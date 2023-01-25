@@ -154,23 +154,23 @@
                             <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
                                   class="fa fa-plus"></i></button></td>
                             <td>
-                              <input type="hidden" name="comparison[]" id="comparison">
-                              <div class='control-label tal' id='jlname'></div>
+                              <input type="hidden" name="comparison[]" id="comparison_0">
+                              <div class='control-label tal' id='jlname_0'></div>
                             </td>
                             <td>
-                              <div class='control-label tal' id='bgtype'></div>
+                              <div class='control-label tal' id='bgtype_0'></div>
                             </td>
                             <td>
-                              <div class='control-label tal' id='breadth'></div>
+                              <div class='control-label tal' id='breadth_0'></div>
                             </td>
                             <td>
-                              <div class='control-label tal' id='nilth'></div>
+                              <div class='control-label tal' id='nilth_0'></div>
                             </td>
                             <td>
-                              <div class='control-label tal' id='mfa'></div>
+                              <div class='control-label tal' id='mfa_0'></div>
                             </td>
                             <td>
-                              <div class='control-label tal' id='afa'></div>
+                              <div class='control-label tal' id='afa_0'></div>
                             </td>
                             <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
                                   class="fa fa-trash"></i></button></td>

@@ -134,12 +134,12 @@ $(document).ready(function () {
       if (x < maxField) {
         x++
         var row_comparison = '<tr id="' + rowId + '"><td><button class="btn btn-primary btn-xs" id="add" type="button"><i class="fa fa-plus"></i></button></td>'
-        row_comparison += '<td><input type="hidden" name="comparison[]" id="comparison"><div class="control-label tal" id="jlname"></div></td>'
-        row_comparison += "<td><div class='control-label tal' id='bgtype'></div></td>"
-        row_comparison += "<td><div class='control-label tal' id='breadth'></div></td>"
-        row_comparison += "<td><div class='control-label tal' id='nilth'></div></td>"
-        row_comparison += "<td><div class='control-label tal' id='mfa'></div></td>"
-        row_comparison += "<td><div class='control-label tal' id='afa'></div></td>"
+        row_comparison += '<td><input type="hidden" name="comparison[]" id="comparison_' + rowId + '"><div class="control-label tal" id="jlname_' + rowId + '"></div></td>'
+        row_comparison += "<td><div class='control-label tal' id='bgtype_" + rowId + "'></div></td>"
+        row_comparison += "<td><div class='control-label tal' id='breadth_" + rowId + "'></div></td>"
+        row_comparison += "<td><div class='control-label tal' id='nilth_" + rowId + "'></div></td>"
+        row_comparison += "<td><div class='control-label tal' id='mfa_" + rowId + "'></div></td>"
+        row_comparison += "<td><div class='control-label tal' id='afa_" + rowId + "'></div></td>"
         row_comparison += '<td><a href="javascript:void(0);" class="btn btn-danger btn-xs" id="delete" type="button"><i class="fa fa-trash"></i></a></td></tr>'
       } else {
         $(this).prop("disabled", true)
@@ -273,22 +273,24 @@ $(document).ready(function () {
   })
 
   $("body").on("click", "#add", function (e) {
-    e.preventDefault()
     var row = $(this).parent().parent()
     var rowId = row.attr("id")
 
     $("#comparison_popup").modal("show")
     console.log(rowId)
 
-    $("#popup_comparison tbody").on("click", "tr", function () {
+    popup_comparison.on("click", "tr", function () {
       var data_comparison = popup_comparison.row(this).data()
-      $("#" + rowId + " #comparison").val(data_comparison[0])
-      $("#" + rowId + " #jlname").html(data_comparison[1])
-      $("#" + rowId + " #bgtype").html(data_comparison[2])
-      $("#" + rowId + " #breadth").html(data_comparison[3])
-      $("#" + rowId + " #nilth").html(data_comparison[4])
-      $("#" + rowId + " #mfa").html(data_comparison[5])
-      $("#" + rowId + " #afa").html(data_comparison[6])
+      $(".comparison #comparison_" + rowId).val(data_comparison[0])
+      $(".comparison #jlname_" + rowId).html(data_comparison[1])
+      $(".comparison #bgtype_" + rowId).html(data_comparison[2])
+      $(".comparison #breadth_" + rowId).html(data_comparison[3])
+      $(".comparison #nilth_" + rowId).html(data_comparison[4])
+      $(".comparison #mfa_" + rowId).html(data_comparison[5])
+      $(".comparison #afa_" + rowId).html(data_comparison[6])
+      $("#comparison_popup").on("hidden.bs.modal", function (e) {
+        rowId = ""
+      })
       $("#comparison_popup").modal("hide")
     })
   })

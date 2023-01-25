@@ -14,3 +14,33 @@ Undefined array key "land_breadth"
 Undefined variable $section
 *******************************************************************
 
+25/01/2023, 20:49:58 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ..., '0', 0, '1438.20', 17258.40, 1438.20, 9.00, 1553.26, {17})
+                                                                  ^
+*******************************************************************
+
+25/01/2023, 20:50:07 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ..., '0', 0, '1438.20', 17258.40, 1438.20, 9.00, 1553.26, {17})
+                                                                  ^
+*******************************************************************
+
+25/01/2023, 20:55:27 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ... '0', 0, '926.00', 11112.00, 926.00, 9.00, 1000.08, {17,17})
+                                                               ^
+*******************************************************************
+
+25/01/2023, 20:55:52 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ... '0', 0, '926.00', 11112.00, 926.00, 9.00, 1000.08, {17,17})
+                                                               ^
+*******************************************************************
+
+25/01/2023, 21:13:09 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ...0', 0, '1284.00', 15408.00, 1284.00, 9.00, 1386.72, {18,18})
+                                                               ^
+*******************************************************************
+
