@@ -48,3 +48,23 @@ LINE 1: ...0', 0, '1284.00', 15408.00, 1284.00, 9.00, 1386.72, {18,18})
 Undefined array key "mfa"
 *******************************************************************
 
+26/01/2023, 03:44:57 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ...ssment_tax) VALUES(2, '208488', 5, '{16,18}', 96, {34}, {17}...
+                                                             ^
+*******************************************************************
+
+26/01/2023, 03:45:03 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
+LINE 1: ...ssment_tax) VALUES(2, '208488', 5, '{16,18}', 97, {35}, {18}...
+                                                             ^
+*******************************************************************
+
+26/01/2023, 03:46:41 | /usr/local/var/www/mdpt/taksiran/app/views/amendment/viewcalcbuilding.php | 10 | ErrorException
+Undefined array key "mfa"
+*******************************************************************
+
+26/01/2023, 03:52:08 | /usr/local/var/www/mdpt/taksiran/app/views/amendment/viewcalcbuilding.php | 10 | ErrorException
+Undefined array key "mfa"
+*******************************************************************
+

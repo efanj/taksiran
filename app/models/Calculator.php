@@ -44,7 +44,7 @@ class Calculator extends Model
 
     $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
     $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', '" . $land_id . "', null, ";
-    $query .= "null, " . $discount . ", '" . $current . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
+    $query .= "null, '" . $capital . "', " . $discount . ", '" . $current . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
     $result = $database->execute();
 
@@ -91,11 +91,12 @@ class Calculator extends Model
     $land = "INSERT INTO data.items_land(siri_no, breadth, price, total) values ('" . $siriNo . "', " . $breadth_land . ", " . $price_land . ", " . $total . ")";
     $database->prepare($land);
     $database->execute();
+    $land_id = $database->lastInsertedId();
 
-    if ($section_one != "") {
-      $itemsOne_id = [];
-      $itemsOne_sum = [];
-      foreach ($section_one as $val) {
+    $itemsOne_id = [];
+    $itemsOne_sum = [];
+    foreach ($section_one as $val) {
+      if ($val["main_title"] != "") {
         $sectionOne = "INSERT INTO data.section(section_type, siri_no, title) values (1,'" . $siriNo . "','" . $val["main_title"] . "')";
         $database->prepare($sectionOne);
         $database->execute();
@@ -116,10 +117,10 @@ class Calculator extends Model
       }
     }
 
-    if ($section_two != "") {
-      $itemsTwo_id = [];
-      $itemsTwo_sum = [];
-      foreach ($section_two as $val) {
+    $itemsTwo_id = [];
+    $itemsTwo_sum = [];
+    foreach ($section_two as $val) {
+      if ($val["external_title"] != "") {
         $breadth_two = empty($value["breadth_two"]) ? 0 : $value["breadth_two"];
         $price_two = empty($value["price_two"]) ? 0 : $value["price_two"];
         $total_two = empty($value["total_two"]) ? 0 : $value["total_two"];
@@ -139,19 +140,20 @@ class Calculator extends Model
         }
       }
     }
+
     if ($comparison != null) {
       $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
     } else {
       $comparison = $comparison;
     }
-    // $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($sectionsOne_id)));
-    // $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($sectionsTwo_id)));
+    $idItemsOne = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsOne_id)));
+    $idItemsTwo = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($itemsTwo_id)));
 
     // $sumItemOne = array_sum($itemsOne_sum);
     // $sumItemTwo = array_sum($itemsTwo_sum);
 
     $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
-    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', ";
+    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', " . $land_id . ", '" . $idItemsOne . "', '" . $idItemsTwo . "', ";
     $query .= "'" . $capital . "', " . $discount . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
     $result = $database->execute();
