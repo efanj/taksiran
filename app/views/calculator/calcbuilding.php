@@ -151,8 +151,7 @@
                         </thead>
                         <tbody id="comparison_table">
                           <tr id="0">
-                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
-                                  class="fa fa-plus"></i></button></td>
+                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i class="fa fa-plus"></i></button></td>
                             <td>
                               <input type="hidden" name="comparison[]" id="comparison_0">
                               <div class='control-label tal' id='jlname_0'></div>
@@ -172,8 +171,7 @@
                             <td>
                               <div class='control-label tal' id='afa_0'></div>
                             </td>
-                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
-                                  class="fa fa-trash"></i></button></td>
+                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i class="fa fa-trash"></i></button></td>
                           </tr>
                         </tbody>
                       </table>
@@ -195,12 +193,10 @@
                         <tbody>
                           <tr>
                             <td></td>
-                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land"
-                                value="<?= $info["lstnh"] ?>"></td>
+                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land" value="<?= $info["lstnh"] ?>"></td>
                             <td>mp</td>
                             <td style="text-align:center">X</td>
-                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land"
-                                value="0"></td>
+                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land" value="0"></td>
                             <td>smp</td>
                             <td><input type="number" class="form-control input-sm ttl_partly" id="total_land" readonly>
                             </td>
@@ -239,11 +235,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_one[0][item][0][title_one]"></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][breadth_one]" id="breadth_one"
-                                    value="<?= $info["lsbgn"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_one[0][item][0][title_one]"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][breadth_one]" id="breadth_one" value="<?= $info["lsbgn"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][breadthtype_one]">
                                     <option value="">Sila Pilih</option>
@@ -254,8 +247,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][price_one]" id="price_one" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][price_one]" id="price_one" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][pricetype_one]">
                                     <option value="">Sila Pilih</option>
@@ -265,8 +257,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -325,11 +316,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_two[0][item][0][title_two]" value="<?= $info["lsans"] ?>"></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][breadth_two]" id="breadth_two"
-                                    value="<?= $info["ttl_ans"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_two[0][item][0][title_two]" value="<?= $info["lsans"] ?>"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][breadth_two]" id="breadth_two" value="<?= $info["ttl_ans"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][breadthtype_two]">
                                     <option value="">Sila Pilih</option>
@@ -340,8 +328,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][price_two]" id="price_two" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][price_two]" id="price_two" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][pricetype_two]">
                                     <option value="">Sila Pilih</option>
@@ -351,8 +338,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -386,18 +372,17 @@
                       </div>
                       <table style="width:100%;font-size:13px;" class="calculator mb15">
                         <tr>
-                          <td style="width:65%" colspan="2"><strong>ANGGARAN SEWA BULANAN</strong></td>
+                          <td style="width:80%" colspan="2"><strong>ANGGARAN SEWA BULANAN</strong></td>
                           <td style="width:20%">
                             <input type="hidden" name="rental" id="rental">
                             RM <span class="control-label tal" id="dummy_rental"></span>
                           </td>
                         </tr>
                         <tr>
-                          <td></td>
+                          <td style="width:65%"></td>
                           <td>
                             <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount"
-                                placeholder="Diskaun">
+                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun">
                               <span class=" input-group-addon">%</span>
                             </div>
                           </td>

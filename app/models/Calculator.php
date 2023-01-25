@@ -34,6 +34,7 @@ class Calculator extends Model
     $land = "INSERT INTO data.items_land(siri_no, breadth, price, total) values ('" . $siriNo . "', " . $breadth_land . ", " . $price_land . ", " . $total . ")";
     $database->prepare($land);
     $database->execute();
+    $land_id = $database->lastInsertedId();
 
     if ($comparison != null) {
       $comparison = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($comparison)));
@@ -41,9 +42,9 @@ class Calculator extends Model
       $comparison = $comparison;
     }
 
-    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
-    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', ";
-    $query .= "'" . $capital . "', " . $discount . ", '" . $current . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
+    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
+    $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', '" . $land_id . "', null, ";
+    $query .= "null, " . $discount . ", '" . $current . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
     $result = $database->execute();
 
@@ -149,7 +150,7 @@ class Calculator extends Model
     // $sumItemOne = array_sum($itemsOne_sum);
     // $sumItemTwo = array_sum($itemsTwo_sum);
 
-    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
+    $query = "INSERT INTO data.calculator(calc_type, siri_no, account_no, comparison, land, bmain, bout, capital, discount, rental, yearly_price, even, rate, assessment_tax) ";
     $query .= "VALUES(" . $calcType . ", '" . $siriNo . "', " . $acctNo . ", '" . $comparison . "', ";
     $query .= "'" . $capital . "', " . $discount . ", '" . $rental . "', " . $yearly . ", " . $even . ", " . $rate . ", " . $tax . ")";
     $database->prepare($query);
@@ -176,6 +177,20 @@ class Calculator extends Model
   }
 
   public function getAccountInfo($siriNo)
+  {
+    $database = Database::openConnection();
+    $query = "SELECT h.*, v.form FROM data.v_submitioninfo v ";
+    $query .= "LEFT JOIN data.hvnduk h ON v.no_akaun = h.peg_akaun ";
+    $query .= "WHERE v.no_siri = :siriNo";
+    $database->prepare($query);
+    $database->bindValue(":siriNo", $siriNo);
+    $database->execute();
+    $info = $database->fetchAssociative();
+
+    return $info;
+  }
+
+  public function getCalculation($userId, $workerId, $siriNo, $form)
   {
     $database = Database::openConnection();
     $query = "SELECT h.*, v.form FROM data.v_submitioninfo v ";

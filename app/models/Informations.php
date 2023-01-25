@@ -647,7 +647,7 @@ class Informations extends Model
     $dataList = substr($comparison, 1, -1);
     $integerIDs = array_map('intval', explode(',', $dataList));
     foreach ($integerIDs as $value) {
-      $query = "SELECT r.id, r.akaun, r.mfa, r.afa, h.bgn_bnama FROM data.v_rating r ";
+      $query = "SELECT r.id, r.akaun, r.mfa, r.afa, h.bgn_bnama, DATE_PART('Year', r.date) as year FROM data.v_rating r ";
       $query .= "LEFT JOIN data.hbangn h ON r.bgkod = h.bgn_bgkod ";
       $query .= "WHERE r.id = :id";
       $database->prepare($query);
@@ -656,9 +656,10 @@ class Informations extends Model
       $row = $database->fetchAssociative();
       // foreach ($rows as $row) {
       $rowOutput["id"] = $row["id"];
-      $rowOutput["mfa"] = $row["mfa"];
-      $rowOutput["afa"] = $row["afa"];
+      $rowOutput["mfa"] = $this->checkNull($row["mfa"]);
+      $rowOutput["afa"] = $this->checkNull($row["afa"]);
       $rowOutput["bgn_bnama"] = $row["bgn_bnama"];
+      $rowOutput["year"] = $row["year"];
 
       if ($row) {
         $qry  = "SELECT jln_jnama, peg_lsbgn, peg_lstnh, peg_nilth FROM SPMC.V_HVNDUK WHERE peg_akaun = " . $row['akaun'];

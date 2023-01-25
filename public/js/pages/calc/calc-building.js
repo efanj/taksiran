@@ -400,6 +400,7 @@ function sumOneTwo() {
   })
   $("#rental").val(rental_value.toFixed(2))
   $("#dummy_rental").html(rental_value.toFixed(2))
+  $("#dummy_discount").html(rental_value.toFixed(2))
   $("#even").val(rental_value.toFixed(2))
   generateTax()
 }

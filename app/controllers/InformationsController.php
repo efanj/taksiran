@@ -32,6 +32,9 @@ class InformationsController extends Controller
       case "getDetailsHandle":
         $this->Security->config("validateForm", false);
         break;
+      case "getCalculationInfo":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
@@ -152,6 +155,19 @@ class InformationsController extends Controller
     $noAkaun = Encryption::decryptId($this->request->data("noAkaun"));
 
     $result = $this->informations->getDetailsHandle($noAkaun);
+    if (!$result) {
+      $this->view->renderErrors($this->informations->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function getCalculationInfo()
+  {
+    $siriNo = $this->request->data("siri");
+
+    $result = $this->informations->getCalculationInfo($siriNo);
+
     if (!$result) {
       $this->view->renderErrors($this->informations->errors());
     } else {

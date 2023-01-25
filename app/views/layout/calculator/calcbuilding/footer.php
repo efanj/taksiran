@@ -43,8 +43,8 @@
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
-<script src="<?= PUBLIC_ROOT ?>js/pages/wizard-building.js" type="text/javascript"></script>
-<script src="<?= PUBLIC_ROOT ?>js/pages/calc-building.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/wizard/wizard-building.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT ?>js/pages/calc/calc-building.js" type="text/javascript"></script>
 
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->

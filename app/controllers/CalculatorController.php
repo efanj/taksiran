@@ -20,6 +20,9 @@ class CalculatorController extends Controller
       case "landSubmit":
         $this->Security->config("validateForm", false);
         break;
+      case "getCalculation":
+        $this->Security->config("validateForm", false);
+        break;
       case "delete":
         $this->Security->config("form", ["fields" => ["file_id"]]);
         break;
@@ -126,6 +129,20 @@ class CalculatorController extends Controller
     $tax = $this->request->data("tax");
 
     $result = $this->calculator->landSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $acctNo, $comparison, $breadth_land, $price_land, $current, $discount, $even, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->calculator->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function getCalculation()
+  {
+    $siriNo = $this->request->data("siri");
+    $form = $this->request->data("form");
+
+    $result = $this->calculator->getCalculation(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $form);
 
     if (!$result) {
       $this->view->renderErrors($this->calculator->errors());
