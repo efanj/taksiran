@@ -1,0 +1,24 @@
+{
+    "name": "Efan Azaha",
+    "type": "project",
+    "description": "",
+    "keywords": ["framework", "authentication", "authorization", "mvc", "security", "login", "encryption", "validation", "files", "ajax"],
+    "homepage": "https://github.com/OmarElGabry/miniPHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Efan Azaha",
+            "email": "azaha.bigcloud@gmail.com",
+            "role": "Developer"
+        }
+    ],    "require": {
+        "php": ">=5.5.0",
+        "phpmailer/phpmailer": "~5.2",
+        "gregwar/captcha": "~1.1.1",
+        "mpdf/mpdf": "^8.0",
+        "spipu/html2pdf": "^5.2"
+    },
+    "autoload": {
+    	"psr-4": { "": ["app/core/", "app/models/", "app/utility/", "app/controllers/", "app/core/components/"] }
+    }
+}

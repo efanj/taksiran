@@ -1,0 +1,16 @@
+24/01/2023, 04:14:16 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
+Undefined array key "land_breadth"
+*******************************************************************
+
+24/01/2023, 04:15:34 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
+Undefined array key "land_breadth"
+*******************************************************************
+
+24/01/2023, 04:15:54 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
+Undefined array key "land_breadth"
+*******************************************************************
+
+24/01/2023, 04:18:05 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
+Undefined variable $section
+*******************************************************************
+
