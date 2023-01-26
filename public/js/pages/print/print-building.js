@@ -15,9 +15,16 @@ $(document).ready(function () {
       context: this,
       success: function (data) {
         console.log(data)
-
-        var doc = new jsPDF()
         var sp = 6
+        var mfalength = length(data.mfa)
+        var afalength = length(data.afa)
+        var mfa_section = mfalength[0]
+        var mfa_items = mfalength[1]
+        var mfa_count = mfa_items * sp
+        var afa_section = afalength[0]
+        var afa_items = afalength[1]
+        console.log(mfalength, afalength, mfa_section, mfa_items, afa_section, afa_items)
+        var doc = new jsPDF()
         doc.setFontSize(11)
         doc.setFont("helvetica", "normal", "bold")
         doc.text("MAJLIS DAERAH PERAK TENGAH", 107, 14, "center")
@@ -165,6 +172,17 @@ $(document).ready(function () {
         window.open(doc.output("bloburl").toString(), "_blank")
       }
     })
+  }
+
+  function length(a) {
+    var mainLen = 0
+    var subLen = 0
+    mainLen = a.length
+    for (var i = 0; i < mainLen; i++) {
+      var len = a[i].items.length
+      subLen = len > subLen ? len : subLen
+    }
+    return [mainLen, subLen]
   }
 
   function firstUpperCase(str) {
