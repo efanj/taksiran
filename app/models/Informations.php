@@ -606,8 +606,11 @@ class Informations extends Model
   public function getCalculationInfo($siriNo)
   {
     $database = Database::openConnection();
-    $query = "SELECT distinct * FROM data.calculator ";
-    $query .= "WHERE siri_no = :siri_no";
+    $dbOracle = new Oracle();
+
+    $query = "SELECT distinct c.*, v.bnama, v.entry, v.entry_pos, v.verifier, v.verifier_pos, to_char(v.etdate, 'DD/MM/YYYY') as etdate, to_char(v.vfdate, 'DD/MM/YYYY') as vfdate FROM data.calculator c ";
+    $query .= "LEFT JOIN data.v_submitioninfo v ON c.siri_no = v.no_siri ";
+    $query .= "WHERE c.siri_no = :siri_no";
     $database->prepare($query);
     $database->bindValue(":siri_no", Encryption::decryptId($siriNo));
     $database->execute();
@@ -615,6 +618,22 @@ class Informations extends Model
     $row = $database->fetchAllAssociative();
     $rowOutput = [];
     foreach ($row as $val) {
+      $sql = "SELECT PMK_NMBIL, PMK_PLGID, PEG_NOLOT, PEG_NOMPT,";
+      $sql .= "rtrim( ADPG1||', '||ADPG2||', '||ADPG3||', '||ADPG4,' ,') AS address, ";
+      $sql .= "rtrim( PVD_ALMT1||', '||PVD_ALMT2||', '||PVD_ALMT3||', '||PVD_ALMT4,' ,') AS postal ";
+      $sql .=
+        "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["account_no"];
+      $sel = $dbOracle->prepare($sql);
+      $dbOracle->execute($sel);
+      $row = $dbOracle->fetchAssociative();
+
+      $rowOutput["pmk_nmbil"] = $row["pmk_nmbil"];
+      $rowOutput["pmk_plgid"] = $row["pmk_plgid"];
+      $rowOutput["peg_nolot"] = $row["peg_nolot"];
+      $rowOutput["peg_nompt"] = $row["peg_nompt"];
+      $rowOutput["address"] = $row["address"];
+      $rowOutput["postal"] = $row["postal"];
+
       $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["siri_no"] = $val["siri_no"];
       $rowOutput["account_no"] = $val["account_no"];
@@ -631,6 +650,14 @@ class Informations extends Model
       $rowOutput["even"] = $val["even"];
       $rowOutput["rate"] = $val["rate"];
       $rowOutput["assessment_tax"] = $val["assessment_tax"];
+
+      $rowOutput["bnama"] = $val["bnama"];
+      $rowOutput["clerk"] = $val["entry"];
+      $rowOutput["clerk_pos"] = $val["entry_pos"];
+      $rowOutput["verifier"] = $this->checkNull($val["verifier"]);
+      $rowOutput["verifier_pos"] = $this->checkNull($val["verifier_pos"]);
+      $rowOutput["etdate"] = $val["etdate"];
+      $rowOutput["vfdate"] = $this->checkNull($val["vfdate"]);
     }
 
     return $rowOutput;

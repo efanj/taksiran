@@ -7,8 +7,6 @@
         <div class="col-lg-4 col-sm-4 col-md-4">
           <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
           <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
-          <?php $mfalength = sizeof($calc['mfa']); ?>
-          <?php print_r($calc); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>

@@ -68,3 +68,34 @@ Undefined array key "mfa"
 Undefined array key "mfa"
 *******************************************************************
 
+26/01/2023, 20:34:34 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "c"
+LINE 1: ...a.v_submitioninfo v ON c.siri_no = v.no_siriWHERE c.siri_no ...
+                                                             ^
+*******************************************************************
+
+26/01/2023, 20:40:43 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 636 | ErrorException
+Undefined array key "entry"
+*******************************************************************
+
+26/01/2023, 22:45:49 | /usr/local/var/www/mdpt/taksiran/app/models/Oracle.php | 122 | PDOException
+SQLSTATE[HY000]: General error: 909 OCIStmtExecute: ORA-00909: invalid number of arguments
+ (/Users/mohdazaha/Downloads/php-8.1.14-src/ext/pdo_oci/oci_statement.c:155)
+*******************************************************************
+
+26/01/2023, 22:54:18 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 627 | ErrorException
+Undefined array key "PMK_NMBIL"
+*******************************************************************
+
+26/01/2023, 22:54:51 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 627 | ErrorException
+Undefined array key "PMK_NMBIL"
+*******************************************************************
+
+26/01/2023, 22:56:49 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 630 | ErrorException
+Undefined array key "PMK_NMBIL"
+*******************************************************************
+
+26/01/2023, 22:58:36 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 631 | ErrorException
+Undefined array key "PMK_PLGID"
+*******************************************************************
+
