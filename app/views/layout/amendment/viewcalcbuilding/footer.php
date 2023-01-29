@@ -25,6 +25,7 @@
 <script src="<?= PUBLIC_ROOT ?>js/jRespond.min.js"></script>
 <!-- Custom scroll for sidebars,tables and etc. -->
 <script src="<?= PUBLIC_ROOT ?>plugins/forms/bootstrap-wizard/jquery.bootstrap.wizard.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
 <!-- Increase jquery animation speed -->

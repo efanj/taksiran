@@ -13,9 +13,9 @@ class Filecode extends Model
 
   public function datetimeToDate($datetime)
   {
-    if($datetime == null){
+    if ($datetime == null) {
       $date = null;
-    }else{
+    } else {
       $date = date("Y-m-d", strtotime($datetime));
     }
     return $date;
@@ -23,9 +23,9 @@ class Filecode extends Model
 
   public function dateFormat($date)
   {
-    if($date == null){
+    if ($date == null) {
       $date = "-";
-    }else{
+    } else {
       $date = date("d/m/Y", strtotime($date));
     }
     return $date;
@@ -65,14 +65,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.htanah");
+    $database->getDataByTableColumns("data.htanah", "tnh_thkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_HTANAH");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["tnh_thkod" => $val["tnh_thkod"], "tnh_tnama" => $val["tnh_tnama"]], $posts, true)) {
+      if (!in_array(["tnh_thkod" => $val["tnh_thkod"]], $posts, true)) {
         $query = "INSERT INTO data.htanah(tnh_thkod, tnh_tnama) ";
         $query .= "VALUES(:tnh_thkod, :tnh_tnama)";
         $database->prepare($query);
@@ -92,14 +92,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.hharta");
+    $database->getDataByTableColumns("data.hharta", "hrt_htkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_HHARTA");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["hrt_htkod" => $val["hrt_htkod"], "hrt_hnama" => $val["hrt_hnama"], "hrt_turut" => $val["hrt_turut"]], $posts, true)) {
+      if (!in_array(["hrt_htkod" => $val["hrt_htkod"]], $posts, true)) {
         $query = "INSERT INTO data.hharta(hrt_htkod, hrt_hnama, hrt_turut) ";
         $query .= "VALUES(:hrt_htkod, :hrt_hnama, :hrt_turut)";
         $database->prepare($query);
@@ -120,14 +120,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.hjenpk");
+    $database->getDataByTableColumns("data.hjenpk", "jpk_jpkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_HJENPK");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["jpk_jpkod" => $val["jpk_jpkod"], "jpk_itkod" => $val["jpk_itkod"], "jpk_jnama" => $val["jpk_jnama"], "jpk_stcbk" => $val["jpk_stcbk"]], $posts, true)) {
+      if (!in_array(["jpk_jpkod" => $val["jpk_jpkod"]], $posts, true)) {
         $query = "INSERT INTO data.hjenpk(jpk_jpkod, jpk_itkod, jpk_jnama, jpk_stcbk) ";
         $query .= "VALUES(:jpk_jpkod, :jpk_itkod, :jpk_jnama, :jpk_stcbk)";
         $database->prepare($query);
@@ -149,14 +149,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.hbangn");
+    $database->getDataByTableColumns("data.hbangn", "bgn_bgkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_HBANGN");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["bgn_bgkod" => $val["bgn_bgkod"], "bgn_bnama" => $val["bgn_bnama"]], $posts, true)) {
+      if (!in_array(["bgn_bgkod" => $val["bgn_bgkod"]], $posts, true)) {
         $query = "INSERT INTO data.hbangn(bgn_bgkod, bgn_bnama) ";
         $query .= "VALUES(:bgn_bgkod, :bgn_bnama)";
         $database->prepare($query);
@@ -176,14 +176,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.hstbgn");
+    $database->getDataByTableColumns("data.hstbgn", "stb_stkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_HSTBGN");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["stb_stkod" => $val["stb_stkod"], "stb_snama" => $val["stb_snama"]], $posts, true)) {
+      if (!in_array(["stb_stkod" => $val["stb_stkod"]], $posts, true)) {
         $query = "INSERT INTO data.hstbgn(stb_stkod, stb_snama) ";
         $query .= "VALUES(:stb_stkod, :stb_snama)";
         $database->prepare($query);
@@ -203,14 +203,14 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->getDataByTable("data.hmjacm");
+    $database->getDataByTableColumns("data.hmjacm", "acm_sbkod");
     $posts = $database->fetchAllAssociative();
 
     $dboracle->getDataByTable("SPMC.V_ACMRSN");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
-      if (!in_array(["acm_sbkod" => $val["acm_sbkod"], "acm_sbktr" => $val["acm_sbktr"]], $posts, true)) {
+      if (!in_array(["acm_sbkod" => $val["acm_sbkod"]], $posts, true)) {
         $query = "INSERT INTO data.hmjacm(acm_sbkod, acm_sbktr) ";
         $query .= "VALUES(:acm_sbkod, :acm_sbktr)";
         $database->prepare($query);
@@ -260,12 +260,10 @@ class Filecode extends Model
     $database = Database::openConnection();
     $dboracle = new Oracle();
 
-    $database->prepare("SELECT mcm_blngn FROM data.hmmacm ");
-    $database->execute();
-    $posts = $database->fetchColumn();
+    $database->getDataByTableColumns("data.hmmacm", "mcm_blngn");
+    $posts = $database->fetchAllAssociative();
 
-    $dboracle->prepare("SELECT MCM_BLNGN, TO_CHAR(MCM_TKHPL, 'yyyy-mm-dd') MCM_TKHPL, MCM_BULAN, MCM_KKRJA, MCM_STATF, TO_CHAR(MCM_TKHTK, 'yyyy-mm-dd') MCM_TKHTK FROM SPMC.V_HMMACM ");
-    $dboracle->execute();
+    $dboracle->getDataByTable("SPMC.V_HMMACM");
     $rows = $dboracle->fetchAllAssociative();
 
     foreach ($rows as $val) {
@@ -966,5 +964,3 @@ class Filecode extends Model
     return true;
   }
 }
-
-?>

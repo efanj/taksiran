@@ -1,101 +1,27 @@
-24/01/2023, 04:14:16 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
-Undefined array key "land_breadth"
+30/01/2023, 02:28:51 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type integer: "f"
+CONTEXT:  unnamed portal parameter $1 = '...'
 *******************************************************************
 
-24/01/2023, 04:15:34 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
-Undefined array key "land_breadth"
+30/01/2023, 02:30:08 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type integer: "f"
+CONTEXT:  unnamed portal parameter $1 = '...'
 *******************************************************************
 
-24/01/2023, 04:15:54 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
-Undefined array key "land_breadth"
+30/01/2023, 02:34:33 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 644 | TypeError
+sizeof(): Argument #1 ($value) must be of type Countable|array, string given
 *******************************************************************
 
-24/01/2023, 04:18:05 | /usr/local/var/www/mdpt/portal/app/views/amendment/viewcalcbuilding.php | 202 | ErrorException
-Undefined variable $section
-*******************************************************************
-
-25/01/2023, 20:49:58 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ..., '0', 0, '1438.20', 17258.40, 1438.20, 9.00, 1553.26, {17})
-                                                                  ^
-*******************************************************************
-
-25/01/2023, 20:50:07 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ..., '0', 0, '1438.20', 17258.40, 1438.20, 9.00, 1553.26, {17})
-                                                                  ^
-*******************************************************************
-
-25/01/2023, 20:55:27 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ... '0', 0, '926.00', 11112.00, 926.00, 9.00, 1000.08, {17,17})
-                                                               ^
-*******************************************************************
-
-25/01/2023, 20:55:52 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ... '0', 0, '926.00', 11112.00, 926.00, 9.00, 1000.08, {17,17})
-                                                               ^
-*******************************************************************
-
-25/01/2023, 21:13:09 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ...0', 0, '1284.00', 15408.00, 1284.00, 9.00, 1386.72, {18,18})
-                                                               ^
-*******************************************************************
-
-26/01/2023, 00:51:13 | /usr/local/var/www/mdpt/taksiran/app/views/amendment/viewcalcbuilding.php | 10 | ErrorException
-Undefined array key "mfa"
-*******************************************************************
-
-26/01/2023, 03:44:57 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ...ssment_tax) VALUES(2, '208488', 5, '{16,18}', 96, {34}, {17}...
+30/01/2023, 02:59:05 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  malformed array literal: ""
+LINE 1: ..., rate, assessment_tax) VALUES(2, '697634', 4036, '', '104',...
                                                              ^
+DETAIL:  Array value must start with "{" or dimension information.
 *******************************************************************
 
-26/01/2023, 03:45:03 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "{"
-LINE 1: ...ssment_tax) VALUES(2, '208488', 5, '{16,18}', 97, {35}, {18}...
+30/01/2023, 03:00:30 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near ","
+LINE 1: ..._price, even, rate, assessment_tax) VALUES(2, '', , '', '105...
                                                              ^
-*******************************************************************
-
-26/01/2023, 03:46:41 | /usr/local/var/www/mdpt/taksiran/app/views/amendment/viewcalcbuilding.php | 10 | ErrorException
-Undefined array key "mfa"
-*******************************************************************
-
-26/01/2023, 03:52:08 | /usr/local/var/www/mdpt/taksiran/app/views/amendment/viewcalcbuilding.php | 10 | ErrorException
-Undefined array key "mfa"
-*******************************************************************
-
-26/01/2023, 20:34:34 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
-SQLSTATE[42601]: Syntax error: 7 ERROR:  syntax error at or near "c"
-LINE 1: ...a.v_submitioninfo v ON c.siri_no = v.no_siriWHERE c.siri_no ...
-                                                             ^
-*******************************************************************
-
-26/01/2023, 20:40:43 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 636 | ErrorException
-Undefined array key "entry"
-*******************************************************************
-
-26/01/2023, 22:45:49 | /usr/local/var/www/mdpt/taksiran/app/models/Oracle.php | 122 | PDOException
-SQLSTATE[HY000]: General error: 909 OCIStmtExecute: ORA-00909: invalid number of arguments
- (/Users/mohdazaha/Downloads/php-8.1.14-src/ext/pdo_oci/oci_statement.c:155)
-*******************************************************************
-
-26/01/2023, 22:54:18 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 627 | ErrorException
-Undefined array key "PMK_NMBIL"
-*******************************************************************
-
-26/01/2023, 22:54:51 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 627 | ErrorException
-Undefined array key "PMK_NMBIL"
-*******************************************************************
-
-26/01/2023, 22:56:49 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 630 | ErrorException
-Undefined array key "PMK_NMBIL"
-*******************************************************************
-
-26/01/2023, 22:58:36 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 631 | ErrorException
-Undefined array key "PMK_PLGID"
 *******************************************************************
 

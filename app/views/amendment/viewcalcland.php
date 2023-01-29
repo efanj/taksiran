@@ -6,6 +6,7 @@
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
           <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
+          <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
@@ -120,175 +121,138 @@
                     </a>
                   </li>
                 </ul>
-                <form class="form-horizontal" role="form" id="calcLand" method="post">
-                  <input type="hidden" name="siri_no" value="<?= $info["no_siri"] ?>">
-                  <input type="hidden" name="akaun" value="<?= $info["no_akaun"] ?>">
-                  <div class="tab-content">
-                    <div class="tab-pane active" id="tab1">
-                      <button id="add-comparison" class="btn btn-primary btn-sm mb5" type="button">Add row</button>
-                      <table class="table table-bordered comparison" style="font-size:13px;">
-                        <thead>
-                          <tr>
-                            <th></th>
-                            <th style="width:20%">Nama Taman</th>
-                            <th style="width:15%">Jenis Bangunan</th>
-                            <th>Keluasan</th>
-                            <th style="width:10%">Nilai Tahunan</th>
-                            <th style="width:15%">Sewa SMP(MFA)</th>
-                            <th style="width:15%">Sewa SMP(AFA)</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody id="comparison_table">
-                          <tr id="0">
-                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
-                                  class="fa fa-plus"></i></button></td>
-                            <td>
-                              <input type="hidden" name="comparison[]" id="comparison">
-                              <div class='control-label tal' id='jlname'></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='bgtype'></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='breadth'></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='nilth'></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='mfa'></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='afa'></div>
-                            </td>
-                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
-                                  class="fa fa-trash"></i></button></td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class=" tab-pane" id="tab2">
-                      <table class="table table-bordered land">
-                        <thead>
-                          <tr>
-                            <th style="width:30%"></th>
-                            <th style="width:15%">Keluasan</th>
-                            <th style="width:10%">Jenis</th>
-                            <th></th>
-                            <th style="width:15%">Nilai Unit</th>
-                            <th style="width:10%">Jenis</th>
-                            <th style="width:15%">Jumlah</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td></td>
-                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land"
-                                value="<?= $info["lstnh"] ?>"></td>
-                            <td>mp</td>
-                            <td style="text-align:center">X</td>
-                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land"
-                                value="0"></td>
-                            <td>smp</td>
-                            <td><input type="number" class="form-control input-sm ttl_partly" id="total_land" readonly>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class="tab-pane" id="tab3">
-                      <table style="width:100%;font-size:13px;" class="calculator mb15">
+                <div class="tab-content">
+                  <div class="tab-pane active" id="tab1">
+                    <table class="table table-bordered comparison" style="font-size:13px;">
+                      <thead>
                         <tr>
-                          <td style="width:63%" colspan="2"><strong>HARGA SEMASA</strong></td>
-                          <td style="width:20%">
-                            <input type="hidden" name="current" id="current">
-                            RM <span class="control-label tal" id="dummy_current"></span>
-                          </td>
+                          <th style="width:20%">Nama Taman</th>
+                          <th style="width:15%">Jenis Bangunan</th>
+                          <th>Keluasan</th>
+                          <th style="width:10%">Nilai Tahunan</th>
+                          <th style="width:15%">Sewa SMP(MFA)</th>
+                          <th style="width:15%">Sewa SMP(AFA)</th>
                         </tr>
-                        <tr>
-                          <td style="width:63%"></td>
+                      </thead>
+                      <tbody id="comparison_table">
+                        <?php foreach ($calc['comparison'] as $row) { ?>
+                        <tr id="0">
                           <td>
-                            <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount"
-                                placeholder="Diskaun">
-                              <span class=" input-group-addon">%</span>
-                            </div>
+                            <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
+                            <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
                           </td>
                           <td>
-                            RM <span class="control-label tal" id="after_discount"></span>
+                            <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
                           </td>
-                        </tr>
-                        <tr>
-                          <td colspan="2"><strong>TEMPOH TAHUNAN</strong></td>
-                          <td>X 12 BULAN</td>
-                        </tr>
-                        <tr>
-                          <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
                           <td>
-                            <input type="hidden" name="yearly" id="yearly">
-                            RM <span class="control-label tal" id="dummy_yearly"></span>
+                            <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
                           </td>
-                        </tr>
-                        <tr>
-                          <td colspan="2"><strong>NILAI TAHUNAN DIGENAPKAN</strong></td>
                           <td>
-                            <div class="input-group input-group-sm">
-                              <span class="input-group-addon">RM</span>
-                              <input type="number" class="form-control input-sm" name="even" id="even">
-                            </div>
+                            <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
                           </td>
-                        </tr>
-                        <tr>
-                          <td colspan="2"><strong>KADAR</strong></td>
                           <td>
-                            <input type="hidden" name="rate" value="<?= $info["kadar_asal"] ?>">
-                            <span class="control-label tal" id="dummy_rate"><?= $info["kadar_asal"] ?></span> %
+                            <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
                           </td>
-                        </tr>
-                        <tr>
-                          <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
                           <td>
-                            <input type="hidden" name="tax" id="tax">
-                            <strong>RM</strong> <span class="control-label tal bold" id="dummy_tax"></span>
+                            <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
                           </td>
                         </tr>
-                      </table>
-                    </div>
+                        <?php } ?>
+                      </tbody>
+                    </table>
                   </div>
-                </form>
+                  <div class=" tab-pane" id="tab2">
+                    <table class="table table-bordered land">
+                      <thead>
+                        <tr>
+                          <th style="width:30%"></th>
+                          <th style="width:15%">Keluasan</th>
+                          <th style="width:10%">Jenis</th>
+                          <th></th>
+                          <th style="width:15%">Nilai Unit</th>
+                          <th style="width:10%">Jenis</th>
+                          <th style="width:15%">Jumlah</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td></td>
+                          <td><?= $calc['land']["breadth"] ?></td>
+                          <td>mp</td>
+                          <td style="text-align:center">X</td>
+                          <td><?= $calc['land']["price"] ?></td>
+                          <td>smp</td>
+                          <td>RM <?= $calc['land']["total"] ?>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="tab-pane" id="tab3">
+                    <table style="width:100%;font-size:13px;" class="calculator mb15">
+                      <tr>
+                        <td style="width:63%" colspan="2"><strong>HARGA SEMASA</strong></td>
+                        <td style="width:20%">
+                          RM <span class="control-label tal" id="dummy_current"><?= $calc['rental']; ?></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="width:63%"><strong>DISKAUN</strong></td>
+                        <td><?= $calc['discount']; ?> %</td>
+                        <td>
+                          RM <span class="control-label tal" id="after_discount">
+                            <?php if ($calc['discount'] < 1) {
+                              echo $calc['rental'];
+                            } else if ($calc['discount'] == "" || $calc['discount'] == 0 || $calc['discount'] >= 1) {
+                              echo $calc['rental'] - ($calc['rental'] * ($calc['discount'] / 100));
+                            }
+                            ?>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>TEMPOH TAHUNAN</strong></td>
+                        <td>X 12 BULAN</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>NILAI TAHUNAN</strong></td>
+                        <td>
+                          RM <span class="control-label tal" id="dummy_yearly"><?= $calc['yearly_price']; ?></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>NILAI TAHUNAN DIGENAPKAN</strong></td>
+                        <td>RM <?= $calc['even']; ?></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>KADAR</strong></td>
+                        <td>
+                          <span class="control-label tal" id="dummy_rate"><?= $calc["rate"] ?></span> %
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
+                        <td>
+                          <strong>RM</strong> <span class="control-label tal bold"
+                            id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
                 <ul class="pager">
                   <li class="previous"><a href="#">&larr; Sebelumnya</a>
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#">Simpan</a>
+                  <li class="next finish" style="display:none;"><a href="#" id="print_calc"
+                      data-siri="<?= $siriNo ?>">Cetak</a>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<div class="modal fade" id="comparison_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-xlg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI DATA PERBANDINGAN</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->informations->comparisontable("1", $info["kwkod"], $info["htkod"]);
-        echo $this->render(Config::get("VIEWS_PATH") . "calculator/comparison.php", ["data" => $data]);
-        ?>
       </div>
     </div>
   </div>

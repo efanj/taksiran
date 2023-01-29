@@ -10,10 +10,10 @@
         <div class="col-lg-4 col-sm-4 col-md-4">
           <div class="card">
             <div class="card-header">
-              <h3>Statistik Penilaian Semula</h3>
+              <h3>Statistik Bayaran</h3>
             </div>
-            <div class="card-body">
-              <div id="ordered-bars-chart" style="width: 100%; height:250px;"></div>
+            <div class="card-body apex-chart">
+              <div class="chart-overflow" id="piechart"></div>
             </div>
           </div>
         </div>

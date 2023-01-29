@@ -2,7 +2,7 @@
 <div id="footer">
   <div class="footer-copyright">
     <div class="container">
-      <p class="pull-left"><?=Config::get('COPYRIGHT'). " " . date("Y")?></p>
+      <p class="pull-left"><?= Config::get('COPYRIGHT') . " " . date("Y") ?></p>
     </div>
   </div>
 </div>
@@ -33,8 +33,8 @@
 <!-- Increase jquery animation speed -->
 <script src="<?= PUBLIC_ROOT; ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
-<script src="<?= PUBLIC_ROOT; ?>plugins/charts/flot/jquery.flot.custom.js"></script>
-<script src="<?= PUBLIC_ROOT; ?>plugins/charts/flot/jquery.flot.orderBars.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>plugins/charts/apex-chart/apex-chart.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/pages/charts/chart-custom.js"></script>
 
 <script src="<?= PUBLIC_ROOT; ?>plugins/ui/bootbox/bootbox.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/libs/main.js"></script>
@@ -47,7 +47,7 @@
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/L.TileLayer.BetterWMS.js" type="text/javascript"></script>
 
 <script src="<?= PUBLIC_ROOT; ?>js/pages/dashboard.js" type="text/javascript"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/pages/charts.js" type="text/javascript"></script>
+<!-- <script src="<?= PUBLIC_ROOT; ?>js/pages/charts.js" type="text/javascript"></script> -->
 
 
 <?php Config::setJsConfig('csrfToken', Session::generateCsrfToken()); ?>

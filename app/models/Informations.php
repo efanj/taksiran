@@ -140,13 +140,13 @@ class Informations extends Model
   public function handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area = "", $street = "")
   {
     // $database = Database::openConnection();
-    $dbOracle = new Oracle();
+    $oracleDB = Oracle::openOriConnection();
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h ";
-    $sel = $dbOracle->prepare($sql);
-    $dbOracle->execute($sel);
-    $records = $dbOracle->fetchAssociative();
+    $sel = $oracleDB->prepare($sql);
+    $oracleDB->execute($sel);
+    $records = $oracleDB->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
@@ -160,14 +160,14 @@ class Informations extends Model
     } else {
       $sql .= " WHERE h.PEG_STATF != 'H'";
     }
-    $sel = $dbOracle->prepare($sql);
+    $sel = $oracleDB->prepare($sql);
     if ($area != "" && $street != "") {
-      $dbOracle->bindValue(":kwkod", $area);
-      $dbOracle->bindValue(":jlkod", $street);
+      $oracleDB->bindValue(":kwkod", $area);
+      $oracleDB->bindValue(":jlkod", $street);
     }
-    $dbOracle->execute($sel);
+    $oracleDB->execute($sel);
 
-    $records = $dbOracle->fetchAssociative();
+    $records = $oracleDB->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
@@ -189,14 +189,14 @@ class Informations extends Model
     $query .= "LEFT JOIN SPMC.V_HSTBGN d ON h.PEG_STKOD = d.STB_STKOD ";
     $query .= "LEFT JOIN SPMC.V_HTANAH e ON h.PEG_THKOD = e.TNH_THKOD ";
     $query .= "WHERE rn > " . (int) $row;
-    $dbOracle->prepare($query);
+    $oracleDB->prepare($query);
     if ($area != "" && $street != "") {
-      $dbOracle->bindValue(":kwkod", $area);
-      $dbOracle->bindValue(":jlkod", $street);
+      $oracleDB->bindValue(":kwkod", $area);
+      $oracleDB->bindValue(":jlkod", $street);
     }
-    $dbOracle->execute();
+    $oracleDB->execute();
 
-    $row = $dbOracle->fetchAllAssociative();
+    $row = $oracleDB->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $key => $val) {
@@ -255,7 +255,8 @@ class Informations extends Model
   public function ownerinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     // $database = Database::openConnection();
-    $dbOracle = new Oracle();
+    $dbOracle =
+      Oracle::openOriConnection();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -375,7 +376,8 @@ class Informations extends Model
   public function vendorinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     // $database = Database::openConnection();
-    $dbOracle = new Oracle();
+    $dbOracle =
+      Oracle::openOriConnection();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -465,7 +467,7 @@ class Informations extends Model
   public function getDetailsHandle($fileId)
   {
     $database = Database::openConnection();
-    // $dbOracle = new Oracle();
+    // $dbOracle = Oracle::openOriConnection();
     $query = "SELECT h.*, h3.tnh_tnama, h2.hrt_hnama, h4.bgn_bnama, h5.stb_snama, h6.jpk_jnama ";
     $query .= "FROM data.hvnduk h ";
     $query .= "left join data.hharta h2 on h.peg_htkod = h2.hrt_htkod ";
@@ -606,7 +608,7 @@ class Informations extends Model
   public function getCalculationInfo($siriNo)
   {
     $database = Database::openConnection();
-    $dbOracle = new Oracle();
+    $dbOracle = Oracle::openOriConnection();
 
     $query = "SELECT distinct c.*, v.bnama, v.entry, v.entry_pos, v.verifier, v.verifier_pos, to_char(v.etdate, 'DD/MM/YYYY') as etdate, to_char(v.vfdate, 'DD/MM/YYYY') as vfdate FROM data.calculator c ";
     $query .= "LEFT JOIN data.v_submitioninfo v ON c.siri_no = v.no_siri ";
@@ -621,23 +623,30 @@ class Informations extends Model
       $sql = "SELECT PMK_NMBIL, PMK_PLGID, PEG_NOLOT, PEG_NOMPT,";
       $sql .= "rtrim( ADPG1||', '||ADPG2||', '||ADPG3||', '||ADPG4,' ,') AS address, ";
       $sql .= "rtrim( PVD_ALMT1||', '||PVD_ALMT2||', '||PVD_ALMT3||', '||PVD_ALMT4,' ,') AS postal ";
-      $sql .=
-        "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["account_no"];
+      $sql .= "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["account_no"];
       $sel = $dbOracle->prepare($sql);
       $dbOracle->execute($sel);
       $row = $dbOracle->fetchAssociative();
 
+      $dataList = substr($val["comparison"], 1, -1);
+      $result = $dataList ? explode(',', $dataList) : array();
+      $integers = array_map('intval', $result);
+
       $rowOutput["pmk_nmbil"] = $row["pmk_nmbil"];
       $rowOutput["pmk_plgid"] = $row["pmk_plgid"];
-      $rowOutput["peg_nolot"] = $row["peg_nolot"];
-      $rowOutput["peg_nompt"] = $row["peg_nompt"];
+      $rowOutput["peg_nolot"] = $this->checkNull($row["peg_nolot"]);
+      $rowOutput["peg_nompt"] = $this->checkNull($row["peg_nompt"]);
       $rowOutput["address"] = $row["address"];
       $rowOutput["postal"] = $row["postal"];
 
       $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["siri_no"] = $val["siri_no"];
       $rowOutput["account_no"] = $val["account_no"];
-      $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
+      if (count($integers) > 0) {
+        $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
+      } else {
+        $rowOutput["comparison"] = [];
+      }
       $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
       $rowOutput["mfa"] = $this->getMfa(Encryption::decryptId($siriNo));
       $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
@@ -666,14 +675,14 @@ class Informations extends Model
   public function getComparison($comparison)
   {
     $database = Database::openConnection();
-    $dbOracle = new Oracle();
+    $dbOracle = Oracle::openOriConnection();
 
     $output = [];
     $rowOutput = [];
 
     $dataList = substr($comparison, 1, -1);
-    $integerIDs = array_map('intval', explode(',', $dataList));
-    foreach ($integerIDs as $value) {
+    $integers = array_map('intval', explode(',', $dataList));
+    foreach ($integers as $value) {
       $query = "SELECT r.id, r.akaun, r.mfa, r.afa, h.bgn_bnama, DATE_PART('Year', r.date) as year FROM data.v_rating r ";
       $query .= "LEFT JOIN data.hbangn h ON r.bgkod = h.bgn_bgkod ";
       $query .= "WHERE r.id = :id";
@@ -681,7 +690,7 @@ class Informations extends Model
       $database->bindValue(":id", $value);
       $database->execute();
       $row = $database->fetchAssociative();
-      // foreach ($rows as $row) {
+
       $rowOutput["id"] = $row["id"];
       $rowOutput["mfa"] = $this->checkNull($row["mfa"]);
       $rowOutput["afa"] = $this->checkNull($row["afa"]);
@@ -693,15 +702,12 @@ class Informations extends Model
         $dbOracle->prepare($qry);
         $dbOracle->execute();
         $res = $dbOracle->fetchAssociative();
-        // foreach ($result as $res) {
+
         $rowOutput["jln_jnama"] = $res["jln_jnama"];
         $rowOutput["peg_lsbgn"] = $res["peg_lsbgn"];
         $rowOutput["peg_lstnh"] = $res["peg_lstnh"];
-        $rowOutput["peg_nilth"] = $res["peg_nilth"];
-        // }
       }
       array_push($output, $rowOutput);
-      // }
     }
     return $output;
   }

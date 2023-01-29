@@ -84,23 +84,22 @@ $("body").on("keyup", "#breadth_land, #price_land", function () {
   row.find("#total_land").val(total_land.toFixed(2))
   $("#current").val(total_land.toFixed(2))
   $("#dummy_current").html(total_land.toFixed(2))
+  $("#after_discount").html(total_land.toFixed(2))
 
   sumTotal()
 })
 
 $("body").on("keyup", "#discount", function () {
-  var current = 0
-  $(".ttl_partly").each(function () {
-    current += +$(this).val()
-  })
+  var current = $("#current").val()
   var discount = $(this).val()
+  console.log(current, discount)
   var current_value
-  if (discount === 0 || discount === 0.0) {
+  if (discount < 1 || discount == "") {
     current_value = parseFloat(current)
   } else {
     current_value = parseFloat(current) - parseFloat(current) * (discount / 100)
   }
-  $("#after_discount").val(current_value.toFixed(2))
+  $("#after_discount").html(current_value.toFixed(2))
 
   sumTotal()
 })
@@ -110,18 +109,9 @@ $("body").on("keyup", "#even", function () {
 })
 
 function sumTotal() {
-  var current = $("#current").val()
-  $("#after_discount").html(current)
-  var discount = $("#discount").val()
-  var current_value
-  if (discount === 0 || discount === 0.0) {
-    current_value = parseFloat(current)
-  } else {
-    current_value = parseFloat(current) - parseFloat(current) * (discount / 100)
-  }
-  $("#after_discount").val(current_value.toFixed(2))
+  var after_discount = $("#after_discount").html()
 
-  var year_value = parseFloat(current_value) * 12
+  var year_value = parseFloat(after_discount) * 12
   $("#yearly").val(year_value.toFixed(2))
   $("#dummy_yearly").html(year_value.toFixed(2))
   $("#even").val(year_value.toFixed(2))

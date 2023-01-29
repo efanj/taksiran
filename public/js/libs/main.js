@@ -550,6 +550,161 @@ var events = {
       }
     }
   },
+  filecode: {
+    init: function () {
+      events.filecode.reloadPegangan()
+      events.filecode.reloadkegunaantanah()
+      events.filecode.reloadkegunaanhartanah()
+      events.filecode.reloadjenispemilik()
+      events.filecode.reloadjenisbangunan()
+      events.filecode.reloadstrukturbangunan()
+      events.filecode.reloadmesejmjp()
+      events.filecode.reloadKadarTahunan()
+      events.filecode.reloadMesyuaratmjp()
+      events.filecode.reloadOthers()
+    },
+    reloadPegangan: function () {
+      $("#reloadPegangan").click(function () {
+        ajax.send("Filecode/reloadPegangan", {}, reloadPeganganCallBack)
+      })
+
+      function reloadPeganganCallBack(result) {
+        console.log(result)
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#pegangan").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadkegunaantanah: function () {
+      $("#reloadKegunaanTanah").click(function () {
+        ajax.send("Filecode/reloadLandUse", {}, reloadKegunaanTanahCallBack)
+      })
+
+      function reloadKegunaanTanahCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#kegunaantanah").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadkegunaanhartanah: function () {
+      $("#reloadKegunaanHartanah").click(function () {
+        ajax.send("Filecode/reloadLandProperty", {}, reloadKegunaanHartanahCallBack)
+      })
+
+      function reloadKegunaanHartanahCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#hartatanah").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadjenispemilik: function () {
+      $("#reloadJenisPemilik").click(function () {
+        ajax.send("Filecode/reloadOwnerType", {}, reloadJenisPemilikCallBack)
+      })
+
+      function reloadJenisPemilikCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#jenispemilik").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadjenisbangunan: function () {
+      $("#reloadJenisBangunan").click(function () {
+        ajax.send("Filecode/reloadBuildingType", {}, reloadJenisBangunanCallBack)
+      })
+
+      function reloadJenisBangunanCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#jenisbangunan").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadstrukturbangunan: function () {
+      $("#reloadStrukturBangunan").click(function () {
+        ajax.send("Filecode/reloadBuildingStructure", {}, reloadStrukturBangunanCallBack)
+      })
+
+      function reloadStrukturBangunanCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#strukturbangunan").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadmesejmjp: function () {
+      $("#reloadMesejMJP").click(function () {
+        ajax.send("Filecode/reloadMessageMJP", {}, reloadMesejMJPCallBack)
+      })
+
+      function reloadMesejMJPCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#sebab-sebab").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadKadarTahunan: function () {
+      $("#reloadKadarTahunan").click(function () {
+        ajax.send("Filecode/reloadAnnualRate", {}, reloadKadarTahunanCallBack)
+      })
+
+      function reloadKadarTahunanCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#kadar").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadMesyuaratmjp: function () {
+      $("#reloadMesyuaratMJP").click(function () {
+        ajax.send("Filecode/reloadMeetingMJP", {}, reloadMesyuaratMJPCallBack)
+      })
+
+      function reloadMesyuaratMJPCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#mesyuarat_mjp").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    },
+    reloadOthers: function () {
+      $("#reloadOthers").click(function () {
+        ajax.send("Filecode/reloadLocation", {}, reloadOthersCallBack)
+      })
+
+      function reloadOthersCallBack(result) {
+        if (result === true) {
+          swal("Berjaya!", "Data berjaya dikemaskini.", "success")
+          $("#others").DataTable().ajax.reload()
+        } else {
+          swal("Oops...!", "Tiada data baru.", "info")
+        }
+      }
+    }
+  },
 
   /*
    * Vendor

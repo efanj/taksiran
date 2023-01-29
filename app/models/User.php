@@ -453,7 +453,7 @@ class User extends Model
         $database->prepare($sql);
         $database->execute();
         $rows = $database->fetchAllAssociative();
-        
+
         if ($database->countRows() > 0) {
             foreach ($rows as $key => $val) {
                 $query = "SELECT h.*, b.BGN_BNAMA FROM SPMC.V_HVNDUK h ";
@@ -509,7 +509,7 @@ class User extends Model
         $oracleDB->prepare($query);
         $oracleDB->execute();
         $data = $oracleDB->fetchAssociative();
-        
+
         if (!empty($data)) {
 
             $rowOutput['STATUS'] = true;
@@ -532,7 +532,7 @@ class User extends Model
             $rowOutput['CODEY'] = $data['peg_codey'];
 
             array_push($output, $rowOutput);
-            
+
             return $output;
             $oracleDB->closeOciConnection();
         } else {
@@ -560,7 +560,7 @@ class User extends Model
         $database->prepare($sql);
         $database->execute();
         $row = $database->fetchAssociative();
-        
+
         if (!empty($row)) {
             $rowOutput['STATUS'] = true;
             $rowOutput['NOMPT'] = $row['smk_nompt'];
@@ -719,8 +719,7 @@ tnh_tnama ";
 
     public function Statistik()
     {
-
-        $oracleDB = new Oracle();
+        $oracleDB = Oracle::openOriConnection();
 
         $query = "select decode(signs,-1,'LEBIHAN',1,'TUNGGAKAN','SELESAI') as status,count(*) as count from spmc.v_takaun group by signs";
 
@@ -735,8 +734,35 @@ tnh_tnama ";
             $rowOutput['status'] = $row['status'];
             array_push($output, $rowOutput);
         }
+        $this->UpdateTablePayment();
 
         return $output;
+    }
+
+    public function UpdateTablePayment()
+    {
+        $database = Database::openConnection();
+        $oracleDB = Oracle::openOriConnection();
+
+        $database->getDataByTableColumns("data.v_takaun", "htang");
+        $posts = $database->fetchAllAssociative();
+
+        $oracleDB->getDataByTable("SPMC.V_TAKAUN");
+        $rows = $oracleDB->fetchAllAssociative();
+
+        foreach ($rows as $val) {
+            if (!in_array(["htang" => $val["htang"]], $posts, true)) {
+                $query = "UPDATE data.v_takaun ";
+                $query .= "SET signs=:signs, htang=:htang WHERE akaun=:akaun";
+                $database->prepare($query);
+                $database->bindValue(":signs", $val["signs"]);
+                $database->bindValue(":htang", $val["htang"]);
+                $database->bindValue(":akaun", $val["akaun"]);
+                $database->execute();
+            } else {
+                return false;
+            }
+        }
     }
 
     public function StatistikPenilaian()
@@ -784,7 +810,7 @@ tnh_tnama ";
 
     public function escapeJsonString($value)
     { # list from www.json.org: (\b backspace, \f formfeed)
-    $escapers = array("\\", "'", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
+        $escapers = array("\\", "'", "/", "\"", "\n", "\r", "\t", "\x08", "\x0c");
         $replacements = array("\\\\", "\\", "\\/", "\\\"", "\\n", "\\r", "\\t", "\\f", "\\b");
         $result = str_replace($escapers, $replacements, $value);
         return $result;

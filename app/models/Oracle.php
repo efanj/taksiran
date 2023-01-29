@@ -1,12 +1,13 @@
 <?php
 
-class Oracle {
+class Oracle
+{
 
     /**
      * @access public
      * @var PDO PDO Object
      */
-    private $connection = null;
+    private $connect = null;
 
     /**
      * @access public
@@ -19,35 +20,21 @@ class Oracle {
      * @static static
      * @var Database Database Object used to implement the Singleton pattern
      */
-    private static $oracledb = null;
+    private static $oracle = null;
 
     /**
      * This is the constructor for Database Object.
      *
      * @access private
      */
-    public function __construct() {
+    public function __construct()
+    {
+        if ($this->connect === null) {
+            $this->connect = new PDO(Config::get('ORACLE_DB') . ";charset=utf8", Config::get('ORACLE_DB_USER'), Config::get('ORACLE_DB_PASS'));
 
-        // $this->connect = oci_connect('SPMC', 'SPMC', '60.53.186.133:6942/mdkpr');
-        // $this->connect = oci_pconnect(Config::get('ORACLE_DB_USER'), Config::get('ORACLE_DB_PASS'), '(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 60.53.186.133)(PORT = 6942)) (CONNECT_DATA = (SERVICE_NAME = mdkpr) (SID = mdkpr)))');
-
-        // try {
-
-        //     $this->connect = new PDO(Config::get('ORACLE_DB'), Config::get('ORACLE_DB_USER'), Config::get('ORACLE_DB_PASS'), array(
-        //         PDO::ATTR_EMULATE_PREPARES => false,
-        //         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-
-        // } catch (PDOException $e) {
-        //     echo $e->getMessage();
-        // }
-        if ($this->connection === null) {
-
-            $this->connection = new PDO('oci:dbname='.Config::get('ORACLE_TNS'), Config::get('ORACLE_DB_USER'), Config::get('ORACLE_DB_PASS'));
-
-            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->connection->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
-
+            $this->connect->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+            $this->connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->connect->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         }
     }
 
@@ -59,13 +46,13 @@ class Oracle {
      * @return Database Instantiate(if not already instantiated)
      *
      */
-    // public static function openOriConnection(){
-    //     if(self::$oracledb === null){
-    //         self::$oracledb = new Oracle();
-
-    //     }
-    //     return self::$oracledb;
-    // }
+    public static function openOriConnection()
+    {
+        if (self::$oracle === null) {
+            self::$oracle = new Oracle();
+        }
+        return self::$oracle;
+    }
 
     /**
      * Prepares a SQL query for execution and assign a statement object to $this->statement
@@ -74,8 +61,9 @@ class Oracle {
      * @param  string  $query
      *
      */
-    public function prepare($query) {
-        $this->statement = $this->connection->prepare($query);
+    public function prepare($query)
+    {
+        $this->statement = $this->connect->prepare($query);
     }
 
     /**
@@ -92,7 +80,8 @@ class Oracle {
      * @param   mixed   $value
      *
      */
-    public function bindValue($param, $value) {
+    public function bindValue($param, $value)
+    {
         $type = self::getPDOType($value);
         $this->statement->bindValue($param, $value, $type);
     }
@@ -105,7 +94,8 @@ class Oracle {
      * @param   mixed   $var
      *
      */
-    public function bindParam($param, &$var) {
+    public function bindParam($param, &$var)
+    {
         $type = self::getPDOType($var);
         $this->statement->bindParam($param, $var, $type);
     }
@@ -118,8 +108,9 @@ class Oracle {
      * @return  boolean Returns TRUE on success or FALSE on failure.
      *
      */
-    public function execute($arr = null){
-        if($arr === null)  return $this->statement->execute();
+    public function execute($arr = null)
+    {
+        if ($arr === null)  return $this->statement->execute();
         else               return $this->statement->execute($arr);
     }
 
@@ -129,7 +120,8 @@ class Oracle {
      * @access public
      * @return array
      */
-    public function fetchColumn() {
+    public function fetchColumn()
+    {
         return $this->statement->fetchAll(PDO::FETCH_COLUMN, 0);
     }
 
@@ -139,7 +131,8 @@ class Oracle {
      * @access public
      * @return array    empty array if no data returned
      */
-    public function fetchAllAssociative() {
+    public function fetchAllAssociative()
+    {
         return $this->statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
@@ -149,7 +142,8 @@ class Oracle {
      * @access public
      * @return array|bool   false on if no data returned
      */
-    public function fetchAssociative() {
+    public function fetchAssociative()
+    {
         return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -159,7 +153,8 @@ class Oracle {
      * @access public
      * @return array
      */
-    public function fetchAllObject() {
+    public function fetchAllObject()
+    {
         return $this->statement->fetchAll(PDO::FETCH_OBJ);
     }
 
@@ -169,7 +164,8 @@ class Oracle {
      * @access public
      * @return object
      */
-    public function fetchObject() {
+    public function fetchObject()
+    {
         return $this->statement->fetch(PDO::FETCH_OBJ);
     }
 
@@ -179,7 +175,8 @@ class Oracle {
      * @access public
      * @return array
      */
-    public function fetchAllBoth() {
+    public function fetchAllBoth()
+    {
         return $this->statement->fetchAll(PDO::FETCH_BOTH);
     }
 
@@ -189,7 +186,8 @@ class Oracle {
      * @access public
      * @return array
      */
-    public function fetchBoth() {
+    public function fetchBoth()
+    {
         return $this->statement->fetch(PDO::FETCH_BOTH);
     }
 
@@ -202,8 +200,9 @@ class Oracle {
      * @see http://php.net/manual/en/pdo.lastinsertid.php
      *
      */
-    public function lastInsertedId() {
-        return $this->connection->lastInsertId();
+    public function lastInsertedId()
+    {
+        return $this->connect->lastInsertId();
     }
 
     /**
@@ -213,8 +212,9 @@ class Oracle {
      * @see http://php.net/manual/en/pdo.begintransaction.php
      * @see http://stackoverflow.com/questions/10155946/php-pdo-transactions
      */
-    public function beginTransaction() {
-        $this->connection->beginTransaction();
+    public function beginTransaction()
+    {
+        $this->connect->beginTransaction();
     }
 
     /**
@@ -225,8 +225,9 @@ class Oracle {
      * @access public
      * @see http://php.net/manual/en/pdo.commit.php
      */
-    public function commit() {
-        $this->connection->commit();
+    public function commit()
+    {
+        $this->connect->commit();
     }
 
     /**
@@ -238,8 +239,9 @@ class Oracle {
      * @access public
      * @see http://php.net/manual/en/pdo.rollback.php
      */
-    public function rollBack() {
-        $this->connection->rollBack();
+    public function rollBack()
+    {
+        $this->connect->rollBack();
     }
 
     /**
@@ -249,7 +251,8 @@ class Oracle {
      * @access public
      * @see http://php.net/manual/en/pdostatement.rowcount.php
      */
-    public function countRows() {
+    public function countRows()
+    {
         return $this->statement->rowCount();
     }
 
@@ -261,8 +264,9 @@ class Oracle {
      * @return  integer
      *
      */
-    public function countAll($table){
-        $this->statement = $this->connection->prepare('SELECT COUNT(*) AS count FROM '.$table);
+    public function countAll($table)
+    {
+        $this->statement = $this->connect->prepare('SELECT COUNT(*) AS count FROM ' . $table);
         $this->execute();
         return (int)$this->fetchAssociative()["count"];
     }
@@ -274,8 +278,9 @@ class Oracle {
      * @param   string  $table
      *
      */
-    public function getAll($table){
-        $this->statement = $this->connection->prepare('SELECT * FROM '.$table);
+    public function getAll($table)
+    {
+        $this->statement = $this->connect->prepare('SELECT * FROM ' . $table);
         $this->execute();
     }
 
@@ -287,8 +292,9 @@ class Oracle {
      * @param   mixed  $id
      *
      */
-    public function getById($table, $id){
-        $this->statement = $this->connection->prepare('SELECT * FROM '.$table. ' WHERE id = :id LIMIT 1');
+    public function getById($table, $id)
+    {
+        $this->statement = $this->connect->prepare('SELECT * FROM ' . $table . ' WHERE id = :id LIMIT 1');
         $this->bindValue(':id', $id);
         $this->execute();
     }
@@ -300,12 +306,14 @@ class Oracle {
      * @param   string  $table
      *
      */
-    public function getDataByTable($table){
-        $this->statement = $this->connection->prepare('SELECT * FROM '.$table);
+    public function getDataByTable($table)
+    {
+        $this->statement = $this->connect->prepare('SELECT * FROM ' . $table);
         $this->execute();
     }
-    public function getDataByTableColumns($table, $column){
-        $this->statement = $this->connection->prepare('SELECT '.$column.' FROM '.$table.' GROUP BY '.$column);
+    public function getDataByTableColumns($table, $column)
+    {
+        $this->statement = $this->connect->prepare('SELECT ' . $column . ' FROM ' . $table . ' GROUP BY ' . $column);
         $this->execute();
     }
 
@@ -316,8 +324,9 @@ class Oracle {
      * @param   string  $table
      *
      */
-    public function deleteAll($table){
-        $this->statement = $this->connection->prepare('DELETE FROM '.$table);
+    public function deleteAll($table)
+    {
+        $this->statement = $this->connect->prepare('DELETE FROM ' . $table);
         $this->execute();
     }
 
@@ -329,8 +338,9 @@ class Oracle {
      * @param  mixed   $id
      *
      */
-    public function deleteById($table, $id){
-        $this->statement = $this->connection->prepare('DELETE FROM '.$table. ' WHERE id = :id LIMIT 1');
+    public function deleteById($table, $id)
+    {
+        $this->statement = $this->connect->prepare('DELETE FROM ' . $table . ' WHERE id = :id LIMIT 1');
         $this->bindValue(':id', $id);
         $this->execute();
     }
@@ -344,7 +354,8 @@ class Oracle {
      * @return  integer PDO Constants
      *
      */
-    private static function getPDOType($value){
+    private static function getPDOType($value)
+    {
         switch ($value) {
             case is_int($value):
                 return PDO::PARAM_INT;
@@ -369,13 +380,12 @@ class Oracle {
      * @access public
      * @see http://php.net/manual/en/pdo.connections.php
      */
-    public static function closeOciConnection() {
-        if(isset(self::$oracledb)) {
-            self::$oracledb->connect =  null;
-            self::$oracledb->statement = null;
-            self::$oracledb = null;
+    public static function closeOciConnection()
+    {
+        if (isset(self::$oracle)) {
+            self::$oracle->connect =  null;
+            self::$oracle->connect = null;
+            self::$oracle = null;
         }
     }
-
-
 }
