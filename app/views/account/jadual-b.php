@@ -38,8 +38,7 @@
                           <div class="input-group input-group-sm">
                             <input type="text" class="form-control input-sm" id="mjb_tkhpl" name="mjbTkhpl" required>
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#mesyuarat_popup">
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#mesyuarat_popup">
                                 <i class="fa fa-book"></i>
                               </button>
                             </span>
@@ -149,7 +148,7 @@
                           <select class="form-control input-sm" name="mjbThkod">
                             <option value="0" selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
-                            <option <?php if ($row["tnh_thkod"] == $hacmjb["peg_thkod"]) {
+                              <option <?php if ($row["tnh_thkod"] == $hacmjb["peg_thkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
@@ -163,7 +162,7 @@
                           <select class="form-control input-sm" name="mjbBgkod">
                             <option value="0" selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
-                            <option <?php if ($row["bgn_bgkod"] == $hacmjb["peg_bgkod"]) {
+                              <option <?php if ($row["bgn_bgkod"] == $hacmjb["peg_bgkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
@@ -176,11 +175,10 @@
                         </div>
                         <div class="col-md-4">
                           <?php $hharta = $this->controller->elements->hharta(); ?>
-                          <select class="form-control input-sm" id="mjb_htkod" name="mjbHtkod"
-                            onchange="semakKadar(this.value)">
+                          <select class="form-control input-sm" id="mjb_htkod" name="mjbHtkod" onchange="semakKadar(this.value)">
                             <option value="0" selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
-                            <option <?php if ($row["hrt_htkod"] == $hacmjb["peg_htkod"]) {
+                              <option <?php if ($row["hrt_htkod"] == $hacmjb["peg_htkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
@@ -194,7 +192,7 @@
                           <select class="form-control input-sm" name="mjbStkod">
                             <option value="0" selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
-                            <option <?php if ($row["stb_stkod"] == $hacmjb["peg_stkod"]) {
+                              <option <?php if ($row["stb_stkod"] == $hacmjb["peg_stkod"]) {
                                         echo "selected";
                                       } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
@@ -217,16 +215,14 @@
                             (X) :</label>
                         </div>
                         <div class="col-md-4 control-label tal">
-                          <input type="text" class="form-control input-sm" name="mjbCodex" id="codex"
-                            value="<?= $hacmjb["peg_codex"] ?>">
+                          <input type="text" class="form-control input-sm" name="mjbCodex" id="codex" value="<?= $hacmjb["peg_codex"] ?>">
                         </div>
                         <div class="col-md-2">
                           <label class="control-label">Koordinat GPS
                             (Y) :</label>
                         </div>
                         <div class="col-md-4 control-label tal">
-                          <input type="text" class="form-control input-sm" name="mjbCodey" id="codey"
-                            value="<?= $hacmjb["peg_codey"] ?>">
+                          <input type="text" class="form-control input-sm" name="mjbCodey" id="codey" value="<?= $hacmjb["peg_codey"] ?>">
                         </div>
                       </div>
                     </div>
@@ -288,8 +284,7 @@
                             <input type="hidden" id="mjb_sbkod" name="mjbSbkod">
                             <input type="text" class="form-control input-sm" id="dummy_mjb_sbkod">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#reason_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>

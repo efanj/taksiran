@@ -4,14 +4,14 @@ class Elements extends Model
 {
   public function dateFormat($date)
   {
-    if($date == null){
+    if ($date == null) {
       $date = "-";
-    }else{
+    } else {
       $date = date("d/m/Y", strtotime($date));
     }
     return $date;
   }
-  
+
   public function referencetable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
@@ -82,39 +82,43 @@ class Elements extends Model
     ];
 
     return $response;
+
+    // $dbOracle->closeOciConnection();
   }
 
   public function accounttable()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $query = "SELECT peg_akaun, pmk_nmbil, peg_htkod, hrt_hnama, jln_jlkod, jln_kwkod, jln_knama, jln_jnama ";
-    $query .= "FROM data.hvnduk ";
+    $query .= "FROM SPMC.V_HVNDUK ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
+
+    $dbOracle->closeOciConnection();
   }
 
   public function meetingtable()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $query = "SELECT mcm_blngn, mcm_tkhpl, mcm_kkrja, mcm_statf, mcm_tkhtk, mcm_bulan, ";
     $query .= "CASE mcm_bulan ";
     $query .= "WHEN '01' THEN 'JANUARI' WHEN '02' THEN 'FEBRUARI' WHEN '03' THEN 'MAC' WHEN '04' THEN 'APRIL' WHEN '05' THEN 'MEI' WHEN '06' THEN 'JUN' ";
     $query .= "WHEN '07' THEN 'JULAI' WHEN '08' THEN 'OGOS' WHEN '09' THEN 'SEPTEMBER' WHEN '10' THEN 'OKTOBER' WHEN '11' THEN 'NOVEMBER' WHEN '12' THEN 'DECEMBER' ";
     $query .= "END eld3 ";
-    $query .= "FROM data.hmmacm ";
+    $query .= "FROM SPMC.V_HMMACM ";
     $query .= "ORDER by mcm_blngn DESC";
     // $query .= "WHERE date_part('year', mcm_tkhpl) = date_part('year', CURRENT_DATE)";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($info as $val) {
@@ -128,68 +132,44 @@ class Elements extends Model
       array_push($output, $rowOutput);
     }
     return $output;
+
+    $dbOracle->closeOciConnection();
   }
 
   public function streettable()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
     $query = "SELECT jln_jlkod, kws_kwkod, kws_knama, jln_jnama, jln_poskd ";
-    $query .= "FROM data.mkwjln ";
+    $query .= "FROM SPMC.V_MKWJLN ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
+
+    $dbOracle->closeOciConnection();
   }
 
   public function reasontable()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM data.hmjacm ";
+    $query = "SELECT * FROM SPMC.V_ACMRSN ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
+
+    $dbOracle->closeOciConnection();
   }
-
-  // public function customertable()
-  // {
-  //   $database = Database::openConnection();
-  //   // $dbOracle = new Oracle();
-  //   $query = "SELECT distinct pid_plgid, pid_pnama, pid_jenpg, val_amtid, val_almt1, val_almt2, val_almt3, val_almt4, val_almt5, val_poskd FROM data.plngan ";
-  //   $database->prepare($query);
-  //   $database->execute();
-
-  //   $row = $database->fetchAllAssociative();
-  //   $output = [];
-  //   $rowOutput = [];
-  //   foreach ($row as $val) {
-  //     $rowOutput["pid_plgid"] = $val["pid_plgid"];
-  //     $rowOutput["pid_pnama"] = $val["pid_pnama"];
-  //     $rowOutput["pid_jenpg"] = $val["pid_jenpg"];
-  //     $rowOutput["val_almt1"] = $val["val_almt1"];
-  //     $rowOutput["val_almt2"] = $val["val_almt2"];
-  //     $rowOutput["val_almt3"] = $val["val_almt3"];
-  //     $rowOutput["val_almt4"] = $val["val_almt4"];
-  //     $rowOutput["val_almt5"] = $val["val_almt5"];
-  //     $rowOutput["role"] = Session::getUserRole();
-  //     array_push($output, $rowOutput);
-  //   }
-
-  //   return $output;
-
-  //   // $dbOracle->closeOciConnection();
-  // }
 
   public function customertable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
-    $database = Database::openConnection();
-    // $dbOracle = new Oracle();
+    $dbOracle = new Oracle();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -197,36 +177,39 @@ class Elements extends Model
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.plngan ";
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
-    $records = $database->fetchAssociative();
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_PLNGAN ";
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+    $records = $dbOracle->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.plngan ";
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_PLNGAN ";
     if ($searchValue != "") {
       $sql .= " WHERE " . $searchQuery;
     }
-    $sel = $database->prepare($sql);
-    $database->execute($sel);
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
 
-    $records = $database->fetchAssociative();
+    $records = $dbOracle->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT distinct pid_plgid, pid_pnama, pid_jenpg, val_amtid, val_almt1, val_almt2, val_almt3, val_almt4, val_almt5, val_poskd FROM data.plngan ";
+    $query = "SELECT * FROM (";
+    $query .= "SELECT tmp.*, rownum rn FROM(";
+    $query .= "SELECT DISTINCT PID_PLGID, PID_PNAMA, PID_JENPG, VAL_AMTID, VAL_ALMT1, VAL_ALMT2, VAL_ALMT3, VAL_ALMT4, VAL_ALMT5, VAL_POSKD FROM SPMC.V_PLNGAN ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
-    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
-    $database->prepare($query);
-    $database->execute();
+    $query .= ") tmp WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $row = $database->fetchAllAssociative();
+    $row = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
@@ -252,19 +235,18 @@ class Elements extends Model
 
     return $response;
 
-    // $dbOracle->closeOciConnection();
+    $dbOracle->closeOciConnection();
   }
 
   public function customeraddtable($plgid)
   {
-    $database = Database::openConnection();
-    // $dbOracle = new Oracle();
-    $query = "SELECT distinct pid_plgid, pid_pnama, pid_jenpg, val_amtid, val_almt1, val_almt2, val_almt3, val_almt4, val_almt5, val_poskd FROM data.plngan ";
+    $dbOracle = new Oracle();
+    $query = "SELECT distinct pid_plgid, pid_pnama, pid_jenpg, val_amtid, val_almt1, val_almt2, val_almt3, val_almt4, val_almt5, val_poskd FROM SPMC.V_PLNGAN ";
     $query .= "WHERE pid_plgid = '" . $plgid . "'";
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $row = $database->fetchAllAssociative();
+    $row = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
@@ -283,105 +265,96 @@ class Elements extends Model
     }
 
     return ["data" => $output];
-
-    // $dbOracle->closeOciConnection();
   }
 
   public function htanah()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM data.htanah";
+    $query = "SELECT tnh_thkod, tnh_tnama FROM SPMC.V_HTANAH ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
   }
 
   public function hbangn()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM data.hbangn";
+    $query = "SELECT * FROM V_HBANGN ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $rows = $database->fetchAllAssociative();
-    $output = [];
-    $rowOutput = [];
-    foreach ($rows as $val) {
-      $rowOutput["bgn_bgkod"] = $val["bgn_bgkod"];
-      $rowOutput["bgn_bnama"] = $val["bgn_bnama"];
-      array_push($output, $rowOutput);
-    }
-    return $output;
+    $rows = $dbOracle->fetchAllAssociative();
+    return $rows;
   }
 
   public function hharta()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM data.hharta ORDER BY hrt_htkod";
+    $query = "SELECT * FROM V_HHARTA ORDER BY hrt_htkod";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
   }
 
   public function hstbgn()
   {
-    $database = Database::openConnection();
+    $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM data.hstbgn";
+    $query = "SELECT * FROM V_HSTBGN ";
 
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $info = $database->fetchAllAssociative();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
   }
 
   public function hjenpk()
   {
-    $database = Database::openConnection();
-    // $query = "SELECT * FROM data.hjenpk WHERE jpk_stcbk = 'T'";
-    $query = "SELECT * FROM data.hjenpk";
-    $database->prepare($query);
-    $database->execute();
-    $info = $database->fetchAllAssociative();
+    $dbOracle = new Oracle();
+    // $query = "SELECT * FROM SPMC.V_HJENPK WHERE jpk_stcbk = 'T'";
+    $query = "SELECT * FROM V_HJENPK ";
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
+    $info = $dbOracle->fetchAllAssociative();
     return $info;
   }
 
   public function area()
   {
-    $database = Database::openConnection();
-    $query = "SELECT kws_kwkod, kws_knama FROM data.mkwjln ";
+    $dbOracle = new Oracle();
+
+    $query = "SELECT kws_kwkod, kws_knama FROM V_MKWJLN ";
     $query .= "GROUP BY kws_kwkod, kws_knama ";
     $query .= "ORDER BY kws_kwkod ASC";
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
 
-    $rows = $database->fetchAllAssociative();
+    $rows = $dbOracle->fetchAllAssociative();
 
     return $rows;
   }
 
   public function street($area)
   {
-    $database = Database::openConnection();
-    $query = "SELECT jln_jlkod, jln_jnama FROM data.mkwjln WHERE kws_kwkod ='" . $area . "'";
-    $database->prepare($query);
-    $database->execute();
+    $dbOracle = new Oracle();
 
-    $rows = $database->fetchAllAssociative();
+    $query = "SELECT jln_jlkod, jln_jnama FROM V_MKWJLN WHERE kws_kwkod ='" . $area . "'";
+    $dbOracle->prepare($query);
+    $dbOracle->execute();
+
+    $rows = $dbOracle->fetchAllAssociative();
 
     return $rows;
   }
 }
-
-?>

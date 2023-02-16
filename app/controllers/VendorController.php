@@ -38,12 +38,15 @@ class VendorController extends Controller
       case "uploaddocuments":
         $this->Security->config("validateForm", false);
         break;
+      case "reviewSubmition":
+        $this->Security->config("validateForm", false);
+        break;
       case "deletesitereview":
         $this->Security->config("form", ["fields" => ["file_id"]]);
         break;
       case "deletebenchdocument":
         $this->Security->config("form", ["fields" => ["doc_id"]]);
-        break;  
+        break;
       case "deleteimage":
         $this->Security->config("form", ["fields" => ["image_id"]]);
         break;
@@ -76,20 +79,22 @@ class VendorController extends Controller
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/submitted/", Config::get("VIEWS_PATH") . "vendor/submitted.php");
   }
 
-  public function approved()
-  {
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/approved/", Config::get("VIEWS_PATH") . "vendor/approved.php");
-  }
-
-  public function pending()
-  {
-    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/pending/", Config::get("VIEWS_PATH") . "vendor/pending.php");
-  }
-
   public function viewbenchmark($id)
   {
     Config::setJsConfig("curPage", "vendor");
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/viewbenchmark/", Config::get("VIEWS_PATH") . "vendor/viewbenchmarkdocs.php", ["id" => $id]);
+  }
+
+  public function createBuildingCalc($reviewId)
+  {
+    Config::setJsConfig("curPage", "vendor");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createBuildingCalc/", Config::get("VIEWS_PATH") . "vendor/calcbuilding.php", ["reviewId" => $reviewId]);
+  }
+
+  public function createEmptyLandCalc($reviewId)
+  {
+    Config::setJsConfig("curPage", "vendor");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createEmptyLandCalc/", Config::get("VIEWS_PATH") . "vendor/calcland.php", ["reviewId" => $reviewId]);
   }
 
   public function viewimages($reviewId)
@@ -154,11 +159,11 @@ class VendorController extends Controller
     $columns = $this->request->data("columns");
     $columnName = $columns[$columnIndex]["data"];
     $columnSortOrder = $column[0]["dir"];
-    // $search = $this->request->data("search");
-    // $searchValue = strtoupper($search["value"]);
+    $search = $this->request->data("search");
+    $searchValue = $search["value"];
     $area = $this->request->data("area");
     $street = $this->request->data("street");
-    $result = $this->vendor->sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area, $street);
+    $result = $this->vendor->sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area, $street);
     if (!$result) {
       $this->view->renderErrors($this->vendor->errors());
     } else {
@@ -254,6 +259,19 @@ class VendorController extends Controller
     } else {
       $fileHTML = $this->view->render(Config::get("VIEWS_PATH") . "vendor/docs.php", ["files" => $file]);
       $this->view->renderJson(["data" => $fileHTML]);
+    }
+  }
+
+  public function reviewSubmition()
+  {
+    $id = $this->request->data("id");
+
+    $result = $this->vendor->reviewSubmition(Session::getUserId(), $id);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
     }
   }
 

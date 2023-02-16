@@ -2,6 +2,15 @@
 
 class Vendor extends Model
 {
+  public function escapeJsonString($value)
+  {
+    # list from www.json.org: (\b backspace, \f formfeed)
+    $escapers = ["\""];
+    $replacements = [""];
+    $result = str_replace($escapers, $replacements, $value);
+    return $result;
+  }
+
   public function rentbenchmarktable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
@@ -176,55 +185,67 @@ class Vendor extends Model
     return $response;
   }
 
-  public function sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area = "", $street = "")
+  public function sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area = "", $street = "")
   {
     $database = Database::openConnection();
+    $dbOracle = new Oracle();
+
+    $searchQuery = "";
+    if ($searchValue != "") {
+      $searchQuery = "CAST(smk_akaun AS TEXT) iLIKE '%" . $searchValue . "%' OR CAST(smk_nolot AS TEXT) iLIKE '%" . $searchValue . "%' OR smk_adpg1 iLIKE '%" . $searchValue . "%' OR smk_adpg2 iLIKE '%" . $searchValue . "%' OR workerid iLIKE '%" . $searchValue . "%' OR name iLIKE '%" . $searchValue . "%'";
+    }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.v_semak s";
+    $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.v_semak s ";
-    $sql .= "LEFT JOIN public.users u ON s.smk_onama = u.workerid ";
+    $sql = "SELECT count(*) AS allcount FROM data.v_semak_raw s ";
     if ($area != "" && $street != "") {
-      $sql .= "WHERE s.jln_kwkod = :kwkod AND s.jln_jlkod = :jlkod";
+      $sql .= "WHERE jln_kwkod = " . $area . " AND jln_jlkod = " . $street;
+    }
+    if ($searchValue != "") {
+      $sql .= "WHERE " . $searchQuery;
     }
     $sel = $database->prepare($sql);
-    if ($area != "" && $street != "") {
-      $database->bindValue(":kwkod", $area);
-      $database->bindValue(":jlkod", $street);
-    }
     $database->execute($sel);
 
     $records = $database->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT s.*, u.workerid, u.name FROM data.v_semak s ";
-    $query .= "LEFT JOIN public.users u ON s.smk_onama = u.workerid ";
+    $query = "SELECT * FROM data.v_semak_raw s ";
     if ($area != "" && $street != "") {
-      $query .= "WHERE s.jln_kwkod = :kwkod AND s.jln_jlkod = :jlkod";
+      $query .= "WHERE jln_kwkod = " . $area . " AND jln_jlkod = " . $street;
+    }
+    if ($searchValue != "") {
+      $query .= "WHERE " . $searchQuery;
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
     $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
     $database->prepare($query);
-    if ($area != "" && $street != "") {
-      $database->bindValue(":kwkod", $area);
-      $database->bindValue(":jlkod", $street);
-    }
     $database->execute();
 
     $row = $database->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($row as $val) {
+
+      $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
+      $info = $dbOracle->fetchAssociative();
+
+      if ($info["peg_htkod"] == "11" || $info["peg_htkod"] == "12" || $info["peg_htkod"] == "13" || $info["peg_htkod"] == "14" || $info["peg_htkod"] == "15" || $info["peg_htkod"] == "28" || $info["peg_htkod"] == "29" || $info["peg_htkod"] == "30" || $info["peg_htkod"] == "31" || $info["peg_htkod"] == "32" || $info["peg_htkod"] == "33" || $info["peg_htkod"] == "34" || $info["peg_htkod"] == "35") {
+        $calcType = "createEmptyLandCalc";
+      } else {
+        $calcType = "createBuildingCalc";
+      }
       $rowOutput["id"] = Encryption::encryptId($val["id"]);
+      $rowOutput["sid"] = $val["id"];
       $rowOutput["akaun"] = Encryption::encryptId($val["smk_akaun"]);
       $rowOutput["smk_akaun"] = $val["smk_akaun"];
       $rowOutput["smk_nolot"] = $val["smk_nolot"];
@@ -245,6 +266,7 @@ class Vendor extends Model
       $rowOutput["smk_datevisit"] = date("d/m/Y H:i:s", strtotime($val["smk_datevisit"]));
       $rowOutput["workerid"] = $val["workerid"];
       $rowOutput["name"] = $val["name"];
+      $rowOutput["calctype"] = $calcType;
       $rowOutput["role"] = Session::getUserRole();
       array_push($output, $rowOutput);
     }
@@ -494,6 +516,20 @@ class Vendor extends Model
       array_push($output, $rowOutput);
     }
     return $output;
+  }
+
+  public function reviewSubmition($userId, $id)
+  {
+    $database = Database::openConnection();
+
+    $id = $this->escapeJsonString(str_replace(["[", "]"], ["{", "}"], json_encode($id)));
+
+    $query = "INSERT INTO data.vendorsubmition(submit_id) ";
+    $query .= "VALUES(:id)";
+
+    $database->prepare($query);
+    $database->bindValue(":id", $id);
+    $database->execute();
   }
 
   public function getImagesById($fileId)

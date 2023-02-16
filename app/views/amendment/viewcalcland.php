@@ -136,27 +136,27 @@
                       </thead>
                       <tbody id="comparison_table">
                         <?php foreach ($calc['comparison'] as $row) { ?>
-                        <tr id="0">
-                          <td>
-                            <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
-                            <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
-                          </td>
-                          <td>
-                            <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
-                          </td>
-                        </tr>
+                          <tr id="0">
+                            <td>
+                              <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
+                              <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
+                            </td>
+                            <td>
+                              <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
+                            </td>
+                          </tr>
                         <?php } ?>
                       </tbody>
                     </table>
@@ -233,8 +233,7 @@
                       <tr>
                         <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
                         <td>
-                          <strong>RM</strong> <span class="control-label tal bold"
-                            id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
+                          <strong>RM</strong> <span class="control-label tal bold" id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
                         </td>
                       </tr>
                     </table>
@@ -245,8 +244,7 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#" id="print_calc"
-                      data-siri="<?= $siriNo ?>">Cetak</a>
+                  <li class="next finish" style="display:none;"><a href="#" id="print_calc" data-siri="<?= $siriNo ?>">Cetak</a>
                   </li>
                 </ul>
               </div>

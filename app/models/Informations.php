@@ -548,6 +548,60 @@ class Informations extends Model
     return $rowOutput;
   }
 
+  public function getReviewInfo($fileId)
+  {
+    $database = Database::openConnection();
+    $dbOracle = new Oracle();
+
+    $query = "SELECT * FROM data.v_semak_raw vsr ";
+    $query .= "LEFT JOIN data.hvnduk h ON vsr.smk_akaun = h.peg_akaun ";
+    $query .= "WHERE vsr.smk_akaun = :smk_akaun";
+    $database->prepare($query);
+    $database->bindValue(":smk_akaun", Encryption::decryptId($fileId));
+    $database->execute();
+
+    $row = $database->fetchAllAssociative();
+    $rowOutput = [];
+    foreach ($row as $val) {
+      // $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
+      // $info = $dbOracle->fetchAssociative();
+
+      $rowOutput["no_akaun"] = $val["smk_akaun"];
+      $rowOutput["no_lot"] = $val["smk_nolot"];
+      $rowOutput["nmbil"] = $val["pmk_nmbil"];
+      $rowOutput["plgid"] = $val["pmk_plgid"];
+      $rowOutput["almt1"] = $val["pvd_almt1"];
+      $rowOutput["almt2"] = $val["pvd_almt2"];
+      $rowOutput["almt3"] = $val["pvd_almt3"];
+      $rowOutput["almt4"] = $val["pvd_almt4"];
+      $rowOutput["almt5"] = $val["pvd_almt5"];
+      $rowOutput["notel"] = $val["pvd_notel"];
+      $rowOutput["adpg1"] = $val["smk_adpg1"];
+      $rowOutput["adpg2"] = $val["smk_adpg2"];
+      $rowOutput["adpg3"] = $val["smk_adpg3"];
+      $rowOutput["adpg4"] = $val["smk_adpg4"];
+      $rowOutput["jnama"] = $val["jln_jnama"];
+      $rowOutput["knama"] = $val["jln_knama"];
+      $rowOutput["kwkod"] = $val["jln_kwkod"];
+      $rowOutput["thkod"] = $val["tnh_thkod"];
+      $rowOutput["tnama"] = $val["tnh_tnama"];
+      $rowOutput["htkod"] = $val["peg_htkod"];
+      $rowOutput["hnama"] = $val["hrt_hnama"];
+      // $rowOutput["bnama"] = $val["bnama"];
+      // $rowOutput["snama"] = $val["snama"];
+      $rowOutput["lsbgn"] = $val["peg_lsbgn"];
+      $rowOutput["lstnh"] = $val["peg_lstnh"];
+      $rowOutput["lsans"] = $val["peg_lsans"];
+      $rowOutput["ttl_bgn"] = $val["smk_lsbgn_tmbh"] + $val["peg_lsbgn"];
+      $rowOutput["ttl_ans"] = $val["smk_lsans_tmbh"] + $val["peg_lsans"];
+      $rowOutput["nilth_asal"] = $val["peg_nilth"];
+      $rowOutput["kadar_asal"] = $val["kaw_kadar"];
+      $rowOutput["cukai_asal"] = $val["peg_tksir"];
+    }
+
+    return $rowOutput;
+  }
+
   public function getSubmitionInfo($siriNo)
   {
     $database = Database::openConnection();
@@ -562,6 +616,7 @@ class Informations extends Model
     foreach ($row as $val) {
       $rowOutput["no_siri"] = $val["no_siri"];
       $rowOutput["no_akaun"] = $val["no_akaun"];
+      $rowOutput["no_lot"] = $val["no_lot"];
       $rowOutput["tkhpl"] = $val["tkhpl"];
       $rowOutput["tkhtk"] = $val["tkhtk"];
       $rowOutput["nmbil"] = $val["nmbil"];
@@ -576,6 +631,8 @@ class Informations extends Model
       $rowOutput["adpg2"] = $val["adpg2"];
       $rowOutput["adpg3"] = $val["adpg3"];
       $rowOutput["adpg4"] = $val["adpg4"];
+      $rowOutput["jnama"] = $val["jnama"];
+      $rowOutput["knama"] = $val["knama"];
       $rowOutput["kwkod"] = $val["kwkod"];
       $rowOutput["thkod"] = $val["thkod"];
       $rowOutput["tnama"] = $val["tnama"];
@@ -706,6 +763,7 @@ class Informations extends Model
         $rowOutput["jln_jnama"] = $res["jln_jnama"];
         $rowOutput["peg_lsbgn"] = $res["peg_lsbgn"];
         $rowOutput["peg_lstnh"] = $res["peg_lstnh"];
+        $rowOutput["peg_nilth"] = $res["peg_nilth"];
       }
       array_push($output, $rowOutput);
     }
@@ -973,5 +1031,34 @@ class Informations extends Model
 
     $childs = $database->fetchAllAssociative();
     return $childs;
+  }
+
+  public function AcctInfo($fileId)
+  {
+    $oracleDB = Oracle::openOriConnection();
+
+    $query = "SELECT b.*, m.jln_jnama, h.bgn_bnama FROM data.benchmark b ";
+    $query .= "LEFT JOIN data.hbangn h on b.bgkod = h.bgn_bgkod ";
+    $query .= "LEFT JOIN data.mkwjln m on b.jlkod = m.jln_jlkod ";
+    $query .= "WHERE b.id = :id";
+
+    $oracleDB->prepare($query);
+    $oracleDB->bindValue(":id", Encryption::decryptId($fileId));
+    $oracleDB->execute();
+
+    $row = $oracleDB->fetchAssociative();
+    $rowOutput = [];
+    $rowOutput["id"] = $row["id"];
+    $rowOutput["jenis"] = $row["jenis"];
+    $rowOutput["jlkod"] = $row["jlkod"];
+    $rowOutput["nmbil"] = $row["nmbil"];
+    $rowOutput["bgkod"] = $row["bgkod"];
+    $rowOutput["nota"] = $row["nota"];
+    $rowOutput["nilai"] = $row["nilai"];
+    $rowOutput["jln_jnama"] = $row["jln_jnama"];
+    $rowOutput["bgn_bnama"] = $row["bgn_bnama"];
+    $rowOutput["childs"] = $this->getChildsBenchMark($row["id"]);
+
+    return $rowOutput;
   }
 }

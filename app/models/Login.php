@@ -7,7 +7,8 @@
  * @author     Omar El Gabry <omar.elgabry.93@gmail.com>
  */
 
-class Login extends Model{
+class Login extends Model
+{
 
     /**
      * register a new user
@@ -21,16 +22,18 @@ class Login extends Model{
      * @return bool
      *
      */
-    public function register($userId, $name, $email, $password, $confirmPassword, $workplace, $position, $contact_no, $worker_id, $group, $role, $activate){
+    public function register($userId, $name, $email, $password, $confirmPassword, $workplace, $position, $contact_no, $worker_id, $group, $role, $activate)
+    {
 
         $isValid = true;
         $validation = new Validation();
 
-        if(!$validation->validate([
+        if (!$validation->validate([
             "User Name" => [$name, "required|alphaNumWithSpaces|minLen(4)|maxLen(128)"],
             "Email" => [$email, "required|email|emailUnique|maxLen(50)"],
-            'Password' => [$password, "required|equals(".$confirmPassword.")|minLen(6)|password"],
-            'Password Confirmation' => [$confirmPassword, 'required']])) {
+            'Password' => [$password, "required|equals(" . $confirmPassword . ")|minLen(6)|password"],
+            'Password Confirmation' => [$confirmPassword, 'required']
+        ])) {
 
             $this->errors = $validation->errors();
             $isValid = false;
@@ -78,9 +81,9 @@ class Login extends Model{
 
         $database->commit();
 
-        if($result){
-            $activity = "Daftar pengguna - Nama : ". $name;
-        	$database->logActivity($userId, $activity);
+        if ($result) {
+            $activity = "Daftar pengguna - Nama : " . $name;
+            $database->logActivity($userId, $activity);
         }
 
         return true;
@@ -96,19 +99,21 @@ class Login extends Model{
      * @param string $userAgent
      * @return bool
      */
-    public function doLogIn($workerid, $password, $rememberMe, $userIp, $userAgent){
+    public function doLogIn($workerid, $password, $rememberMe, $userIp, $userAgent)
+    {
 
         // 1. check if user is blocked
-        if($this->isIpBlocked($userIp)) {
+        if ($this->isIpBlocked($userIp)) {
             $this->errors[] = "Your IP Address has been blocked";
             return false;
         }
 
         // 2. validate only presence
         $validation = new Validation();
-        if(!$validation->validate([
+        if (!$validation->validate([
             "Your Worker ID" => [$workerid, 'required'],
-            "Your Password" => [$password, 'required']])){
+            "Your Password" => [$password, 'required']
+        ])) {
             $this->errors = $validation->errors();
             return false;
         }
@@ -118,13 +123,14 @@ class Login extends Model{
         $database->getByUserWorkerId("failed_logins", $workerid);
         $failedLogin = $database->fetchAssociative();
 
-        $last_time   = isset($failedLogin["last_failed_login"])? $failedLogin["last_failed_login"]: null;
-        $count       = isset($failedLogin["failed_login_attempts"])? $failedLogin["failed_login_attempts"]: null;
+        $last_time   = isset($failedLogin["last_failed_login"]) ? $failedLogin["last_failed_login"] : null;
+        $count       = isset($failedLogin["failed_login_attempts"]) ? $failedLogin["failed_login_attempts"] : null;
 
         // check if the failed login attempts exceeded limits
         // @see Validation::attempts()
-        if(!$validation->validate([
-            'Failed Login' => [["last_time" => $last_time, "count" => $count], 'attempts']])){
+        if (!$validation->validate([
+            'Failed Login' => [["last_time" => $last_time, "count" => $count], 'attempts']
+        ])) {
             $this->errors = $validation->errors();
             return false;
         }
@@ -135,13 +141,14 @@ class Login extends Model{
         $database->execute();
         $user = $database->fetchAssociative();
 
-        $userId = isset($user["id"])? $user["id"]: null;
-        $hashedPassword = isset($user["hashed_password"])? $user["hashed_password"]: null;
+        $userId = isset($user["id"]) ? $user["id"] : null;
+        $hashedPassword = isset($user["hashed_password"]) ? $user["hashed_password"] : null;
 
         // 5. validate data returned from users table
-        if(!$validation->validate([
-            "Login" => [["user_id" => $userId, "hashed_password" => $hashedPassword, "password" => $password], 'credentials']])){
-            if($this->checkIp($userIp, $user["role"])){
+        if (!$validation->validate([
+            "Login" => [["user_id" => $userId, "hashed_password" => $hashedPassword, "password" => $password], 'credentials']
+        ])) {
+            if ($this->checkIp($userIp, $user["role"])) {
                 // if not valid, then increment number of failed logins
                 $this->incrementFailedLogins($workerid, $failedLogin);
 
@@ -158,11 +165,10 @@ class Login extends Model{
         Session::reset(["user_id" => $userId, "name" => $user["name"], "department" => $user["department"], "workerid" => $user["workerid"], "role" => $user["role"], "group" => $user["group"], "ip" => $userIp, "user_agent" => $userAgent]);
 
         // if remember me checkbox is checked, then save data to cookies as well
-        if(!empty($rememberMe) && $rememberMe === "rememberme"){
+        if (!empty($rememberMe) && $rememberMe === "rememberme") {
 
             // reset cookie, Cookie token usable only once
             Cookie::reset($userId);
-
         } else {
 
             Cookie::remove($userId);
@@ -173,7 +179,7 @@ class Login extends Model{
         $this->resetFailedLogins($workerid);
         $this->resetPasswordToken($userId);
 
-        $activity = "Daftar Masuk - ID Pekerja : ". $workerid;
+        $activity = "Daftar Masuk - ID Pekerja : " . $workerid;
         $database->logActivity($userId, $activity);
 
         return true;
@@ -186,7 +192,8 @@ class Login extends Model{
      * @param  string   $userIp
      *
      */
-    private function blockIp($userIp){
+    private function blockIp($userIp)
+    {
 
         // if user is already blocked, this method won't be triggered
         /*if(!$this->isIpBlocked($userIp)){}*/
@@ -206,13 +213,14 @@ class Login extends Model{
      * @param string    $username
      */
 
-	private function checkIp($userIp, $username){
+    private function checkIp($userIp, $username)
+    {
 
-		if($userIp === "60.53.186.113" || $userIp === "127.0.0.1" || $username === "admin"){
-			return false;
-		}else{
-			return true;
-		}
+        if ($userIp === "60.53.186.113" || $userIp === "127.0.0.1" || $username === "admin") {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
@@ -223,7 +231,8 @@ class Login extends Model{
      * @param  string   $userIp
      * @return bool
      */
-    private function isIpBlocked($userIp){
+    private function isIpBlocked($userIp)
+    {
 
         $database = Database::openConnection();
         $database->prepare("SELECT ip FROM blocked_ips WHERE ip = :ip ");
@@ -242,7 +251,8 @@ class Login extends Model{
      * @param  string   $userIp
      * @param  string   $email
      */
-    private function handleIpFailedLogin($userIp, $workerid){
+    private function handleIpFailedLogin($userIp, $workerid)
+    {
 
         $database = Database::openConnection();
         $database->prepare("SELECT ip, worker_id FROM ip_failed_logins WHERE ip = :ip ");
@@ -253,15 +263,14 @@ class Login extends Model{
         $count = count($ips);
 
         // block IP if there were failed login attempts using different emails(>= 10) from the same IP address
-        if($count >= 10){
+        if ($count >= 10) {
 
             $this->blockIp($userIp);
-
         } else {
 
             // check if ip_failed_logins already has a record with current ip + email
             // if not, then insert it.
-            if(!in_array(["ip" => $userIp, "worker_id" => $workerid], $ips, true)){
+            if (!in_array(["ip" => $userIp, "worker_id" => $workerid], $ips, true)) {
                 $database->prepare("INSERT INTO ip_failed_logins (ip, worker_id) VALUES (:ip, :worker_id)");
                 $database->bindValue(":ip", $userIp);
                 $database->bindValue(":worker_id", $workerid);
@@ -279,16 +288,17 @@ class Login extends Model{
      * @throws Exception If couldn't increment failed logins
      *
      */
-    private function incrementFailedLogins($workerid, $failedLogin){
+    private function incrementFailedLogins($workerid, $failedLogin)
+    {
 
         $database = Database::openConnection();
 
-        if(!empty($failedLogin)){
+        if (!empty($failedLogin)) {
             $query = "UPDATE failed_logins SET last_failed_login = :last_failed_login, " .
-                     "failed_login_attempts = failed_login_attempts+1 WHERE worker_id = :worker_id";
-        }else{
-            $query = "INSERT INTO failed_logins (worker_id, last_failed_login, failed_login_attempts) ".
-                     "VALUES (:worker_id, :last_failed_login, 1)";
+                "failed_login_attempts = failed_login_attempts+1 WHERE worker_id = :worker_id";
+        } else {
+            $query = "INSERT INTO failed_logins (worker_id, last_failed_login, failed_login_attempts) " .
+                "VALUES (:worker_id, :last_failed_login, 1)";
         }
 
         // Remember? the user_email we are using here is not a foreign key from users table
@@ -298,7 +308,7 @@ class Login extends Model{
         $database->bindValue(':worker_id', $workerid);
         $result = $database->execute();
 
-        if(!$result){
+        if (!$result) {
             throw new Exception("FAILED LOGIN", "Couldn't increment failed logins of Worker ID: " . $workerid);
         }
     }
@@ -310,17 +320,18 @@ class Login extends Model{
      * @param  string   $email
      * @throws Exception If couldn't reset failed logins
      */
-    private function resetFailedLogins($workerid){
+    private function resetFailedLogins($workerid)
+    {
 
         $database = Database::openConnection();
         $query = "UPDATE failed_logins SET last_failed_login = NULL, " .
-                 "failed_login_attempts = 0 WHERE worker_id = :worker_id";
+            "failed_login_attempts = 0 WHERE worker_id = :worker_id";
 
         $database->prepare($query);
         $database->bindValue(':worker_id', $workerid);
         $result = $database->execute();
 
-        if(!$result){
+        if (!$result) {
             throw new Exception("Couldn't reset failed logins for Worker ID " . $workerid);
         }
     }
@@ -331,15 +342,16 @@ class Login extends Model{
      * @param  string  $email
      * @return bool
      */
-    public function forgotPassword($email){
+    public function forgotPassword($email)
+    {
 
         $validation = new Validation();
-        if(!$validation->validate(['Email' => [$email, 'required|email']])) {
+        if (!$validation->validate(['Email' => [$email, 'required|email']])) {
             $this->errors = $validation->errors();
             return false;
         }
 
-        if($this->isEmailExists($email)){
+        if ($this->isEmailExists($email)) {
 
             // depends on the last query made by isEmailExists()
             $database = Database::openConnection();
@@ -349,10 +361,10 @@ class Login extends Model{
             $database->getByUserId("forgotten_passwords", $user["id"]);
             $forgottenPassword = $database->fetchAssociative();
 
-            $last_time = isset($forgottenPassword["password_last_reset"])? $forgottenPassword["password_last_reset"]: null;
-            $count     = isset($forgottenPassword["forgotten_password_attempts"])? $forgottenPassword["forgotten_password_attempts"]: null;
+            $last_time = isset($forgottenPassword["password_last_reset"]) ? $forgottenPassword["password_last_reset"] : null;
+            $count     = isset($forgottenPassword["forgotten_password_attempts"]) ? $forgottenPassword["forgotten_password_attempts"] : null;
 
-            if(!$validation->validate(['Failed Login' => [["last_time" => $last_time, "count" => $count], 'attempts']])){
+            if (!$validation->validate(['Failed Login' => [["last_time" => $last_time, "count" => $count], 'attempts']])) {
                 $this->errors = $validation->errors();
                 return false;
             }
@@ -377,7 +389,8 @@ class Login extends Model{
      * @return boolean
      *
      */
-    private function isEmailExists($email){
+    private function isEmailExists($email)
+    {
 
         // email is already unique in the database,
         // So, we can't have more than 2 users with the same emails
@@ -398,17 +411,18 @@ class Login extends Model{
      * @return array    new generated forgotten Password token
      * @throws Exception If couldn't generate the token.
      */
-    private function generateForgottenPasswordToken($userId, $forgottenPassword){
+    private function generateForgottenPasswordToken($userId, $forgottenPassword)
+    {
 
         $database = Database::openConnection();
 
-        if(!empty($forgottenPassword)){
+        if (!empty($forgottenPassword)) {
             $query = "UPDATE forgotten_passwords SET password_token = :password_token, " .
-                     "password_last_reset = :password_last_reset, forgotten_password_attempts = forgotten_password_attempts+1 ".
-                     "WHERE user_id = :user_id";
-        }else{
-            $query = "INSERT INTO forgotten_passwords (user_id, password_token, password_last_reset, forgotten_password_attempts) ".
-                     "VALUES (:user_id, :password_token, :password_last_reset, 1)";
+                "password_last_reset = :password_last_reset, forgotten_password_attempts = forgotten_password_attempts+1 " .
+                "WHERE user_id = :user_id";
+        } else {
+            $query = "INSERT INTO forgotten_passwords (user_id, password_token, password_last_reset, forgotten_password_attempts) " .
+                "VALUES (:user_id, :password_token, :password_last_reset, 1)";
         }
 
         // generate random hash for email verification (40 char string)
@@ -420,7 +434,7 @@ class Login extends Model{
         $database->bindValue(':user_id', $userId);
         $result = $database->execute();
 
-        if(!$result){
+        if (!$result) {
             throw new Exception("Couldn't generate token");
         }
 
@@ -435,7 +449,8 @@ class Login extends Model{
      * @param  string   $passwordToken
      * @return boolean
      */
-    public function isForgottenPasswordTokenValid($userId, $passwordToken){
+    public function isForgottenPasswordTokenValid($userId, $passwordToken)
+    {
 
         if (empty($userId) || empty($passwordToken)) {
             return false;
@@ -458,19 +473,17 @@ class Login extends Model{
 
             // reset token only after the user enters his password.
             return true;
-
-        } else if($database->countRows() === 1 && $time_elapsed > $expiry_time){
+        } else if ($database->countRows() === 1 && $time_elapsed > $expiry_time) {
 
             // reset if the user id & token exists in the database, but exceeded the $expiry_time
             $this->resetPasswordToken($userId);
             return false;
-
-        }else {
+        } else {
 
             // reset the token if invalid,
             // But, if the user id was invalid, this won't make any affect on database
             $this->resetPasswordToken($userId);
-            Logger::log("PASSWORD TOKEN", "User ID ". $userId . " is trying to reset password using invalid token: " . $passwordToken, __FILE__, __LINE__);
+            Logger::log("PASSWORD TOKEN", "User ID " . $userId . " is trying to reset password using invalid token: " . $passwordToken, __FILE__, __LINE__);
             return false;
         }
     }
@@ -486,12 +499,14 @@ class Login extends Model{
      * @throws Exception If password couldn't be updated
      *
      */
-    public function updatePassword($userId, $password, $confirmPassword){
+    public function updatePassword($userId, $password, $confirmPassword)
+    {
 
         $validation = new Validation();
-        if(!$validation->validate([
-            'Password' => [$password, "required|equals(".$confirmPassword.")|minLen(6)|password"],
-            'Password Confirmation' => [$confirmPassword, 'required']])){
+        if (!$validation->validate([
+            'Password' => [$password, "required|equals(" . $confirmPassword . ")|minLen(6)|password"],
+            'Password Confirmation' => [$confirmPassword, 'required']
+        ])) {
             $this->errors = $validation->errors();
             return false;
         }
@@ -505,13 +520,13 @@ class Login extends Model{
         $database->bindValue(':id', $userId);
         $result = $database->execute();
 
-        if(!$result){
+        if (!$result) {
             throw new Exception("Couldn't update password");
         }
 
-        if($result){
+        if ($result) {
             $activity = "Kemas kini kata laluan";
-        	$database->logActivity($userId, $activity);
+            $database->logActivity($userId, $activity);
         }
 
         // resetting the password token comes ONLY after successful updating password
@@ -527,17 +542,18 @@ class Login extends Model{
      * @param  integer   $userId
      * @throws Exception  If couldn't reset password token
      */
-    private function resetPasswordToken($userId){
+    private function resetPasswordToken($userId)
+    {
 
         $database = Database::openConnection();
         $query = "UPDATE forgotten_passwords SET password_token = NULL, " .
-                 "password_last_reset = NULL, forgotten_password_attempts = 0 ".
-                 "WHERE user_id = :user_id ";
+            "password_last_reset = NULL, forgotten_password_attempts = 0 " .
+            "WHERE user_id = :user_id ";
 
         $database->prepare($query);
         $database->bindValue(':user_id', $userId);
         $result = $database->execute();
-        if(!$result){
+        if (!$result) {
             throw new Exception("Couldn't reset password token");
         }
     }
@@ -551,7 +567,8 @@ class Login extends Model{
      * @return boolean If valid, it will return true, and vice-versa.
      *
      */
-    public function isEmailVerificationTokenValid($userId, $emailToken){
+    public function isEmailVerificationTokenValid($userId, $emailToken)
+    {
 
         if (empty($userId) || empty($emailToken)) {
             return false;
@@ -562,10 +579,10 @@ class Login extends Model{
         $database->bindValue(':id', $userId);
         $database->execute();
         $user = $database->fetchAssociative();
-        $isTokenValid = ($user["email_token"] === $emailToken)? true: false;
+        $isTokenValid = ($user["email_token"] === $emailToken) ? true : false;
 
         // check if user is already verified
-        if(!empty($user["is_email_activated"])){
+        if (!empty($user["is_email_activated"])) {
             $this->resetEmailVerificationToken($userId, true);
             return false;
         }
@@ -578,22 +595,20 @@ class Login extends Model{
         $time_elapsed = time() - $user['email_last_verification'];
 
         // token is usable only once.
-        if($database->countRows() === 1 && $isTokenValid && $time_elapsed < $expiry_time) {
+        if ($database->countRows() === 1 && $isTokenValid && $time_elapsed < $expiry_time) {
 
             $this->resetEmailVerificationToken($userId, true);
             return true;
-
-        }else if($database->countRows() === 1 && $isTokenValid && $time_elapsed > $expiry_time) {
+        } else if ($database->countRows() === 1 && $isTokenValid && $time_elapsed > $expiry_time) {
 
             $this->resetEmailVerificationToken($userId, false);
             return false;
-
-        }else{
+        } else {
 
             // reset token if invalid,
             // But, if the user id was invalid, this won't make any affect on database
             $this->resetEmailVerificationToken($userId, false);
-            Logger::log("EMAIL TOKEN", "User ID ". $userId . " is trying to access using invalid email token " . $emailToken, __FILE__, __LINE__);
+            Logger::log("EMAIL TOKEN", "User ID " . $userId . " is trying to access using invalid email token " . $emailToken, __FILE__, __LINE__);
             return false;
         }
     }
@@ -607,22 +622,23 @@ class Login extends Model{
      * @param boolean $isValid
      * @throws Exception If couldn't reset email verification token
      */
-    public function resetEmailVerificationToken($userId, $isValid){
+    public function resetEmailVerificationToken($userId, $isValid)
+    {
 
         $database = Database::openConnection();
 
-        if($isValid){
+        if ($isValid) {
             $query = "UPDATE users SET email_token = NULL, " .
-                "email_last_verification = NULL, is_email_activated = 1 ".
+                "email_last_verification = NULL, is_email_activated = 1 " .
                 "WHERE id = :id ";
-        }else{
+        } else {
             $query = "DELETE FROM users WHERE id = :id";
         }
 
         $database->prepare($query);
         $database->bindValue(':id', $userId);
         $result = $database->execute();
-        if(!$result){
+        if (!$result) {
             throw new Exception("Couldn't reset email verification token");
         }
     }
@@ -634,10 +650,10 @@ class Login extends Model{
      * @param  integer $userId
      *
      */
-    public function logOut($userId){
+    public function logOut($userId)
+    {
 
         Session::remove();
         Cookie::remove($userId);
     }
-
 }

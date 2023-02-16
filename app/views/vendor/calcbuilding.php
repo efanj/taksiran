@@ -5,7 +5,7 @@
       <!-- Start .row -->
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
-          <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
+          <?php $info = $this->controller->informations->getReviewInfo($reviewId); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
@@ -46,47 +46,40 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><label class="control-label tal">Alamat Surat Menyurat</label></td>
-                  <td>:</td>
-                  <td colspan="4">
-                    <?php
-                    if ($info["almt1"] != "") {
-                      echo $info["almt1"] . ", ";
-                    }
-                    if ($info["almt2"] != "" && $info["almt2"] != "-") {
-                      echo $info["almt2"] . ", ";
-                    }
-                    if ($info["almt3"] != "" && $info["almt3"] != "-") {
-                      echo $info["almt3"] . ", ";
-                    }
-                    if ($info["almt4"] != "" && $info["almt4"] != "-") {
-                      echo $info["almt4"] . ", ";
-                    }
-                    if ($info["almt5"] != "" && $info["almt5"] != "-") {
-                      echo $info["almt5"];
-                    }
-                    ?>
-                  </td>
-                </tr>
-                <tr>
                   <td><label class="control-label tal">Kegunaan Tanah</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["hnama"] ?></td>
-                </tr>
-                <tr>
+                  <td><?= $info["tnama"]; ?></td>
                   <td><label class="control-label tal">Kegunaan Hartanah</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["hnama"] ?></td>
+                  <td><?= $info["hnama"]; ?></td>
                 </tr>
                 <tr>
-                  <td><label class="control-label tal">Jenis Bangunan</label></td>
+                  <td><label class="control-label tal">Luas Tanah</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["bnama"] ?></td>
+                  <td colspan="4"><?= $info["lstnh"] . " mp"; ?></td>
                 </tr>
                 <tr>
-                  <td><label class="control-label tal">Struktur Bangunan</label></td>
+                  <td><label class="control-label tal">Luas Bangunan</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["snama"] ?></td>
+                  <td><?= $info["lsbgn"] . " mp"; ?></td>
+                  <td><label class="control-label tal">Luas Ansolari</label></td>
+                  <td>:</td>
+                  <td><?= $info["lsans"] . " mp"; ?></td>
+                </tr>
+                <tr>
+                  <td><label class="control-label tal">Nilai Tahunan Asal</label></td>
+                  <td>:</td>
+                  <td colspan="4"><?= "RM " . $info["nilth_asal"] ?></td>
+                </tr>
+                <tr>
+                  <td><label class="control-label tal">Kadar Asal</label></td>
+                  <td>:</td>
+                  <td colspan="4"><?= $info["kadar_asal"] ?></td>
+                </tr>
+                <tr>
+                  <td><label class="control-label tal">Cukai Asal</label></td>
+                  <td>:</td>
+                  <td colspan="4"><?= "RM " . $info["cukai_asal"] ?></td>
                 </tr>
               </table>
             </div>
@@ -132,7 +125,6 @@
                   </li>
                 </ul>
                 <form class="form-horizontal" role="form" id="calcBuilding" method="post">
-                  <input type="hidden" name="siri_no" value="<?= $info["no_siri"] ?>">
                   <input type="hidden" name="akaun" value="<?= $info["no_akaun"] ?>">
                   <div class="tab-content">
                     <div class=" tab-pane active" id="tab1">
@@ -247,7 +239,7 @@
                                     name="section_one[0][item][0][title_one]"></td>
                                 <td><input type="number" class="form-control input-sm"
                                     name="section_one[0][item][0][breadth_one]" id="breadth_one"
-                                    value="<?= $info["lsbgn"] ?>"></td>
+                                    value="<?= $info["ttl_bgn"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][breadthtype_one]">
                                     <option value="">Sila Pilih</option>
@@ -330,7 +322,7 @@
                             <tbody id="zero">
                               <tr id="0">
                                 <td><input type="text" class="form-control input-sm"
-                                    name="section_two[0][item][0][title_two]" value="<?= $info["lsans"] ?>"></td>
+                                    name="section_two[0][item][0][title_two]" value=""></td>
                                 <td><input type="number" class="form-control input-sm"
                                     name="section_two[0][item][0][breadth_two]" id="breadth_two"
                                     value="<?= $info["ttl_ans"] ?>"></td>

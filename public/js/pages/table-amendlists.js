@@ -163,8 +163,8 @@ $(document).ready(function () {
               } else {
                 data += '<a href="#" class="btn btn-default btn-sm" title="Borang Nilaian" disabled><i class="fa fa-calculator color-dark"></i></a>'
               }
-              data += '<a href="uploadphoto/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o color-dark"></i></a>'
-              data += '<a href="uploaddocument/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o color-dark"></i></a>'
+              data += '<a href="viewimages/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Gambar"><i class="fa fa-file-image-o color-dark"></i></a>'
+              data += '<a href="viewdocuments/' + row.noSiri + '" class="btn btn-default btn-sm" title="Ruangan Dokumen"><i class="fa fa-file-pdf-o color-dark"></i></a>'
               data += "</div>"
             }
             return data

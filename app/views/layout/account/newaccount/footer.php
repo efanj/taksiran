@@ -65,6 +65,7 @@ $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>
+<?php Oracle::closeOciConnection(); ?>
 </body>
 
 </html>

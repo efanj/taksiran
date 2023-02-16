@@ -45,6 +45,8 @@
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/styledLayerControl.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet-google.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/L.TileLayer.BetterWMS.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/leaflet/L.Geoserver.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet.setLegend.js" type="text/javascript"></script>
 
 <script src="<?= PUBLIC_ROOT; ?>js/pages/dashboard.js" type="text/javascript"></script>
 <!-- <script src="<?= PUBLIC_ROOT; ?>js/pages/charts.js" type="text/javascript"></script> -->

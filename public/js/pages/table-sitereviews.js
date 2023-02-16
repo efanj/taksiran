@@ -10,7 +10,7 @@ $(document).ready(function () {
       ],
       processing: true,
       serverSide: true,
-      searching: false,
+      searching: true,
       order: [],
       ajax: {
         url: "sitereviewtable",
@@ -23,7 +23,7 @@ $(document).ready(function () {
       columnDefs: [
         {
           targets: 0,
-          data: "id",
+          data: "sid",
           checkboxes: {
             selectRow: true
           }
@@ -136,7 +136,7 @@ $(document).ready(function () {
             // console.log(data);
             if (type === "display") {
               data = '<div class="btn-group btn-group-sm" role="group">'
-              data += '<a href="' + row.calctype + "/" + row.id + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
+              data += '<a href="' + row.calctype + "/" + row.akaun + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
               data += '<a href="viewimages/' + row.id + '" class="btn btn-default btn-sm" title="Gambar"><i class="fa  fa-file-photo-o color-dark"></i></a>'
               data += '<a href="viewdocuments/' + row.id + '" class="btn btn-default btn-sm" title="Dokumen"><i class="fa fa-file color-dark"></i></a>'
               data += '<a class="btn btn-danger btn-sm remove" title="Padam" id="remove" data-id="' + row.id + '"><i class="fa fa-trash"></i></a>'
@@ -151,7 +151,7 @@ $(document).ready(function () {
       },
       order: [[9, "asc"]],
       language: {
-        search: "Saring:",
+        search: "Saring : ",
         lengthMenu: "Paparkan _MENU_ rekod",
         zeroRecords: "Tiada maklumat yang dijumpai",
         info: "Memaparkan _START_ sehingga _END_ rekod daripada _TOTAL_ rekod",
@@ -165,18 +165,24 @@ $(document).ready(function () {
         }
       }
     })
+
+    $("#form-verifylists").on("submit", function (e) {
+      $("#submit_popup").modal("show")
+      var form = this
+      var rows_selected = table.column(0).checkboxes.selected()
+      console.log(rows_selected)
+      // $.each(rows_selected, function (index, rowId) {
+      //   data += rowId
+      // })
+      var data = rows_selected.join(",")
+      $("#id").val(data)
+
+      // Prevent actual form submission
+      e.preventDefault()
+    })
   }
 
   $("#sitereviews").css("font-size", 13)
-
-  $("#form-verifylists").submit(function (e) {
-    var form = this
-    var rows_selected = table.column(0).checkboxes.selected()
-    $.each(rows_selected, function (index, rowId) {
-      console.log(index, rowId)
-      // $(form).append($("<input>").attr("type", "hidden").attr("name", "id[]").val(rowId))
-    })
-  })
 
   $("#filter").click(function () {
     var area = $("#area").val()

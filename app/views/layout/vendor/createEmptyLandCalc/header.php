@@ -15,6 +15,7 @@
   <meta name="application-name" content="" />
   <!-- Import google fonts - Heading first/ text second -->
   <link href='https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway:100,200,300,700,800,900' rel='stylesheet' type='text/css'>
   <!-- Css files -->
   <!-- Icons -->
   <link href="<?= PUBLIC_ROOT ?>css/icons.css" rel="stylesheet" />
@@ -27,10 +28,6 @@
   <!-- Custom stylesheets ( Put your own changes here ) -->
   <link href="<?= PUBLIC_ROOT ?>css/custom.css" rel="stylesheet" />
 
-  <link href="<?= PUBLIC_ROOT ?>css/leaflet.css" rel="stylesheet" />
-  <link href="<?= PUBLIC_ROOT ?>css/L.Control.Locate.min.css" rel="stylesheet" />
-  <link href="<?= PUBLIC_ROOT ?>css/styledLayerControl.css" rel="stylesheet" />
-  <link href="<?= PUBLIC_ROOT ?>css/leaflet.setLegend.css" rel="stylesheet" />
   <!-- Fav and touch icons -->
   <link rel="icon" href="<?= PUBLIC_ROOT ?>img/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="<?= PUBLIC_ROOT ?>img/favicon.ico" type="image/x-icon">
@@ -39,4 +36,5 @@
 </head>
 
 <body>
-  <?php require_once Config::get("VIEWS_PATH") . "layout/default/navigation.php"; ?>
+  <?php require_once Config::get("VIEWS_PATH") .
+    "layout/default/navigation.php"; ?>

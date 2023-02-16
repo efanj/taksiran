@@ -125,7 +125,7 @@ class ElementsController extends Controller
     Permission::allow("user", $resource, "*");
 
     //only for normal vendor
-    Permission::allow("vendor", $resource, ["reference"]);
+    Permission::allow("vendor", $resource, ["reference", "street"]);
 
     return Permission::check($role, $resource, $action);
   }

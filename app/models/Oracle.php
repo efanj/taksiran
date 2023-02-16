@@ -271,6 +271,13 @@ class Oracle
         return (int)$this->fetchAssociative()["count"];
     }
 
+    public function countByNoAcct($table, $columnName, $noAcct)
+    {
+        $this->statement = $this->connect->prepare("SELECT COUNT(*) AS count FROM SPMC." . $table . " WHERE " . $columnName . " = " . $noAcct);
+        $this->execute();
+        return (int) $this->fetchAssociative()["count"];
+    }
+
     /**
      * Select all rows from a table
      *
@@ -315,6 +322,14 @@ class Oracle
     {
         $this->statement = $this->connect->prepare('SELECT ' . $column . ' FROM ' . $table . ' GROUP BY ' . $column);
         $this->execute();
+    }
+
+    public function getByNoAcct($table, $columnName, $noAcct)
+    {
+        if ($this->countByNoAcct($table, $columnName, $noAcct) > 0) {
+            $this->statement = $this->connect->prepare("SELECT * FROM SPMC." . $table . " WHERE " . $columnName . " = " . $noAcct);
+            $this->execute();
+        }
     }
 
     /**

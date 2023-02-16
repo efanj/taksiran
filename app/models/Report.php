@@ -1,6 +1,6 @@
 <?php
 
-class Filecode extends Model
+class Report extends Model
 {
   public function kodStatus($data)
   {
@@ -60,31 +60,85 @@ class Filecode extends Model
     }
   }
 
-  public function reloadLandUse()
+  public function sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $database = Database::openConnection();
-    $dboracle = new Oracle();
 
-    $database->getDataByTableColumns("data.htanah", "tnh_thkod");
-    $posts = $database->fetchAllAssociative();
-
-    $dboracle->getDataByTable("SPMC.V_HTANAH");
-    $rows = $dboracle->fetchAllAssociative();
-
-    foreach ($rows as $val) {
-      if (!in_array(["tnh_thkod" => $val["tnh_thkod"]], $posts, true)) {
-        $query = "INSERT INTO data.htanah(tnh_thkod, tnh_tnama) ";
-        $query .= "VALUES(:tnh_thkod, :tnh_tnama)";
-        $database->prepare($query);
-        $database->bindValue(":tnh_thkod", $val["tnh_thkod"]);
-        $database->bindValue(":tnh_tnama", $val["tnh_tnama"]);
-        $database->execute();
-      } else {
-        return false;
-      }
+    $searchQuery = '';
+    if ($searchValue != '') {
+      $searchQuery = "u.name iLIKE '%" . $searchValue . "%'";
     }
 
-    return true;
+    ## Total number of records without filtering
+    $sql = "SELECT count(*) AS allcount FROM data.v_semak s";
+    $sel = $database->prepare($sql);
+    $database->execute($sel);
+    $records = $database->fetchAssociative();
+    $totalRecords = $records["allcount"];
+
+    ## Total number of record with filtering
+    $sql = "SELECT count(*) AS allcount FROM data.v_semak s ";
+    $sql .= "LEFT JOIN public.users u ON s.smk_onama = u.workerid ";
+    if ($searchValue != '') {
+      $sql .= " WHERE " . $searchQuery;
+    }
+    $count = $database->prepare($sql);
+    $database->execute($count);
+
+    $records = $database->fetchAssociative();
+    $totalRecordwithFilter = $records["allcount"];
+
+    ## Fetch records
+    $query = "SELECT s.*, u.workerid, u.name FROM data.v_semak s ";
+    $query .= "LEFT JOIN public.users u ON s.smk_onama = u.workerid ";
+    if ($searchValue != '') {
+      $query .= "WHERE " . $searchQuery;
+    }
+    if ($columnName != "") {
+      $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+    }
+    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
+    $database->prepare($query);
+    $database->execute();
+
+    $row = $database->fetchAllAssociative();
+    $output = [];
+    $rowOutput = [];
+    foreach ($row as $val) {
+      $rowOutput["id"] = Encryption::encryptId($val["id"]);
+      $rowOutput["akaun"] = Encryption::encryptId($val["smk_akaun"]);
+      $rowOutput["smk_akaun"] = $val["smk_akaun"];
+      $rowOutput["smk_nolot"] = $val["smk_nolot"];
+      $rowOutput["smk_adpg1"] = $val["smk_adpg1"];
+      $rowOutput["smk_adpg2"] = $val["smk_adpg2"];
+      $rowOutput["smk_lsbgn"] = $val["smk_lsbgn"];
+      $rowOutput["smk_lstnh"] = $val["smk_lstnh"];
+      $rowOutput["smk_lsans"] = $val["smk_lsans"];
+      $rowOutput["smk_lsbgn_tmbh"] = $val["smk_lsbgn_tmbh"];
+      $rowOutput["smk_lsans_tmbh"] = $val["smk_lsans_tmbh"];
+      $rowOutput["smk_codex"] = $val["smk_codex"];
+      $rowOutput["smk_codey"] = $val["smk_codey"];
+      $rowOutput["smk_type"] = $val["smk_type"];
+      $rowOutput["hadapan"] = $val["hadapan"];
+      $rowOutput["belakang"] = $val["belakang"];
+      $rowOutput["hrt_hnama"] = $val["hrt_hnama"];
+      $rowOutput["jln_jnama"] = $val["jln_jnama"];
+      $rowOutput["smk_datevisit"] = date("d/m/Y H:i:s", strtotime($val["smk_datevisit"]));
+      $rowOutput["workerid"] = $val["workerid"];
+      $rowOutput["name"] = $val["name"];
+      $rowOutput["role"] = Session::getUserRole();
+      array_push($output, $rowOutput);
+    }
+
+    ## Response
+    $response = [
+      "draw" => intval($draw),
+      "iTotalRecords" => $totalRecords,
+      "iTotalDisplayRecords" => $totalRecordwithFilter,
+      "aaData" => $output,
+    ];
+
+    return $response;
   }
 
   public function reloadLandProperty()
@@ -326,7 +380,7 @@ class Filecode extends Model
 
   public function landusetable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
-    $dbOracle = new Oracle();
+    $database = Database::openConnection();
 
     $searchQuery = "";
     if ($searchValue != "") {
@@ -334,39 +388,36 @@ class Filecode extends Model
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HTANAH h ";
-    $sel = $dbOracle->prepare($sql);
-    $dbOracle->execute($sel);
-    $records = $dbOracle->fetchAssociative();
+    $sql = "SELECT count(*) AS allcount FROM data.htanah h ";
+    $sel = $database->prepare($sql);
+    $database->execute($sel);
+    $records = $database->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HTANAH ";
+    $sql = "SELECT count(*) AS allcount FROM data.htanah ";
     if ($searchValue != "") {
       $sql .= "WHERE " . $searchQuery;
     }
-    $sel = $dbOracle->prepare($sql);
-    $dbOracle->execute($sel);
+    $sel = $database->prepare($sql);
+    $database->execute($sel);
 
-    $records = $dbOracle->fetchAssociative();
+    $records = $database->fetchAssociative();
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT * FROM (";
-    $query .= "SELECT tmp.*, rownum rn FROM(";
-    $query .= "SELECT tnh_thkod, tnh_tnama FROM SPMC.V_HTANAH ";
+    $query = "SELECT * FROM data.htanah ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
     }
-    $query .= ") tmp WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
-    $query .= "WHERE rn > " . (int) $row;
-    $dbOracle->prepare($query);
-    $dbOracle->execute();
+    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
+    $database->prepare($query);
+    $database->execute();
 
-    $rows = $dbOracle->fetchAllAssociative();
+    $rows = $database->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
     foreach ($rows as $val) {

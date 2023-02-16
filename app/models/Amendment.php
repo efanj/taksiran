@@ -493,5 +493,3 @@ class Amendment extends Model
     return $response;
   }
 }
-
-?>

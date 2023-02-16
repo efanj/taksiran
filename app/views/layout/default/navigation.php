@@ -127,8 +127,9 @@ $info = $this->controller->user->getProfileInfo(Session::getUserId()); ?>
             <li class="dropdown-submenu">
               <a tabindex="-1" href="#">Nilaian Semula</a>
               <ul class="dropdown-menu">
-                <li><a tabindex="-1" href="<?= PUBLIC_ROOT ?>vendor/approved">Data Diluluskan</a></li>
-                <li><a href="<?= PUBLIC_ROOT ?>vendor/pending">Semak Semula</a></li>
+                <li><a tabindex="-1" href="<?= PUBLIC_ROOT ?>report/sitereview">Semakan Tapak</a></li>
+                <li><a href="<?= PUBLIC_ROOT ?>report/approved">Data Diluluskan</a></li>
+                <li><a href="<?= PUBLIC_ROOT ?>report/pending">Semak Semula</a></li>
               </ul>
             </li>
             <?php } ?>

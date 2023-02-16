@@ -16,8 +16,7 @@
 <!-- Important javascript libs(put in all pages) -->
 <script src="<?= PUBLIC_ROOT ?>js/libs/jquery-2.1.1.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/jquery-ui-1.10.4.min.js"></script>
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?v=3&key=<?= Config::get("GOOGLE_KEY") ?>&libraries=places"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&key=<?= Config::get("GOOGLE_KEY") ?>&libraries=places"></script>
 <!-- Bootstrap plugins -->
 <script src="<?= PUBLIC_ROOT ?>js/bootstrap/bootstrap.js"></script>
 <!-- Core plugins ( not remove ) -->
@@ -57,14 +56,15 @@
 <?php Config::setJsConfig("csrfToken", Session::generateCsrfToken()); ?>
 <!-- Assign all configration variables -->
 <script>
-config = <?= json_encode(Config::getJsConfig()) ?>;
+  config = <?= json_encode(Config::getJsConfig()) ?>;
 </script>
 <!-- Run the application -->
 <script>
-$(document).ready(app.init());
+  $(document).ready(app.init());
 </script>
 
 <?php Database::closeConnection(); ?>
+<?php Oracle::closeOciConnection(); ?>
 </body>
 
 </html>

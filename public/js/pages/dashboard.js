@@ -13,6 +13,13 @@ $(document).ready(function () {
     maxZoom: 25,
     attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
   })
+  var paymentwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
+    layers: "mdpt:v_payment_all",
+    format: "image/png",
+    transparent: true,
+    maxZoom: 25,
+    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+  })
   var kadlotwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
     layers: "mdpt:kadLot",
     format: "image/png",
@@ -33,6 +40,11 @@ $(document).ready(function () {
     transparent: true,
     maxZoom: 25,
     attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+  })
+
+  var layerLegend = L.Geoserver.legend("https://perancang.mps.gov.my/geoserver", {
+    layers: "mdpt:v_payment_all",
+    style: `payment_status`
   })
 
   var map = L.map("mapView", {
@@ -64,7 +76,8 @@ $(document).ready(function () {
         Sempadan: sempadanwmsLayer,
         Mukim: mukimwmsLayer,
         Kadlot: kadlotwmsLayer,
-        Dilawati: visitwmsLayer
+        Dilawati: visitwmsLayer,
+        "Status Bayaran": paymentwmsLayer
       }
     }
   ]
@@ -81,6 +94,7 @@ $(document).ready(function () {
   control.selectLayer(g_roadmap)
   control.selectLayer(sempadanwmsLayer)
   control.selectLayer(kadlotwmsLayer)
+  control.selectLayer(visitwmsLayer)
 
   // var input = document.getElementById("google_term")
   // var mdptBounds = new google.maps.LatLngBounds(
@@ -120,15 +134,21 @@ $(document).ready(function () {
   // })
 
   map.on("overlayadd", function (eventLayer) {
-    console.log(eventLayer)
-    if (eventLayer.name === "Bayaran") {
+    console.log(eventLayer.name)
+    if (eventLayer.name === "Status Bayaran") {
       layerLegend.addTo(this)
     }
+    // if (eventLayer.name === "Dilawati") {
+    //   layerLegendLawat.addTo(this)
+    // }
   })
   map.on("overlayremove", function (eventLayer) {
-    if (eventLayer.name === "Bayaran") {
+    if (eventLayer.name === "Status Bayaran") {
       this.removeControl(layerLegend)
     }
+    // if (eventLayer.name === "Dilawati") {
+    //   this.removeControl(layerLegendLawat)
+    // }
   })
 
   // map.on("click", function (e) {
@@ -453,5 +473,144 @@ $(document).ready(function () {
   // }
   // function errorCallback(result) {
   //   console.log(result)
+  // }
+
+  // var removeFlag = false
+  // /**
+  //  * Legend API has deduplication function
+  //  * @param {string} [position] - legend control position
+  //  * @param {string} [title] - legend title
+  //  * @param {string} [legendType] - legend type
+  //  * @param {array} [imgArr] - graphic legend parameter (object array, including image url and text description)
+  //  * @param {array} [colorArr] - color legend parameter array (object array, including color and corresponding text description)
+  //  * @param {string} [imgId] - the unique identification id corresponding to img legend
+  //  * @param {string} [colorId] - the unique identification id corresponding to the color legend
+  //  * @param {bool} [isShow] - show hide
+  //  */
+  // function legendfn(position, title, legendType, imgArr, colorArr, imgId, colorId, isShow) {
+  //   // imgType graphic legend
+  //   if (legendType === "imgType") {
+  //     if (isShow) {
+  //       // show
+  //       if (!this.legendCtrl) {
+  //         // Determine whether the control is initialized No create a new control
+  //         this.legendCtrl = new L.Control.setLegend({
+  //           position: position,
+  //           title: title,
+  //           legendType: legendType,
+  //           imgArr: imgArr,
+  //           colorArr: colorArr,
+  //           imgId: imgId,
+  //           colorId: colorId
+  //         })
+  //         this.legendCtrl.addTo(map)
+  //       } else {
+  //         // control legendCtrl has been initialized, only add the corresponding imgContent
+  //         // legendCtrl has been removed, so it needs to addTo(map) again
+  //         // But because legendCtrl is not automatically updated, the last div before remove remains
+  //         // So after addTo(map), you need to empty the content of the control, and then add the corresponding legend
+  //         if (this.removeFlag) {
+  //           this.legendCtrl.addTo(map)
+  //           // Here should add a this.legendCtrl with empty content
+  //           this.legendCtrl.setContentToNULL()
+  //           this.removeFlag = false
+  //         }
+  //         this.legendCtrl.setImgContent(title, legendType, imgArr, imgId)
+  //       }
+  //     } else {
+  //       // hide
+  //       // Delete the corresponding imgContent div
+  //       this.legendCtrl.removeImgContent(imgId)
+  //       // Remove the control when it is judged that the control is empty
+  //       let judgeContent = this.legendCtrl.judgeContent()
+  //       if (judgeConetent) {
+  //         this.legendCtrl.remove()
+  //         // Set the flag to remember the content state
+  //         this.removeFlag = true
+  //       }
+  //     }
+  //   }
+  //   // colorType legend of color type of thematic map
+  //   if (legendType === "colorType") {
+  //     if (isShow) {
+  //       // show
+  //       if (!this.legendCtrl) {
+  //         // Determine whether the control is initialized No create a new control
+  //         this.legendCtrl = new L.Control.setLegend({
+  //           position: position,
+  //           title: title,
+  //           legendType: legendType,
+  //           imgArr: imgArr,
+  //           colorArr: colorArr,
+  //           imgId: imgId,
+  //           colorId: colorId
+  //         })
+  //         this.legendCtrl.addTo(map)
+  //       } else {
+  //         // already initialized, only add the corresponding colorContent
+  //         // Add the corresponding colorContent div
+  //         if (this.removeFlag) {
+  //           this.legendCtrl.addTo(map)
+  //           this.legendCtrl.setContentToNULL()
+  //           this.removeFlag = false
+  //         }
+  //         this.legendCtrl.setColorContent(title, legendType, colorArr, colorId)
+  //       }
+  //     } else {
+  //       // hide
+  //       // Delete the corresponding colorContent div
+  //       this.legendCtrl.removeColorContent(colorId)
+  //       // Remove the control when it is judged that the control is empty
+  //       let judgeContent = this.legendCtrl.judgeContent()
+  //       if (judgeConetent) {
+  //         this.legendCtrl.remove()
+  //         this.removeFlag = true
+  //       }
+  //     }
+  //   }
+
+  //   return this.legendCtrl
+  // }
+
+  // /**
+  //  * legend
+  //  * @param: {layerName} (String) layer name
+  //  * @param: {isShow} (Boolean) show hide
+  //  * @param: {position} (String) Legend control position
+  //  */
+  // // icon array
+  // var imgArr = [
+  //   {
+  //     url: "img/icons/legend.png",
+  //     size: [150, 322],
+  //     label: "Legend"
+  //   }
+  // ]
+  // setLegend = function (layerName, isShow, position) {
+  //   // console.log('Add legend:', layerName)
+  //   for (let i = 0; i < imgArr.length; i++) {
+  //     if (layerName === imgArr[i].label) {
+  //       let imgToArr = []
+  //       imgToArr.push(imgArr[i])
+  //       legendfn(position, "", "imgType", imgToArr, [], layerName, "", isShow)
+  //     }
+  //   }
+  //   return layerName
+  // }
+
+  // // Example
+  // setLegend("Legend", true, "bottomleft")
+  // setLegend("emergency supplies", true, "bottomleft")
+  // setLegend("where the incident happened", true, "bottomleft")
+
+  // var showExpert = false
+  // function addExpert() {
+  //   showExpert = !showExpert
+  //   setLegend("Emergency Expert", showExpert, "bottomleft")
+  // }
+  // var showDanger = false
+  // function addDanger() {
+  //   showDanger = !showDanger
+  //   setLegend("Danger source", showDanger, "bottomleft")
   // }
 })
