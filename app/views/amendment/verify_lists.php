@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -12,15 +12,17 @@
             </div>
             <div class="panel-body">
               <div class="row">
-                <div class="col-lg-6 col-sm-6 col-md-6">
+                <div class="col-lg-6 col-sm-6 col-md-6 tal pl15">
                 </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 tar">
+                <div class="col-lg-6 col-sm-6 col-md-6 tar pr15">
                   <form class="form-inline" role="form">
+                    <button type="button" class="btn btn-info btn-sm btn-alt ml30" id="print"><i class="fa fa-print"></i>
+                      Cetak</button> |
                     <div class="form-group">
                       <select class="form-control input-sm" name="area" id="area">
                         <option selected value="">Sila Pilih Kawasan</option>
                         <?php foreach ($kws as $row) { ?>
-                        <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
+                          <option value="<?= $row["kws_kwkod"] ?>"><?= $row["kws_knama"] ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -31,9 +33,6 @@
                     </div>
                     <button type="button" class="btn btn-primary btn-sm" id="filter"><i class="fa  fa-search"></i>
                       Saring</button>
-                    <button type="button" class="btn btn-info btn-sm btn-alt ml30" id="print"><i
-                        class="fa fa-print"></i>
-                      Cetak</button>
                   </form>
                 </div>
               </div>

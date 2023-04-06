@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -141,8 +141,7 @@
                         </thead>
                         <tbody id="comparison_table">
                           <tr id="0">
-                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
-                                  class="fa fa-plus"></i></button></td>
+                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i class="fa fa-plus"></i></button></td>
                             <td>
                               <input type="hidden" name="comparison[]" id="comparison">
                               <div class='control-label tal' id='jlname'></div>
@@ -162,8 +161,7 @@
                             <td>
                               <div class='control-label tal' id='afa'></div>
                             </td>
-                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
-                                  class="fa fa-trash"></i></button></td>
+                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i class="fa fa-trash"></i></button></td>
                           </tr>
                         </tbody>
                       </table>
@@ -184,12 +182,10 @@
                         <tbody>
                           <tr>
                             <td></td>
-                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land"
-                                value="<?= $info["lstnh"] ?>"></td>
+                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land" value="<?= $info["lstnh"] ?>"></td>
                             <td>mp</td>
                             <td style="text-align:center">X</td>
-                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land"
-                                value="0"></td>
+                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land" value="0"></td>
                             <td>smp</td>
                             <td><input type="number" class="form-control input-sm ttl_partly" id="total_land" readonly>
                             </td>
@@ -210,8 +206,7 @@
                           <td style="width:63%"></td>
                           <td>
                             <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount"
-                                placeholder="Diskaun">
+                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun">
                               <span class=" input-group-addon">%</span>
                             </div>
                           </td>

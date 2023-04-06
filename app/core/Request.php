@@ -9,7 +9,8 @@
  * @author     Omar El Gabry <omar.elgabry.93@gmail.com>
  */
 
-class Request{
+class Request
+{
 
     /**
      * Set a list of trusted hosts patterns.
@@ -22,8 +23,8 @@ class Request{
      * Array of parameters parsed from the URL.
      *
      * @var array
-    */
-     public $params = [
+     */
+    public $params = [
         "controller" => null, "action"  => null, "args"  => null
     ];
 
@@ -39,7 +40,7 @@ class Request{
      *
      * @var array
      */
-     public $query = [];
+    public $query = [];
 
     /**
      * The URL used to make the request.
@@ -48,17 +49,18 @@ class Request{
      */
     public $url = null;
 
-     /**
-      * Constructor
-      * Create a new request from PHP superglobals.
-      *
-      * @param array $config user provided config
-      */
-    public function __construct($config = []){
+    /**
+     * Constructor
+     * Create a new request from PHP superglobals.
+     *
+     * @param array $config user provided config
+     */
+    public function __construct($config = [])
+    {
 
         $this->data    = $this->mergeData($_POST, $_FILES);
         $this->query   = $_GET;
-        $this->params += isset($config["params"])? $config["params"]: [];
+        $this->params += isset($config["params"]) ? $config["params"] : [];
         $this->url     = $this->fullUrl();
     }
 
@@ -70,66 +72,74 @@ class Request{
      * @param  array $files
      * @return array the merged array
      */
-    private function mergeData(array $post, array $files){
-        foreach($post as $key => $value) {
-            if(is_string($value)) { $post[$key] = trim($value); }
+    private function mergeData(array $post, array $files)
+    {
+        foreach ($post as $key => $value) {
+            if (is_string($value)) {
+                $post[$key] = trim($value);
+            }
         }
         return array_merge($files, $post);
     }
 
-     /**
-      * count fields in $this->data and optionally exclude some fields
-      *
-      * @param  array   $exclude
-      * @return mixed
-      */
-     public function countData(array $exclude = []){
-         $count = count($this->data);
-         foreach($exclude as $field){
-             if(array_key_exists($field, $this->data)){
-                 $count--;
-             }
-         }
-         return $count;
-     }
+    /**
+     * count fields in $this->data and optionally exclude some fields
+     *
+     * @param  array   $exclude
+     * @return mixed
+     */
+    public function countData(array $exclude = [])
+    {
+        $count = count($this->data);
+        foreach ($exclude as $field) {
+            if (array_key_exists($field, $this->data)) {
+                $count--;
+            }
+        }
+        return $count;
+    }
 
-     /**
-      * safer and better access to $this->data
-      *
-      * @param  string   $key
-      * @return mixed
-      */
-     public function data($key){
-         return array_key_exists($key, $this->data)? $this->data[$key]: null;
-     }
+    /**
+     * safer and better access to $this->data
+     *
+     * @param  string   $key
+     * @return mixed
+     */
+    public function data($key)
+    {
+        return array_key_exists($key, $this->data) ? $this->data[$key] : null;
+    }
 
-     /**
-      * safer and better access to $this->query
-      *
-      * @param  string   $key
-      * @return mixed
-      */
-     public function query($key){
-         return array_key_exists($key, $this->query)? $this->query[$key]: null;
-     }
+    /**
+     * safer and better access to $this->query
+     *
+     * @param  string   $key
+     * @return mixed
+     */
+    public function query($key)
+    {
+        return array_key_exists($key, $this->query) ? $this->query[$key] : null;
+    }
 
-     /**
-      * safer and better access to $this->params
-      *
-      * @param  string   $key
-      * @return mixed
-      */
-     public function param($key){
-         return array_key_exists($key, $this->params)? $this->params[$key]: null;
-     }
+    /**
+     * safer and better access to $this->params
+     *
+     * @param  string   $key
+     * @return mixed
+     */
+    public function param($key)
+    {
+        return array_key_exists($key, $this->params) ? $this->params[$key] : null;
+    }
 
     /**
      * detect if request is Ajax
      *
      * @return boolean
      */
-    public function isAjax(){
-        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH'])){
+    public function isAjax()
+    {
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
             return strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
         }
         return false;
@@ -140,18 +150,20 @@ class Request{
      *
      * @return boolean
      */
-    public function isPost(){
+    public function isPost()
+    {
         return $_SERVER["REQUEST_METHOD"] === "POST";
     }
 
-     /**
-      * detect if request is GET request
-      *
-      * @return boolean
-      */
-     public function isGet(){
-         return $_SERVER["REQUEST_METHOD"] === "GET";
-     }
+    /**
+     * detect if request is GET request
+     *
+     * @return boolean
+     */
+    public function isGet()
+    {
+        return $_SERVER["REQUEST_METHOD"] === "GET";
+    }
 
     /**
      * detect if request over secured connection(SSL)
@@ -159,8 +171,10 @@ class Request{
      * @return boolean
      *
      */
-    public function isSSL(){
-        return isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== "off";
+    public function isSSL()
+    {
+        return !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] !== 'off';
+        // return isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== "off";
     }
 
     /**
@@ -169,38 +183,42 @@ class Request{
      * @param  array $params
      * @return Request
      */
-    public function addParams(array $params){
+    public function addParams(array $params)
+    {
         $this->params = array_merge($this->params, $params);
         return $this;
     }
 
-     /**
-      * get content length
-      *
-      * @return integer
-      */
-     public function contentLength(){
-         return (int)$_SERVER['CONTENT_LENGTH'];
-     }
+    /**
+     * get content length
+     *
+     * @return integer
+     */
+    public function contentLength()
+    {
+        return (int)$_SERVER['CONTENT_LENGTH'];
+    }
 
-     /**
-      * checks if there is overflow in POST & FILES data.
-      * This will lead to having both $_POST & $_FILES = empty array.
-      *
-      * @return bool
-      */
-     public function dataSizeOverflow(){
-         $contentLength = $this->contentLength();
-         return empty($this->data) && isset($contentLength);
-     }
+    /**
+     * checks if there is overflow in POST & FILES data.
+     * This will lead to having both $_POST & $_FILES = empty array.
+     *
+     * @return bool
+     */
+    public function dataSizeOverflow()
+    {
+        $contentLength = $this->contentLength();
+        return empty($this->data) && isset($contentLength);
+    }
 
     /**
      * get the current uri of the request
      *
      * @return string|null
      */
-    public function uri(){
-        return isset($_SERVER['REQUEST_URI'])? $_SERVER['REQUEST_URI']: null;
+    public function uri()
+    {
+        return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
     }
 
     /**
@@ -209,7 +227,8 @@ class Request{
      * @return string
      * @throws UnexpectedValueException if the hostname is invalid
      */
-    public function host(){
+    public function host()
+    {
 
         if (!$host = Environment::get('HTTP_HOST')) {
             if (!$host = $this->name()) {
@@ -246,8 +265,9 @@ class Request{
      *
      * @return string|null
      */
-    public function name(){
-        return isset($_SERVER['SERVER_NAME'])? $_SERVER['SERVER_NAME']: null;
+    public function name()
+    {
+        return isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : null;
     }
 
     /**
@@ -255,8 +275,9 @@ class Request{
      *
      * @return string|null
      */
-    public function referer(){
-        return isset($_SERVER['HTTP_REFERER'])? $_SERVER['HTTP_REFERER']: null;
+    public function referer()
+    {
+        return isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
     }
 
     /**
@@ -267,8 +288,9 @@ class Request{
      *
      * @return string|null
      */
-    public function clientIp(){
-        return isset($_SERVER['REMOTE_ADDR'])? $_SERVER['REMOTE_ADDR']: null;
+    public function clientIp()
+    {
+        return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
     }
 
     /**
@@ -276,8 +298,9 @@ class Request{
      *
      * @return string|null
      */
-    public function userAgent(){
-        return isset($_SERVER['HTTP_USER_AGENT'])? $_SERVER['HTTP_USER_AGENT']: null;
+    public function userAgent()
+    {
+        return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
     }
 
     /**
@@ -285,7 +308,8 @@ class Request{
      *
      * @return string
      */
-    public function protocol(){
+    public function protocol()
+    {
         return $this->isSSL() ? 'https' : 'http';
     }
 
@@ -294,7 +318,8 @@ class Request{
      *
      * @return string The protocol and the host
      */
-    public function getProtocolAndHost(){
+    public function getProtocolAndHost()
+    {
         return $this->protocol() . '://' . $this->host();
     }
 
@@ -303,7 +328,8 @@ class Request{
      *
      * @return string
      */
-    public function fullUrl(){
+    public function fullUrl()
+    {
 
         // get uri
         $uri = $this->uri();
@@ -317,7 +343,7 @@ class Request{
         unset($queryArr['url']);
         unset($queryArr['redirect']);
 
-        if(!empty($queryArr)){
+        if (!empty($queryArr)) {
             $query .= '?' . http_build_query($queryArr, null, '&');
         }
 
@@ -331,7 +357,8 @@ class Request{
      *
      * @return string
      */
-    public function fullUrlWithoutProtocol(){
+    public function fullUrlWithoutProtocol()
+    {
         return preg_replace('#^https?://#', '', $this->fullUrl());
     }
 
@@ -345,7 +372,8 @@ class Request{
      *
      * @return string
      */
-    public function getBaseUrl(){
+    public function getBaseUrl()
+    {
         $baseUrl = str_replace(['public', '\\'], ['', '/'], dirname(Environment::get('SCRIPT_NAME')));
         return $baseUrl;
     }
@@ -355,7 +383,8 @@ class Request{
      *
      * @return string
      */
-    public function root(){
+    public function root()
+    {
         return $this->getProtocolAndHost() . $this->getBaseUrl();
     }
 }

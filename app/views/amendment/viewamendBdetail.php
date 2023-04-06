@@ -1,4 +1,4 @@
-<div class="page-content clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -28,6 +28,7 @@
                   </li>
                 </ul>
                 <form class="form-horizontal" role="form" id="jadualB" method="post" style="font-size:13px;">
+                  <input type="hidden" name="mjbNsiri" value="<?= $hacmjb["mjb_nsiri"] ?>" />
                   <div class="tab-content">
                     <div class="tab-pane active" id="tab1">
                       <div class="row mb5">
@@ -87,8 +88,8 @@
                         <div class="col-md-1">
                           <div class="checkbox-custom">
                             <input type="checkbox" id="dummy_mjb_Stcbk" <?php if ($hacmjb["mjb_stcbk"] === "Y") {
-                              echo "checked";
-                            } ?>disabled>
+                                                                          echo "checked";
+                                                                        } ?>disabled>
                             <label for="dummy_mjb_Stcbk"></label>
                           </div>
                           <input type="hidden" id="mjb_stcbk" name="mjbStcbk" value="<?= $hacmjb["mjb_stcbk"] ?>">
@@ -151,8 +152,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
                             <option <?php if ($row["tnh_thkod"] == $hacmjb["mjb_thkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -165,8 +166,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
                             <option <?php if ($row["bgn_bgkod"] == $hacmjb["mjb_bgkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -182,8 +183,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
                             <option <?php if ($row["hrt_htkod"] == $hacmjb["mjb_htkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -196,8 +197,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
                             <option <?php if ($row["stb_stkod"] == $hacmjb["mjb_stkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -323,7 +324,7 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#">Simpan</a>
+                  <li class="next finish" style="display:none;"><a href="#">Kemaskini</a>
                   </li>
                 </ul>
               </div>
@@ -351,29 +352,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="street_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI JALAN</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->streettable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/street.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -389,10 +379,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

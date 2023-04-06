@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -86,8 +86,8 @@
                         <div class="col-md-1">
                           <div class="checkbox-custom">
                             <input type="checkbox" id="dummy_mjb_Stcbk" <?php if ($hacmjb["peg_stcbk"] === "Y") {
-                              echo "checked";
-                            } ?>disabled>
+                                                                          echo "checked";
+                                                                        } ?>disabled>
                             <label for="dummy_mjb_Stcbk"></label>
                           </div>
                           <input type="hidden" id="mjb_stcbk" name="mjbStcbk" value="<?= $hacmjb["peg_stcbk"] ?>">
@@ -150,8 +150,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
                             <option <?php if ($row["tnh_thkod"] == $hacmjb["peg_thkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -164,8 +164,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
                             <option <?php if ($row["bgn_bgkod"] == $hacmjb["peg_bgkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -181,8 +181,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
                             <option <?php if ($row["hrt_htkod"] == $hacmjb["peg_htkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -195,8 +195,8 @@
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
                             <option <?php if ($row["stb_stkod"] == $hacmjb["peg_stkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
+                                        echo "selected";
+                                      } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>

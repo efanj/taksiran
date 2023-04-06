@@ -1,84 +1,63 @@
 //------------- charts-flot.js -------------//
 $(document).ready(function () {
+  //------------- Flot charts -------------//
+
+  //define chart colours first
   var chartColours = {
+    gray: "#bac3d2",
     teal: "#43aea8",
-    red: "#df6a78",
-    gridColor: "#bfbfbf",
+    blue: "#00aced",
+    red: "#ff1e1e",
+    green: "#04be13",
+    gray_lighter: "#e8ecf1",
+    gray_light: "#777777",
+    gridColor: "#bfbfbf"
   }
 
-  //convert the object to array for flot use
-  var chartColoursArr = Object.keys(chartColours).map(function (key) {
-    return chartColours[key]
-  })
-
-  //------------- Ordered bars chart -------------//
-  $(function () {
-    //some data
-    var d1 = []
-    for (var i = 0; i <= 20; i += 1)
-      d1.push([i, parseInt(Math.random() * 26000)])
-
-    var ds = new Array()
-
-    ds.push({
-      label: "Data One",
-      data: d1,
-      bars: { order: 1 },
-    })
-
-    console.log(ds)
-
-    var stack = 0,
-      bars = false,
-      lines = false,
-      steps = false
-
-    var options = {
-      bars: {
+  //------------- Pie chart -------------//
+  var options = {
+    series: {
+      pie: {
         show: true,
-        barWidth: 0.2,
-        fill: 1,
+        innerRadius: 0,
+        radius: 1,
+        label: {
+          show: true,
+          radius: 2 / 3,
+          formatter: labelFormatter,
+          threshold: 0.1
+        }
+      }
+    },
+    legend: {
+      show: true,
+      labelFormatter: function (label, series) {
+        return '<div style="font-weight:bold;font-size:13px;">&nbsp;' + label + "</div>"
       },
-      grid: {
-        show: true,
-        aboveData: false,
-        color: chartColours.gridColor,
-        labelMargin: 5,
-        axisMargin: 0,
-        borderWidth: 0,
-        borderColor: null,
-        minBorderMargin: 5,
-        clickable: true,
-        hoverable: true,
-        autoHighlight: false,
-        mouseActiveRadius: 20,
-      },
-      series: {
-        stack: stack,
-      },
-      legend: {
-        position: "nu",
-        margin: [0, -25],
-        noColumns: 0,
-        labelBoxBorderColor: null,
-        labelFormatter: function (label, series) {
-          // just add some space to labes
-          return "&nbsp;&nbsp;" + label + " &nbsp;&nbsp;"
-        },
-        width: 30,
-        height: 2,
-      },
-      colors: chartColoursArr,
-      tooltip: true, //activate tooltip
-      tooltipOpts: {
-        content: "%s : %y.0",
-        shifts: {
-          x: -30,
-          y: -50,
-        },
-      },
+      labelBoxBorderColor: null,
+      margin: 50,
+      width: 20,
+      padding: 1
     }
-
-    $.plot($("#ordered-bars-chart"), ds, options)
+  }
+  $.ajax({
+    url: "User/Statistik",
+    async: false,
+    success: function (response) {
+      // console.log(Number(response[0].count))
+      var data = [
+        { label: "TUNGGAKAN", data: Number(response[0].count), color: chartColours.red },
+        { label: "SELESAI", data: Number(response[1].count), color: chartColours.green },
+        { label: "LEBIHAN", data: Number(response[2].count), color: chartColours.blue }
+      ]
+      $.plot($("#pie-chart"), data, options)
+    },
+    error: function () {
+      alert("Error occured")
+    }
   })
+
+  function labelFormatter(label, series) {
+    return "<div style='font-weight:bold;font-size:10pt; text-align:center; padding:2px; color:white;'>" + series.data[0][1] + "</div>"
+  }
 })

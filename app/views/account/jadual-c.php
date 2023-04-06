@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -43,8 +43,7 @@
                           <div class="input-group input-group-sm">
                             <input type="text" class="form-control input-sm" id="mjc_tkhpl" name="mjcTkhpl" required>
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#mesyuarat_popup">
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#mesyuarat_popup">
                                 <i class="fa fa-book"></i>
                               </button>
                             </span>
@@ -63,8 +62,7 @@
                         <div class="col-md-2">
                           <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" class="form-control input-sm" data-language="en"
-                              data-date-Format="dd/mm/yyyy" id="mjc_tkhoc" name="mjcTkhoc">
+                            <input type="text" class="form-control input-sm" data-language="en" data-date-Format="dd/mm/yyyy" id="mjc_tkhoc" name="mjcTkhoc">
                           </div>
                         </div>
                       </div>
@@ -132,8 +130,7 @@
                             <input type="hidden" class="form-control input-sm" id="mjc_jlkod" name="mjcJlkod">
                             <input type="text" class="form-control input-sm" id="dummy_mjc_jlkod">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#street_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#street_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>
@@ -170,7 +167,7 @@
                           <select class="form-control input-sm" name="mjcThkod" required>
                             <option value="" selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
-                            <option value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
+                              <option value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -182,7 +179,7 @@
                           <select class="form-control input-sm" name="mjcBgkod">
                             <option value="" selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
-                            <option value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
+                              <option value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -196,7 +193,7 @@
                           <select class="form-control input-sm" name="mjcHtkod" id="mjcHtkod" required>
                             <option value="" selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
-                            <option value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
+                              <option value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -208,7 +205,7 @@
                           <select class="form-control input-sm" name="mjcStkod">
                             <option value="" selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
-                            <option value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
+                              <option value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -222,7 +219,7 @@
                           <select class="form-control input-sm" name="mjcJpkod" onchange="semakSumbangan(this.value)">
                             <option value="" selected>Sila Pilih</option>
                             <?php foreach ($hjenpk as $row) { ?>
-                            <option value="<?= $row["jpk_jpkod"] ?>"><?= $row["jpk_jnama"] ?></option>
+                              <option value="<?= $row["jpk_jpkod"] ?>"><?= $row["jpk_jnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -250,8 +247,7 @@
                         </div>
                         <div class="col-md-2">
                           <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_diskn" name="mjcDiskn"
-                              maxlength="3">
+                            <input type="number" class="form-control input-sm" id="mjc_diskn" name="mjcDiskn" maxlength="3">
                             <span class="input-group-addon">%</span>
                           </div>
                         </div>
@@ -282,8 +278,7 @@
                           <label class="control-label">No. Pelan :</label>
                         </div>
                         <div class="col-md-2">
-                          <input class="form-control input-sm" type="text" name="mjcPelan" id="mjc_pelan"
-                            maxlength="10">
+                          <input class="form-control input-sm" type="text" name="mjcPelan" id="mjc_pelan" maxlength="10">
                         </div>
                       </div>
                       <div class="row mb5">
@@ -312,8 +307,7 @@
                         </div>
                         <div class="col-md-2">
                           <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lsbgn" name="mjcLsbgn" min="0"
-                              value="0" step=".01">
+                            <input type="number" class="form-control input-sm" id="mjc_lsbgn" name="mjcLsbgn" min="0" value="0" step=".01">
                             <span class="input-group-addon">m&sup2;</span>
                           </div>
                         </div>
@@ -322,8 +316,7 @@
                         </div>
                         <div class="col-md-2">
                           <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lstnh" name="mjcLstnh" min="0"
-                              value="0" step=".01">
+                            <input type="number" class="form-control input-sm" id="mjc_lstnh" name="mjcLstnh" min="0" value="0" step=".01">
                             <span class="input-group-addon">m&sup2;</span>
                           </div>
                         </div>
@@ -332,8 +325,7 @@
                         </div>
                         <div class="col-md-2">
                           <div class="input-group input-group-sm">
-                            <input type="number" class="form-control input-sm" id="mjc_lsans" name="mjcLsans" min="0"
-                              value="0" step=".01">
+                            <input type="number" class="form-control input-sm" id="mjc_lsans" name="mjcLsans" min="0" value="0" step=".01">
                             <span class="input-group-addon">m&sup2;</span>
                           </div>
                         </div>
@@ -347,8 +339,7 @@
                             <input type="hidden" id="mjc_sbkod" name="mjcSbkod">
                             <input type="text" class="form-control input-sm" id="dummy_mjc_sbkod">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#reason_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>
@@ -393,8 +384,7 @@
                           <div class="input-group input-group-sm">
                             <input type="text" class="form-control input-sm" id="mjc_plgid" name="mjcPlgid" readonly>
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#customer_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#customer_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>
@@ -407,8 +397,7 @@
                           <div class="input-group input-group-sm">
                             <input type="text" class="form-control input-sm" id="mjc_amtid" name="mjcAmtid" readonly>
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#customeraddress_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#customeraddress_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>
@@ -466,10 +455,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -485,10 +482,19 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI JALAN</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->streettable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/street.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_street" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Jalan</th>
+              <th>Kod Kawasan</th>
+              <th width="50%">Nama Jalan</th>
+              <th width="10%">Poskod</th>
+              <th width="30%">Nama Kawasan</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -504,10 +510,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

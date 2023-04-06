@@ -1,0 +1,103 @@
+19/03/2023, 01:41:07 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 16 | ErrorException
+Undefined array key "JLN_KWKOD"
+*******************************************************************
+
+19/03/2023, 01:52:25 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 16 | ErrorException
+Undefined array key "JLN_KWKOD"
+*******************************************************************
+
+19/03/2023, 01:57:25 | /usr/local/var/www/mdpt/taksiran/app/models/Informations.php | 962 | ErrorException
+Undefined array key "nilth_asal"
+*******************************************************************
+
+19/03/2023, 01:58:01 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 16 | ErrorException
+Undefined array key "JLN_KWKOD"
+*******************************************************************
+
+19/03/2023, 01:58:34 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 17 | ErrorException
+Undefined array key "PEG_HTKOD"
+*******************************************************************
+
+19/03/2023, 01:58:59 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 25 | ErrorException
+Undefined array key "PMK_PLGID"
+*******************************************************************
+
+19/03/2023, 01:59:36 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 55 | ErrorException
+Undefined array key "hnama"
+*******************************************************************
+
+19/03/2023, 02:00:32 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 60 | ErrorException
+Undefined array key "hnama"
+*******************************************************************
+
+19/03/2023, 02:01:23 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 60 | ErrorException
+Undefined array key "hrt_hnama"
+*******************************************************************
+
+19/03/2023, 02:02:16 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 65 | ErrorException
+Undefined array key "BGN_BNAMA"
+*******************************************************************
+
+19/03/2023, 02:02:46 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 317 | ErrorException
+Undefined array key "ttl_ans"
+*******************************************************************
+
+19/03/2023, 02:07:17 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 415 | ErrorException
+Undefined array key "kadar_asal"
+*******************************************************************
+
+19/03/2023, 03:14:30 | /usr/local/var/www/mdpt/taksiran/app/models/Elements.php | 503 | ArgumentCountError
+Too few arguments to function Elements::rates(), 0 passed in /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php on line 415 and exactly 2 expected
+*******************************************************************
+
+19/03/2023, 03:16:08 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 415 | ErrorException
+Undefined array key "kadar_asal"
+*******************************************************************
+
+19/03/2023, 03:28:20 | /usr/local/var/www/mdpt/taksiran/app/views/calculator/calcbuilding.php | 9 | ErrorException
+Undefined array key "jlkod"
+*******************************************************************
+
+19/03/2023, 03:29:31 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "v_mkwjln" does not exist
+LINE 1: SELECT kadar_nilai, kadar_lama FROM V_MKWJLN WHERE kws_kwkod...
+                                            ^
+*******************************************************************
+
+19/03/2023, 03:38:44 | /usr/local/var/www/mdpt/taksiran/app/models/Amendment.php | 298 | ErrorException
+Undefined array key "tnama"
+*******************************************************************
+
+19/03/2023, 04:19:23 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[22P02]: Invalid text representation: 7 ERROR:  invalid input syntax for type numeric: ""
+CONTEXT:  unnamed portal parameter $1 = ''
+*******************************************************************
+
+19/03/2023, 04:36:53 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "data.v_submitioninfops" does not exist
+LINE 1: SELECT count(*) AS allcount FROM data.v_submitioninfops
+                                         ^
+*******************************************************************
+
+19/03/2023, 04:37:02 | /usr/local/var/www/mdpt/taksiran/app/models/Database.php | 127 | PDOException
+SQLSTATE[42P01]: Undefined table: 7 ERROR:  relation "data.v_submitioninfops" does not exist
+LINE 1: SELECT count(*) AS allcount FROM data.v_submitioninfops
+                                         ^
+*******************************************************************
+
+20/03/2023, 05:54:20 | /usr/local/var/www/mdpt/taksiran/app/core/components/SecurityComponent.php | 238 | CSRF Attack
+User: 5 provided invalid CSRF Token 1f13de78caa1e9339e6eb0f030c37db6
+*******************************************************************
+
+20/03/2023, 05:54:20 | /usr/local/var/www/mdpt/taksiran/app/core/components/SecurityComponent.php | 136 | Exception
+The request has been deined
+*******************************************************************
+
+21/03/2023, 16:30:08 | /usr/local/var/www/mdpt/taksiran/app/core/components/SecurityComponent.php | 136 | Exception
+The request has been deined
+*******************************************************************
+
+21/03/2023, 21:20:44 | /usr/local/var/www/mdpt/taksiran/app/models/Amendment.php | 459 | ErrorException
+Undefined array key "no_siri"
+*******************************************************************
+

@@ -1,45 +1,41 @@
 //------------- blank.js -------------//
 $(document).ready(function () {
+  var api_url = "https://perancang.mps.gov.my/geoserver/mdpt/wms?"
   var popup = L.popup()
 
   var g_roadmap = new L.Google("ROADMAP")
   var g_terrain = new L.Google("TERRAIN")
   var g_satellite = new L.Google("SATELLITE")
 
-  var visitwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
-    layers: "mdpt:v_semak",
+  var visitwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "mpti:v_semak",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+    maxZoom: 25
   })
-  var paymentwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
-    layers: "mdpt:v_payment_all",
+  // var paymentwmsLayer = L.tileLayer.betterWms(api_url, {
+  //   layers: "mdpt:v_payment_all",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  // })
+  var kadlotwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "	mdpt:kadLot",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+    maxZoom: 25
   })
-  var kadlotwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
-    layers: "mdpt:kadLot",
-    format: "image/png",
-    transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
-  })
-  var mukimwmsLayer = L.tileLayer.wms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
-    layers: "mdpt:mukim",
-    format: "image/png",
-    transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
-  })
-  var sempadanwmsLayer = L.tileLayer.wms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
+  // var mukimwmsLayer = L.tileLayer.wms(api_url, {
+  //   layers: "mdpt:mukim",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  // })
+  var sempadanwmsLayer = L.tileLayer.wms(api_url, {
     layers: "mdpt:daerah",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+    maxZoom: 25
   })
 
   var layerLegend = L.Geoserver.legend("https://perancang.mps.gov.my/geoserver", {
@@ -48,8 +44,8 @@ $(document).ready(function () {
   })
 
   var map = L.map("mapView", {
-    center: [4.2738327000745, 100.95737914922],
-    zoom: 10.5,
+    center: [4.2635497, 100.8956734],
+    zoom: 10,
     markerZoomAnimation: false,
     zoomControl: false,
     maxZoom: 25
@@ -74,10 +70,8 @@ $(document).ready(function () {
       expanded: true,
       layers: {
         Sempadan: sempadanwmsLayer,
-        Mukim: mukimwmsLayer,
         Kadlot: kadlotwmsLayer,
-        Dilawati: visitwmsLayer,
-        "Status Bayaran": paymentwmsLayer
+        Dilawati: visitwmsLayer
       }
     }
   ]

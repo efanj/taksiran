@@ -1,6 +1,39 @@
 $(document).ready(function () {
   $("#mjc_tkhoc").datepicker()
   var popup_meeting = $("#popup_meeting").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/meetingtable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "mcm_blngn"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "eld3"
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: "mcm_tkhpl"
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: "mcm_tkhtk"
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "mcm_kkrja"
+      }
+    ],
     order: [[0, "desc"]],
     language: {
       search: "Saring:",
@@ -20,13 +53,32 @@ $(document).ready(function () {
 
   $("#popup_meeting tbody").on("click", "tr", function () {
     var data_meeting = popup_meeting.row(this).data()
-    $("#mjb_tkhpl").val(data_meeting[2])
-    $("#mjb_tkhtk").html(data_meeting[3])
-    $("#mjbTkhtk").val(data_meeting[3])
+    console.log(data_meeting)
+    $("#mjb_tkhpl").val(data_meeting.mcm_tkhpl)
+    $("#mjb_tkhtk").html(data_meeting.mcm_tkhtk)
+    $("#mjbTkhtk").val(data_meeting.mcm_tkhtk)
     $("#mesyuarat_popup").modal("hide")
   })
 
   var popup_reason = $("#popup_reason").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/reasontable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "acm_sbkod"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "acm_sbktr"
+      }
+    ],
     language: {
       search: "Saring:",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -46,8 +98,8 @@ $(document).ready(function () {
   $("#popup_reason tbody").on("click", "tr", function () {
     var data_reason = popup_reason.row(this).data()
     console.log(data_reason)
-    $("#mjb_sbkod").val(data_reason[0])
-    $("#dummy_mjb_sbkod").val(data_reason[1])
+    $("#mjb_sbkod").val(data_reason.acm_sbkod)
+    $("#dummy_mjb_sbkod").val(data_reason.acm_sbktr)
     $("#reason_popup").modal("toggle")
   })
 

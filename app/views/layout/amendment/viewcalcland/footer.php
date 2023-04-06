@@ -1,12 +1,9 @@
 </div>
-<div id="footer">
-  <div class="footer-copyright">
-    <div class="container">
-      <p class="pull-left"><?= Config::get("COPYRIGHT") . " " . date("Y") ?></p>
-    </div>
-  </div>
+<div id="footer" class="clearfix sidebar-page" style="position: absolute;">
+  <!-- Start #footer  -->
+  <p class="pull-left"><?= Config::get('COPYRIGHT') . " " . date("Y") ?></p>
 </div>
-<!-- / #footer -->
+<!-- End #footer  -->
 <!-- Back to top -->
 <div id="back-to-top"><a href="#">Back to Top</a>
 </div>
@@ -28,12 +25,16 @@
 <script src="<?= PUBLIC_ROOT ?>plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
 <!-- Remove click delay in touch -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/fastclick/fastclick.js"></script>
+<!-- Custom scroll for sidebars,tables and etc. -->
+<script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="<?= PUBLIC_ROOT ?>plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
 <!-- Increase jquery animation speed -->
 <script src="<?= PUBLIC_ROOT ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
 <script src="<?= PUBLIC_ROOT ?>plugins/ui/bootbox/bootbox.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/jspdf.min.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/libs/main.js"></script>
+<script src="<?= PUBLIC_ROOT ?>js/jquery.dynamic.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/main.js"></script>
 <script src="<?= PUBLIC_ROOT ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->

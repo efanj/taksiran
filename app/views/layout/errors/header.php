@@ -2,33 +2,33 @@
 <html lang="en">
 
 <head>
+  <meta charset="utf-8">
+  <title><?= Config::get('WEBSITE_NAME'); ?></title>
+  <!-- Mobile specific metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no">
+  <!-- Force IE9 to render in normal mode -->
+  <!--[if IE]><meta http-equiv="x-ua-compatible" content="IE=9" /><![endif]-->
+  <meta name="author" content="" />
+  <meta name="description" content="" />
+  <meta name="keywords" content="" />
+  <meta name="application-name" content="" />
+  <!-- Import google fonts - Heading first/ text second -->
+  <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
+  <!-- Css files -->
+  <!-- Icons -->
+  <link href="<?= PUBLIC_ROOT; ?>css/icons.css" rel="stylesheet" />
+  <!-- Bootstrap stylesheets (included template modifications) -->
+  <link href="<?= PUBLIC_ROOT; ?>css/bootstrap.css" rel="stylesheet" />
+  <!-- Plugins stylesheets (all plugin custom css) -->
+  <link href="<?= PUBLIC_ROOT; ?>css/plugins.css" rel="stylesheet" />
+  <!-- Main stylesheets (template main css file) -->
+  <link href="<?= PUBLIC_ROOT; ?>css/main.css" rel="stylesheet" />
+  <!-- Custom stylesheets ( Put your own changes here ) -->
+  <link href="<?= PUBLIC_ROOT; ?>css/custom.css" rel="stylesheet" />
 
-    <title><?=Config::get('WEBSITE_NAME');?></title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="MD Kampar">
-    <meta name="author" content="MD Kampar">
-
-    <!-- Icons -->
-    <!-- The following icons can be replaced with your own, they are used by desktop and mobile browsers -->
-    <link rel="shortcut icon" href="<?= PUBLIC_ROOT;?>img/icons/favicon.ico">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon57.png" sizes="57x57">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon72.png" sizes="72x72">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon76.png" sizes="76x76">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon114.png" sizes="114x114">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon120.png" sizes="120x120">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon144.png" sizes="144x144">
-    <link rel="apple-touch-icon" href="<?= PUBLIC_ROOT;?>img/icons/icon152.png" sizes="152x152">
-    <!-- END Icons -->
-    <style>
-    body {
-        background: #ffffff url("<?= PUBLIC_ROOT;?>img/backgrounds/background.png") no-repeat fixed left top;
-    }
-    </style>
-
-
+  <link rel="shortcut icon" href="<?= PUBLIC_ROOT; ?>img/icons/favicon.ico" type="image/x-icon">
+  <!-- Windows8 touch icon ( http://www.buildmypinnedsite.com/ )-->
+  <meta name="msapplication-TileColor" content="#3399cc" />
 </head>
 
-<body>
-    <div id="wrapper">
+<body class="error-page">

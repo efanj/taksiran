@@ -1,13 +1,5 @@
 <?php
 
-/**
- * This file contains configuration for the application.
- * It will be used by app/core/Config.php
- *
- * @license    http://opensource.org/licenses/MIT The MIT License (MIT)
- * @author     Omar El Gabry <omar.elgabry.93@gmail.com>
- */
-
 return array(
 
 

@@ -17,6 +17,14 @@ class Account extends Model
     }
   }
 
+  public static function dateFormat($date)
+  {
+    $date = str_replace("-", "/", $date);
+    $date = date("d/m/Y", strtotime($date));
+
+    return $date;
+  }
+
   public function createAcct(
     $userId,
     $workerId,
@@ -301,10 +309,10 @@ class Account extends Model
     $database->execute();
 
 
-    $query = "INSERT INTO data.t_hacmjb(mjb_nsiri, mjb_akaun, mjb_digit, mjb_tkhtk, mjb_tkhpl, mjb_thkod, mjb_htkod, mjb_jpkod, mjb_bgkod, mjb_stkod, mjb_sbkod, mjb_mesej, mjb_statf, ";
-    $query .= "mjb_hsiri, mjb_stcbk, mjb_tkpos, mjb_onama, mjb_etdate, mjb_calcty) ";
-    $query .= "VALUES(:mjb_nsiri, :mjb_akaun, :mjb_digit, :mjb_tkhtk, :mjb_tkhpl, :mjb_thkod, :mjb_htkod, :mjb_jpkod, :mjb_bgkod, :mjb_stkod, :mjb_sbkod, :mjb_mesej, :mjb_statf, ";
-    $query .= ":mjb_hsiri, :mjb_stcbk, :mjb_tkpos, :mjb_onama, :mjb_etdate, :mjb_calcty)";
+    $query = "INSERT INTO data.t_hacmjb(mjb_nsiri, mjb_akaun, mjb_digit, mjb_tkhtk, mjb_tkhpl, mjb_thkod, mjb_htkod, mjb_jpkod, mjb_bgkod, mjb_stkod, ";
+    $query .= "mjb_sbkod, mjb_mesej, mjb_statf, mjb_hsiri, mjb_stcbk, mjb_tkpos, mjb_onama, mjb_etdate, mjb_calcty) ";
+    $query .= "VALUES(:mjb_nsiri, :mjb_akaun, :mjb_digit, :mjb_tkhtk, :mjb_tkhpl, :mjb_thkod, :mjb_htkod, :mjb_jpkod, :mjb_bgkod, :mjb_stkod, :mjb_sbkod, ";
+    $query .= ":mjb_mesej, :mjb_statf, :mjb_hsiri, :mjb_stcbk, :mjb_tkpos, :mjb_onama, :mjb_etdate, :mjb_calcty)";
 
     $database->prepare($query);
     $database->bindValue(":mjb_nsiri", $mjbNsiri);
@@ -326,17 +334,92 @@ class Account extends Model
     $database->bindValue(":mjb_onama", $workerId);
     $database->bindValue(":mjb_etdate", $mjbEtdate);
     $database->bindValue(":mjb_calcty", $calcType);
-    $database->execute();
+    $result = $database->execute();
 
     if ($database->countRows() !== 1) {
       throw new Exception("Gagal untuk masukkan data pindaan.");
     }
 
-    // if($result){
-    //     $activity = "Nilaian Semula : No akaun - ". $mjbAkaun ." No Siri - ". $mjbNsiri;
-    //     $database->logActivity($userId, $activity);
-    // }
+    if ($result) {
+      $activity = "Pindaan : No akaun - " . $mjbAkaun . " No Siri - " . $mjbNsiri;
+      $database->logActivity($userId, $activity);
+    }
     return ["success" => true, "sirino" => Encryption::encryptId($mjbNsiri), "calcUrl" => $calcUrl];
+  }
+
+  public function updateB($userId, $mjbNsiri, $mjbTkhpl, $mjbTkhtk, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbSbkod, $mjbMesej)
+  {
+    if ($mjbTkhpl != null) {
+      $mjbTkhplPg = str_replace("/", "-", $mjbTkhpl);
+      $mjbTkhplPg = date("Y-m-d", strtotime($mjbTkhplPg));
+    }
+
+    if ($mjbTkhtk != null) {
+      $mjbTkhtkPg = str_replace("/", "-", $mjbTkhtk);
+      $mjbTkhtkPg = date("Y-m-d", strtotime($mjbTkhtkPg));
+    }
+
+    if ($mjbHtkod == "11" || $mjbHtkod == "12" || $mjbHtkod == "13" || $mjbHtkod == "14" || $mjbHtkod == "15" || $mjbHtkod == "28" || $mjbHtkod == "29" || $mjbHtkod == "30" || $mjbHtkod == "31" || $mjbHtkod == "32" || $mjbHtkod == "33" || $mjbHtkod == "34" || $mjbHtkod == "35") {
+      $calcType = "1";
+    } else {
+      $calcType = "2";
+    }
+
+    $mjbNsiri = empty($mjbNsiri) ? "0" : $mjbNsiri;
+    $mjbAkaun = empty($mjbAkaun) ? "0" : $mjbAkaun;
+    $mjbDigit = empty($mjbDigit) ? "0" : $mjbDigit;
+    $mjbTkhpl = empty($mjbTkhpl) ? null : $mjbTkhplPg;
+    $mjaTkhtk = empty($mjbTkhtk) ? null : $mjbTkhtkPg;
+    $mjbThkod = empty($mjbThkod) ? "0" : $mjbThkod;
+    $mjbBgkod = empty($mjbBgkod) ? "0" : $mjbBgkod;
+    $mjbHtkod = empty($mjbHtkod) ? "0" : $mjbHtkod;
+    $mjbStkod = empty($mjbStkod) ? "0" : $mjbStkod;
+    $mjbJpkod = empty($mjbJpkod) ? "0" : $mjbJpkod;
+    $mjbCodex = empty($mjbCodex) ? "0" : $mjbCodex;
+    $mjbCodey = empty($mjbCodey) ? "0" : $mjbCodey;
+    $mjbSbkod = empty($mjbSbkod) ? null : $mjbSbkod;
+    $mjbMesej = empty($mjbMesej) ? null : $mjbMesej;
+    $mjbStcbk = empty($mjbStcbk) ? "T" : $mjbStcbk;
+    $mjbStatf = null;
+    $mjbHsiri = "0";
+    $mjbTkpos = null;
+    $mjbEtdate = date("Y-m-d");
+
+    $database = Database::openConnection();
+
+    $query = "UPDATE data.t_hacmjb SET mjb_tkhtk=:mjb_tkhtk, mjb_tkhpl=:mjb_tkhpl, mjb_thkod=:mjb_thkod, ";
+    $query .= "mjb_htkod=:mjb_htkod, mjb_jpkod=:mjb_jpkod, mjb_bgkod=:mjb_bgkod, mjb_stkod=:mjb_stkod, mjb_sbkod=:mjb_sbkod, mjb_mesej=:mjb_mesej, mjb_statf=:mjb_statf, ";
+    $query .= "mjb_hsiri=:mjb_hsiri, mjb_stcbk=:mjb_stcbk, mjb_tkpos=:mjb_tkpos, mjb_etdate=:mjb_etdate, mjb_calcty=:mjb_calcty ";
+    $query .= "WHERE mjb_nsiri=:mjb_nsiri";
+
+    $database->prepare($query);
+    $database->bindValue(":mjb_nsiri", $mjbNsiri);
+    $database->bindValue(":mjb_tkhtk", $mjaTkhtk);
+    $database->bindValue(":mjb_tkhpl", $mjbTkhpl);
+    $database->bindValue(":mjb_thkod", $mjbThkod);
+    $database->bindValue(":mjb_htkod", $mjbHtkod);
+    $database->bindValue(":mjb_jpkod", $mjbJpkod);
+    $database->bindValue(":mjb_bgkod", $mjbBgkod);
+    $database->bindValue(":mjb_stkod", $mjbStkod);
+    $database->bindValue(":mjb_sbkod", $mjbSbkod);
+    $database->bindValue(":mjb_mesej", $mjbMesej);
+    $database->bindValue(":mjb_statf", $mjbStatf);
+    $database->bindValue(":mjb_hsiri", $mjbHsiri);
+    $database->bindValue(":mjb_stcbk", $mjbStcbk);
+    $database->bindValue(":mjb_tkpos", $mjbTkpos);
+    $database->bindValue(":mjb_etdate", $mjbEtdate);
+    $database->bindValue(":mjb_calcty", $calcType);
+    $result = $database->execute();
+
+    if ($database->countRows() !== 1) {
+      throw new Exception("Gagal untuk kemaskini data pindaan.");
+    }
+
+    if ($result) {
+      $activity = "Kemaskini Pindaan : No akaun - " . $mjbAkaun . " No Siri - " . $mjbNsiri;
+      $database->logActivity($userId, $activity);
+    }
+    return ["success" => true];
   }
 
   public function createPS($userId, $workerId, $mjbTkhpl, $mjbTkhtk, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbSbkod, $mjbMesej)
@@ -352,10 +435,10 @@ class Account extends Model
     }
 
     if ($mjbHtkod == "11" || $mjbHtkod == "12" || $mjbHtkod == "13" || $mjbHtkod == "14" || $mjbHtkod == "15" || $mjbHtkod == "28" || $mjbHtkod == "29" || $mjbHtkod == "30" || $mjbHtkod == "31" || $mjbHtkod == "32" || $mjbHtkod == "33" || $mjbHtkod == "34" || $mjbHtkod == "35") {
-      // $calcType = "calcland";
+      $calcUrl = "calcland";
       $calcType = "1";
     } else {
-      // $calcType = "calcbuilding";
+      $calcUrl = "calcbuilding";
       $calcType = "2";
     }
 
@@ -381,10 +464,10 @@ class Account extends Model
     $mjbVfdate = null;
 
     $database = Database::openConnection();
-    $query = "INSERT INTO data.ps_hacmjb(mjb_nsiri, mjb_akaun, mjb_digit, mjb_tkhtk, mjb_tkhpl, mjb_thkod, mjb_htkod, mjb_jpkod, mjb_bgkod, mjb_stkod, mjb_sbkod, mjb_mesej, mjb_statf, ";
-    $query .= "mjb_hsiri, mjb_stcbk, mjb_tkpos, mjb_onama, mjb_etdate, mjb_calcty) ";
-    $query .= "VALUES(:mjb_nsiri, :mjb_akaun, :mjb_digit, :mjb_tkhtk, :mjb_tkhpl, :mjb_thkod, :mjb_htkod, :mjb_jpkod, :mjb_bgkod, :mjb_stkod, :mjb_sbkod, :mjb_mesej, :mjb_statf, ";
-    $query .= ":mjb_hsiri, :mjb_stcbk, :mjb_tkpos, :mjb_onama, :mjb_etdate, :mjb_calcty)";
+    $query = "INSERT INTO data.ps_hacmjb(mjb_nsiri, mjb_akaun, mjb_digit, mjb_tkhtk, mjb_tkhpl, mjb_thkod, mjb_htkod, mjb_jpkod, mjb_bgkod, mjb_stkod, ";
+    $query .= "mjb_sbkod, mjb_mesej, mjb_statf, mjb_hsiri, mjb_stcbk, mjb_tkpos, mjb_onama, mjb_etdate, mjb_calcty) ";
+    $query .= "VALUES(:mjb_nsiri, :mjb_akaun, :mjb_digit, :mjb_tkhtk, :mjb_tkhpl, :mjb_thkod, :mjb_htkod, :mjb_jpkod, :mjb_bgkod, :mjb_stkod, :mjb_sbkod, ";
+    $query .= ":mjb_mesej, :mjb_statf, :mjb_hsiri, :mjb_stcbk, :mjb_tkpos, :mjb_onama, :mjb_etdate, :mjb_calcty)";
 
     $database->prepare($query);
     $database->bindValue(":mjb_nsiri", $mjbNsiri);
@@ -412,11 +495,11 @@ class Account extends Model
       throw new Exception("Gagal untuk masukkan data nilaian semula.");
     }
 
-    // if($result){
-    //     $activity = "Nilaian Semula : No akaun - ". $mjbAkaun ." No Siri - ". $mjbNsiri;
-    //     $database->logActivity($userId, $activity);
-    // }
-    return ["success" => true, "sirino" => Encryption::encryptId($mjbNsiri), "calctype" => $calcType];
+    if ($result) {
+      $activity = "Nilaian Semula : No akaun - " . $mjbAkaun . " No Siri - " . $mjbNsiri;
+      $database->logActivity($userId, $activity);
+    }
+    return ["success" => true, "sirino" => Encryption::encryptId($mjbNsiri), "calcUrl" => $calcUrl];
   }
 
   public function getAccountInfo($fileId)
@@ -457,11 +540,9 @@ class Account extends Model
   public function viewamendBdetail($siriNo)
   {
     $database = Database::openConnection();
-    $query = "SELECT b.*, s.*, h.tnh_tnama, bg.bgn_bnama, st.stb_snama, jp.jpk_jnama, sb.acm_sbktr, u.name FROM data.t_hacmjb b ";
-    $query .= "LEFT JOIN data.hvnduk s ON b.mjb_akaun = s.peg_akaun ";
-    $query .= "LEFT JOIN data.htanah h ON s.peg_thkod = h.tnh_thkod ";
-    $query .= "LEFT JOIN data.hbangn bg ON s.peg_bgkod = bg.bgn_bgkod ";
-    $query .= "LEFT JOIN data.hstbgn st ON s.peg_stkod = st.stb_stkod ";
+    $dbOracle = new Oracle();
+
+    $query = "SELECT b.*, jp.jpk_jnama, sb.acm_sbktr, u.name FROM data.t_hacmjb b ";
     $query .= "LEFT JOIN data.hmjacm sb ON b.mjb_sbkod = sb.acm_sbkod ";
     $query .= "LEFT JOIN data.hjenpk jp ON b.mjb_jpkod = jp.jpk_jpkod ";
     $query .= "LEFT JOIN public.users u ON b.mjb_onama = u.workerid ";
@@ -471,7 +552,57 @@ class Account extends Model
     $database->execute();
 
     $info = $database->fetchAssociative();
-    return $info;
+    $rowOutput = [];
+    $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $info["mjb_akaun"]);
+    $val = $dbOracle->fetchAssociative();
+    $rowOutput["mjb_nsiri"] = $info["mjb_nsiri"];
+    $rowOutput["mjb_akaun"] = $info["mjb_akaun"];
+    $rowOutput["mjb_digit"] = $info["mjb_digit"];
+    $rowOutput["mjb_tkhtk"] = $this->dateFormat($info["mjb_tkhtk"]);
+    $rowOutput["mjb_tkhpl"] = $this->dateFormat($info["mjb_tkhpl"]);
+    $rowOutput["mjb_thkod"] = $info["mjb_thkod"];
+    $rowOutput["mjb_htkod"] = $info["mjb_htkod"];
+    $rowOutput["mjb_jpkod"] = $info["mjb_jpkod"];
+    $rowOutput["mjb_bgkod"] = $info["mjb_bgkod"];
+    $rowOutput["mjb_stkod"] = $info["mjb_stkod"];
+    $rowOutput["mjb_nilth"] = $info["mjb_nilth"];
+    $rowOutput["mjb_bnilt"] = $info["mjb_bnilt"];
+    $rowOutput["mjb_sbkod"] = $info["mjb_sbkod"];
+    $rowOutput["mjb_mesej"] = $info["mjb_mesej"];
+    $rowOutput["mjb_statf"] = $info["mjb_statf"];
+    $rowOutput["mjb_hsiri"] = $info["mjb_hsiri"];
+    $rowOutput["mjb_stcbk"] = $info["mjb_stcbk"];
+    $rowOutput["mjb_nota"] = $info["mjb_nota"];
+    $rowOutput["mjb_rujuk"] = $info["mjb_rujuk"];
+    $rowOutput["mjb_disk"] = $info["mjb_disk"];
+    $rowOutput["mjb_tkpos"] = $info["mjb_tkpos"];
+    $rowOutput["mjb_onama"] = $info["mjb_onama"];
+    $rowOutput["name"] = $info["name"];
+    $rowOutput["acm_sbktr"] = $info["acm_sbktr"];
+    $rowOutput["jpk_jnama"] = $info["jpk_jnama"];
+    $rowOutput["peg_oldac"] = $val["peg_oldac"];
+    $rowOutput["pmk_nmbil"] = $val["pmk_nmbil"];
+    $rowOutput["peg_nolot"] = $val["peg_nolot"];
+    $rowOutput["jln_jnama"] = $val["jln_jnama"];
+    $rowOutput["adpg1"] = $val["adpg1"];
+    $rowOutput["adpg2"] = $val["adpg2"];
+    $rowOutput["adpg3"] = $val["adpg3"];
+    $rowOutput["adpg4"] = $val["adpg4"];
+    $rowOutput["jln_knama"] = $val["jln_knama"];
+    $rowOutput["kaw_kwkod"] = $val["kaw_kwkod"];
+    $rowOutput["peg_codex"] = $val["peg_codex"];
+    $rowOutput["peg_codey"] = $val["peg_codey"];
+    $rowOutput["peg_nompt"] = $val["peg_nompt"];
+    $rowOutput["peg_rjfil"] = $val["peg_rjfil"];
+    $rowOutput["peg_pelan"] = $val["peg_pelan"];
+    $rowOutput["pmk_hkmlk"] = $val["pmk_hkmlk"];
+    $rowOutput["peg_bilpk"] = $val["peg_bilpk"];
+    $rowOutput["peg_rjmmk"] = $val["peg_rjmmk"];
+    $rowOutput["peg_lsbgn"] = $val["peg_lsbgn"];
+    $rowOutput["peg_lstnh"] = $val["peg_lstnh"];
+    $rowOutput["peg_lsans"] = $val["peg_lsans"];
+
+    return $rowOutput;
   }
 
   public function viewamendCdetail($siriNo)

@@ -120,9 +120,9 @@ $(document).ready(function () {
           data: null,
           render: function (data, type, row, meta) {
             if (type === "display") {
-              if (row.vstatus === 0) {
+              if (row.vstatus === "0") {
                 data = "Belum Disahkan"
-              } else if (row.vstatus === 1) {
+              } else if (row.vstatus === "1") {
                 data = "Telah Disahkan"
               }
             }
@@ -155,6 +155,8 @@ $(document).ready(function () {
                 data += '<a href="viewamendBdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
               } else if (row.form === "C") {
                 data += '<a href="viewamendCdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
+              } else if (row.form === "PS") {
+                data += '<a href="../vendor/viewreviewPSdetail/' + row.noSiri + '" class="btn btn-default btn-sm" type="button" title="Maklumat Lengkap"><i class="fa fa-eye color-dark"></i></a>'
               }
               if (row.calctype === "1") {
                 data += '<a href="viewcalcland/' + row.noSiri + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'

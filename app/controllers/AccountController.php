@@ -67,6 +67,9 @@ class AccountController extends Controller
       case "createB":
         $this->Security->config("form", ["fields" => ["mjbTkhpl", "mjbTkhtk", "mjbAkaun", "mjbDigit", "mjbStcbk", "kawKwkod", "mjbThkod", "mjbBgkod", "mjbHtkod", "mjbStkod", "mjbJpkod", "mjbCodex", "mjbCodey", "mjbSbkod", "mjbMesej"]]);
         break;
+      case "updateB":
+        $this->Security->config("form", ["fields" => ["mjbNsiri", "mjbTkhpl", "mjbTkhtk", "mjbAkaun", "mjbDigit", "mjbStcbk", "kawKwkod", "mjbThkod", "mjbBgkod", "mjbHtkod", "mjbStkod", "mjbJpkod", "mjbSbkod", "mjbMesej"]]);
+        break;
       case "createPS":
         $this->Security->config("form", ["fields" => ["mjbTkhpl", "mjbTkhtk", "mjbAkaun", "mjbDigit", "mjbStcbk", "kawKwkod", "mjbThkod", "mjbBgkod", "mjbHtkod", "mjbStkod", "mjbJpkod", "mjbSbkod", "mjbMesej"]]);
         break;
@@ -233,6 +236,31 @@ class AccountController extends Controller
     $mjbMesej = $this->request->data("mjbMesej");
 
     $result = $this->Account->createB(Session::getUserId(), Session::getUserWorkerId(), $mjbTkhpl, $mjbTkhtk, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbCodex, $mjbCodey, $mjbSbkod, $mjbMesej);
+    if (!$result) {
+      $this->view->renderErrors($this->Account->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function updateB()
+  {
+    $mjbNsiri = $this->request->data("mjbNsiri");
+    $mjbTkhpl = $this->request->data("mjbTkhpl");
+    $mjbTkhtk = $this->request->data("mjbTkhtk");
+    $mjbAkaun = $this->request->data("mjbAkaun");
+    $mjbDigit = $this->request->data("mjbDigit");
+    $mjbStcbk = $this->request->data("mjbStcbk");
+    $kawKwkod = $this->request->data("kawKwkod");
+    $mjbThkod = $this->request->data("mjbThkod");
+    $mjbBgkod = $this->request->data("mjbBgkod");
+    $mjbHtkod = $this->request->data("mjbHtkod");
+    $mjbStkod = $this->request->data("mjbStkod");
+    $mjbJpkod = $this->request->data("mjbJpkod");
+    $mjbSbkod = $this->request->data("mjbSbkod");
+    $mjbMesej = $this->request->data("mjbMesej");
+
+    $result = $this->Account->updateB(Session::getUserId(), $mjbNsiri, $mjbTkhpl, $mjbTkhtk, $mjbAkaun, $mjbDigit, $mjbStcbk, $kawKwkod, $mjbThkod, $mjbBgkod, $mjbHtkod, $mjbStkod, $mjbJpkod, $mjbSbkod, $mjbMesej);
     if (!$result) {
       $this->view->renderErrors($this->Account->errors());
     } else {

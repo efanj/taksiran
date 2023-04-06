@@ -7,37 +7,44 @@ $(document).ready(function () {
   var g_terrain = new L.Google("TERRAIN")
   var g_satellite = new L.Google("SATELLITE")
 
-  var visitwmsLayer = L.tileLayer.betterWms(api_url, {
-    layers: "mdpt:v_semak",
+  var visitwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mpti/wms?", {
+    layers: "mpti:v_semak",
     format: "image/png",
     transparent: true,
     maxZoom: 25,
-    attribution: "Semakan Tapak © 2022 Majlis Daerah Perak Tengah"
+    attribution: "Kadlot Terkini © 2022 Majlis Perbandaran Teluk Intan"
   })
-  var kadlotwmsLayer = L.tileLayer.wms(api_url, {
-    layers: "mdpt:kadLot",
+  // var paymentwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
+  //   layers: "mdpt:v_payment_all",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  //   attribution: "Kadlot Terkini © 2022 Majlis Perbandaran Teluk Intan"
+  // })
+  var kadlotwmsLayer = L.tileLayer.betterWms("https://perancang.mps.gov.my/geoserver/mpti/wms?", {
+    layers: "mpti:lot",
     format: "image/png",
     transparent: true,
     maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah"
+    attribution: "Kadlot Terkini © 2022 Majlis Perbandaran Teluk Intan"
   })
-  var mukimwmsLayer = L.tileLayer.wms(api_url, {
-    layers: "mdpt:mukim",
+  // var mukimwmsLayer = L.tileLayer.wms("https://perancang.mps.gov.my/geoserver/mdpt/wms?", {
+  //   layers: "mdpt:mukim",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  //   attribution: "Kadlot Terkini © 2022 Majlis Perbandaran Teluk Intan"
+  // })
+  var sempadanwmsLayer = L.tileLayer.wms("https://perancang.mps.gov.my/geoserver/mpti/wms?", {
+    layers: "mpti:sempadan",
     format: "image/png",
     transparent: true,
     maxZoom: 25,
-    attribution: "Mukim © 2022 Majlis Daerah Perak Tengah"
-  })
-  var sempadanwmsLayer = L.tileLayer.wms(api_url, {
-    layers: "mdpt:daerah",
-    format: "image/png",
-    transparent: true,
-    maxZoom: 25,
-    attribution: "Sempadan © 2022 Majlis Daerah Perak Tengah"
+    attribution: "Kadlot Terkini © 2022 Majlis Perbandaran Teluk Intan"
   })
 
   var map = L.map("mapView", {
-    center: [4.2738327000745, 100.95737914922],
+    center: [3.9451963, 100.9629367],
     zoom: 10.5,
     markerZoomAnimation: false,
     zoomControl: false,
@@ -63,7 +70,6 @@ $(document).ready(function () {
       expanded: true,
       layers: {
         Sempadan: sempadanwmsLayer,
-        Mukim: mukimwmsLayer,
         Kadlot: kadlotwmsLayer
         // Dilawati: visitwmsLayer,
       }

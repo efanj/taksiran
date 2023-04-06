@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -71,8 +71,8 @@
                   <div class="col-md-1">
                     <div class="checkbox-custom">
                       <input type="checkbox" id="dummy_mja_Stcbk" <?php if ($hacmja["mja_stcbk"] === "Y") {
-                        echo "checked";
-                      } ?>disabled>
+                                                                    echo "checked";
+                                                                  } ?>disabled>
                       <label for="dummy_mja_Stcbk"></label>
                     </div>
                     <input type="hidden" id="mja_Stcbk" name="mjaStcbk" value="<?= $hacmja["mja_stcbk"] ?>">

@@ -117,7 +117,7 @@ $(document).ready(function () {
           street: street
         }
       },
-      searching: false,
+      searching: true,
       select: "single",
       columnDefs: [
         {

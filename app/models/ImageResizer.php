@@ -22,8 +22,8 @@ class ImageResizer
     $thumb_new_width = 250; // assign new width to new resized image
     $thumb_new_height = $ratio * 250;
 
-    $image = ImageCreateTrueColor($new_width, $new_height);
-    $thumbImage = ImageCreateTrueColor($thumb_new_width, $thumb_new_height);
+    $image = ImageCreateTrueColor((int)$new_width, (int)$new_height);
+    $thumbImage = ImageCreateTrueColor((int)$thumb_new_width, (int)$thumb_new_height);
 
     if ($ty == IMAGETYPE_JPEG) {
       $originalImage = imagecreatefromjpeg($sourcePath);
@@ -88,4 +88,3 @@ class ImageResizer
     return $filename;
   }
 }
-?>

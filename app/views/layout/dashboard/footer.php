@@ -1,12 +1,9 @@
 </div>
-<div id="footer">
-  <div class="footer-copyright">
-    <div class="container">
-      <p class="pull-left"><?= Config::get('COPYRIGHT') . " " . date("Y") ?></p>
-    </div>
-  </div>
+<div id="footer" class="clearfix sidebar-page" style="position: absolute;">
+  <!-- Start #footer  -->
+  <p class="pull-left"><?= Config::get('COPYRIGHT') . " " . date("Y") ?></p>
 </div>
-<!-- / #footer -->
+<!-- End #footer  -->
 <!-- Back to top -->
 <div id="back-to-top"><a href="#">Back to Top</a>
 </div>
@@ -16,8 +13,6 @@
 <!-- Important javascript libs(put in all pages) -->
 <script src="<?= PUBLIC_ROOT; ?>js/libs/jquery-2.1.1.min.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/libs/jquery-ui-1.10.4.min.js"></script>
-<script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?v=3&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
 <!-- Bootstrap plugins -->
 <script src="<?= PUBLIC_ROOT; ?>js/bootstrap/bootstrap.js"></script>
 <!-- Core plugins ( not remove ) -->
@@ -33,14 +28,14 @@
 <!-- Increase jquery animation speed -->
 <script src="<?= PUBLIC_ROOT; ?>plugins/core/velocity/jquery.velocity.min.js"></script>
 <!-- Bootbox fast bootstrap modals -->
-<script src="<?= PUBLIC_ROOT; ?>plugins/charts/apex-chart/apex-chart.js"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/pages/charts/chart-custom.js"></script>
+<!-- <script src="<?= PUBLIC_ROOT; ?>plugins/charts/apex-chart/apex-chart.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/pages/charts/chart-custom.js"></script> -->
 
 <script src="<?= PUBLIC_ROOT; ?>plugins/ui/bootbox/bootbox.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/libs/main.js"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/main.js"></script>
-<script src="<?= PUBLIC_ROOT; ?>js/setting.js" type="text/javascript"></script>
 <!-- Other plugins ( load only nessesary plugins for every page) -->
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?v=3.52&key=<?= Config::get('GOOGLE_KEY') ?>&libraries=places"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/styledLayerControl.js" type="text/javascript"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet-google.js" type="text/javascript"></script>
@@ -48,8 +43,16 @@
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/L.Geoserver.js"></script>
 <script src="<?= PUBLIC_ROOT; ?>js/leaflet/leaflet.setLegend.js" type="text/javascript"></script>
 
+<script src="<?= PUBLIC_ROOT; ?>plugins/charts/flot/jquery.flot.custom.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>plugins/charts/flot/jquery.flot.pie.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>plugins/charts/flot/jquery.flot.tooltip.min.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>plugins/charts/pie-chart/jquery.easy-pie-chart.js"></script>
+
 <script src="<?= PUBLIC_ROOT; ?>js/pages/dashboard.js" type="text/javascript"></script>
-<!-- <script src="<?= PUBLIC_ROOT; ?>js/pages/charts.js" type="text/javascript"></script> -->
+<script src="<?= PUBLIC_ROOT; ?>js/jquery.Dynamic.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/main.js"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/setting.js" type="text/javascript"></script>
+<script src="<?= PUBLIC_ROOT; ?>js/pages/charts.js" type="text/javascript"></script>
 
 
 <?php Config::setJsConfig('csrfToken', Session::generateCsrfToken()); ?>

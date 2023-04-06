@@ -17,6 +17,9 @@ class CalculatorController extends Controller
       case "buildingSubmit":
         $this->Security->config("validateForm", false);
         break;
+      case "buildingEdit":
+        $this->Security->config("validateForm", false);
+        break;
       case "landSubmit":
         $this->Security->config("validateForm", false);
         break;
@@ -114,6 +117,31 @@ class CalculatorController extends Controller
     }
   }
 
+  public function buildingEdit()
+  {
+    $siriNo = $this->request->data("siri_no");
+    $akaun = $this->request->data("akaun");
+    $comparison = $this->request->data("comparison");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $section_one = $this->request->data("section_one");
+    $section_two = $this->request->data("section_two");
+    $discount = $this->request->data("discount");
+    $rental = $this->request->data("rental");
+    $even = $this->request->data("even");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->calculator->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->calculator->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function landSubmit()
   {
     $siriNo = $this->request->data("siri_no");
@@ -162,6 +190,9 @@ class CalculatorController extends Controller
 
     //only for normal users
     Permission::allow("user", $resource, "*");
+
+    //only for normal vendor
+    Permission::allow("vendor", $resource, ["buildingSubmit", "landSubmit", "getCalculation"]);
 
     return Permission::check($role, $resource, $action);
   }

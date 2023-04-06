@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -38,8 +38,7 @@
                           <div class="input-group input-group-sm">
                             <input type="text" class="form-control input-sm" id="mjb_tkhpl" name="mjbTkhpl" required>
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#mesyuarat_popup">
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#mesyuarat_popup">
                                 <i class="fa fa-book"></i>
                               </button>
                             </span>
@@ -86,8 +85,8 @@
                         <div class="col-md-1">
                           <div class="checkbox-custom">
                             <input type="checkbox" id="dummy_mjb_Stcbk" <?php if ($hacmjb["peg_stcbk"] === "Y") {
-                              echo "checked";
-                            } ?>disabled>
+                                                                          echo "checked";
+                                                                        } ?>disabled>
                             <label for="dummy_mjb_Stcbk"></label>
                           </div>
                           <input type="hidden" id="mjb_stcbk" name="mjbStcbk" value="<?= $hacmjb["peg_stcbk"] ?>">
@@ -149,9 +148,9 @@
                           <select class="form-control input-sm" name="mjbThkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($htanah as $row) { ?>
-                            <option <?php if ($row["tnh_thkod"] == $hacmjb["peg_thkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
+                              <option <?php if ($row["tnh_thkod"] == $hacmjb["peg_thkod"]) {
+                                        echo "selected";
+                                      } ?> value="<?= $row["tnh_thkod"] ?>"><?= $row["tnh_tnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -163,9 +162,9 @@
                           <select class="form-control input-sm" name="mjbBgkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hbangn as $row) { ?>
-                            <option <?php if ($row["bgn_bgkod"] == $hacmjb["peg_bgkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
+                              <option <?php if ($row["bgn_bgkod"] == $hacmjb["peg_bgkod"]) {
+                                        echo "selected";
+                                      } ?> value="<?= $row["bgn_bgkod"] ?>"><?= $row["bgn_bnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -176,13 +175,12 @@
                         </div>
                         <div class="col-md-4">
                           <?php $hharta = $this->controller->elements->hharta(); ?>
-                          <select class="form-control input-sm" id="mjb_htkod" name="mjbHtkod"
-                            onchange="semakKadar(this.value)">
+                          <select class="form-control input-sm" id="mjb_htkod" name="mjbHtkod" onchange="semakKadar(this.value)">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hharta as $row) { ?>
-                            <option <?php if ($row["hrt_htkod"] == $hacmjb["peg_htkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
+                              <option <?php if ($row["hrt_htkod"] == $hacmjb["peg_htkod"]) {
+                                        echo "selected";
+                                      } ?> value="<?= $row["hrt_htkod"] ?>"><?= $row["hrt_hnama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -194,9 +192,9 @@
                           <select class="form-control input-sm" name="mjbStkod">
                             <option selected>Sila Pilih</option>
                             <?php foreach ($hstbgn as $row) { ?>
-                            <option <?php if ($row["stb_stkod"] == $hacmjb["peg_stkod"]) {
-                              echo "selected";
-                            } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
+                              <option <?php if ($row["stb_stkod"] == $hacmjb["peg_stkod"]) {
+                                        echo "selected";
+                                      } ?> value="<?= $row["stb_stkod"] ?>"><?= $row["stb_snama"] ?></option>
                             <?php } ?>
                           </select>
                         </div>
@@ -300,8 +298,7 @@
                             <input type="hidden" id="mjb_sbkod" name="mjbSbkod">
                             <input type="text" class="form-control input-sm" id="dummy_mjb_sbkod">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" type="button" data-toggle="modal"
-                                data-target="#reason_popup"><i class="fa fa-book"></i></button>
+                              <button class="btn btn-default" type="button" data-toggle="modal" data-target="#reason_popup"><i class="fa fa-book"></i></button>
                             </span>
                           </div>
                         </div>
@@ -361,10 +358,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -380,28 +385,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="calc_button_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12 tac">
-            <div class="btn-group">
-              <a href="<?= PUBLIC_ROOT ?>filecode/reviewrate/<?= $fileId ?>" class="btn btn-default">Kira-Kira Tanah</a>
-              <a href="<?= PUBLIC_ROOT ?>filecode/reviewrate/<?= $fileId ?>" class="btn btn-default">Kira-Kira
-                Bangunan</a>
-            </div>
-          </div>
-        </div>
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

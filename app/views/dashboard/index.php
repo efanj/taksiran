@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -8,12 +8,12 @@
           <div id="mapView" class="mapView"></div>
         </div>
         <div class="col-lg-4 col-sm-4 col-md-4">
-          <div class="card">
-            <div class="card-header">
+          <div class="panel">
+            <div class="panel-heading">
               <h3>Statistik Bayaran</h3>
             </div>
-            <div class="card-body apex-chart">
-              <div class="chart-overflow" id="piechart"></div>
+            <div class="panel-body">
+              <div id="pie-chart" style="width: 100%; height:250px;"></div>
             </div>
           </div>
         </div>

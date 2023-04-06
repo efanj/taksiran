@@ -8,40 +8,42 @@ $(document).ready(function () {
   var g_satellite = new L.Google("SATELLITE")
 
   var visitwmsLayer = L.tileLayer.betterWms(api_url, {
-    layers: "mdpt:v_semak",
+    layers: "mpti:v_semak",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Semakan Tapak © 2022 Majlis Daerah Perak Tengah",
+    maxZoom: 25
   })
-  var kadlotwmsLayer = L.tileLayer.wms(api_url, {
-    layers: "mdpt:kadLot",
+  // var paymentwmsLayer = L.tileLayer.betterWms(api_url, {
+  //   layers: "mdpt:v_payment_all",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  // })
+  var kadlotwmsLayer = L.tileLayer.betterWms(api_url, {
+    layers: "	mdpt:kadLot",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Kadlot Terkini © 2022 Majlis Daerah Perak Tengah",
+    maxZoom: 25
   })
-  var mukimwmsLayer = L.tileLayer.wms(api_url, {
-    layers: "mdpt:mukim",
-    format: "image/png",
-    transparent: true,
-    maxZoom: 25,
-    attribution: "Mukim © 2022 Majlis Daerah Perak Tengah",
-  })
+  // var mukimwmsLayer = L.tileLayer.wms(api_url, {
+  //   layers: "mdpt:mukim",
+  //   format: "image/png",
+  //   transparent: true,
+  //   maxZoom: 25,
+  // })
   var sempadanwmsLayer = L.tileLayer.wms(api_url, {
     layers: "mdpt:daerah",
     format: "image/png",
     transparent: true,
-    maxZoom: 25,
-    attribution: "Sempadan © 2022 Majlis Daerah Perak Tengah",
+    maxZoom: 25
   })
 
   var map = L.map("mapView", {
-    center: [4.2738327000745, 100.95737914922],
-    zoom: 10.5,
+    center: [4.262865, 100.8668342],
+    zoom: 10,
     markerZoomAnimation: false,
     zoomControl: false,
-    maxZoom: 25,
+    maxZoom: 25
   })
   var zoomControl = new L.Control.Zoom({ position: "topright" })
   zoomControl.addTo(map)
@@ -53,9 +55,9 @@ $(document).ready(function () {
       layers: {
         "Google Map - Satellite": g_satellite,
         "Google Map - Terrain": g_terrain,
-        "Google Map - Road Map": g_roadmap,
-      },
-    },
+        "Google Map - Road Map": g_roadmap
+      }
+    }
   ]
   var overlays = [
     {
@@ -63,18 +65,17 @@ $(document).ready(function () {
       expanded: true,
       layers: {
         Sempadan: sempadanwmsLayer,
-        Mukim: mukimwmsLayer,
-        Kadlot: kadlotwmsLayer,
+        Kadlot: kadlotwmsLayer
         // Dilawati: visitwmsLayer,
-      },
-    },
+      }
+    }
   ]
   var options = {
     container_width: "250px",
     group_maxHeight: "150px",
     exclusive: false,
     collapsed: true,
-    position: "topright",
+    position: "topright"
   }
 
   var control = L.Control.styledLayerControl(baseMaps, overlays, options)

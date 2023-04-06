@@ -102,67 +102,209 @@ class Elements extends Model
     $dbOracle->closeOciConnection();
   }
 
-  public function meetingtable()
+  public function meetingtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $dbOracle = new Oracle();
 
-    $query = "SELECT mcm_blngn, mcm_tkhpl, mcm_kkrja, mcm_statf, mcm_tkhtk, mcm_bulan, ";
-    $query .= "CASE mcm_bulan ";
+    $searchQuery = "";
+    if ($searchValue != "") {
+      $searchQuery = "CAST(f.noakaun AS TEXT) = '" . $searchValue . "' OR h.adpg1 LIKE '%" . $searchValue . "%' OR h.adpg2 LIKE '%" . $searchValue . "%' OR h.adpg3 LIKE '%" . $searchValue . "%' OR h.adpg4 LIKE '%" . $searchValue . "%' OR h2.bgn_bnama = '" . $searchValue . "'";
+    }
+
+    ## Total number of records without filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HMMACM v ";
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+    $records = $dbOracle->fetchAssociative();
+    $totalRecords = $records["allcount"];
+
+    ## Total number of record with filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_HMMACM v ";
+    if ($searchValue != "") {
+      $sql .= "WHERE " . $searchQuery;
+    }
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+
+    $records = $dbOracle->fetchAssociative();
+    $totalRecordwithFilter = $records["allcount"];
+
+    ## Fetch records
+    $query = "SELECT MCM_BLNGN, MCM_TKHPL, MCM_BULAN, MCM_KKRJA, MCM_STATF, MCM_TKHTK, ";
+    $query .= "CASE MCM_BULAN ";
     $query .= "WHEN '01' THEN 'JANUARI' WHEN '02' THEN 'FEBRUARI' WHEN '03' THEN 'MAC' WHEN '04' THEN 'APRIL' WHEN '05' THEN 'MEI' WHEN '06' THEN 'JUN' ";
     $query .= "WHEN '07' THEN 'JULAI' WHEN '08' THEN 'OGOS' WHEN '09' THEN 'SEPTEMBER' WHEN '10' THEN 'OKTOBER' WHEN '11' THEN 'NOVEMBER' WHEN '12' THEN 'DECEMBER' ";
     $query .= "END eld3 ";
-    $query .= "FROM SPMC.V_HMMACM ";
-    $query .= "ORDER by mcm_blngn DESC";
-    // $query .= "WHERE date_part('year', mcm_tkhpl) = date_part('year', CURRENT_DATE)";
-
+    $query .= "FROM ( SELECT tmp.*, rownum rn ";
+    $query .= "FROM( SELECT * FROM SPMC.V_HMMACM v ";
+    if ($searchValue != "") {
+      $query .= "WHERE " . $searchQuery;
+    }
+    if ($columnName != "") {
+      $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+    }
+    $query .= ") tmp ";
+    $query .= "WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
     $dbOracle->prepare($query);
     $dbOracle->execute();
 
-    $info = $dbOracle->fetchAllAssociative();
+    $rows = $dbOracle->fetchAllAssociative();
     $output = [];
     $rowOutput = [];
-    foreach ($info as $val) {
+    foreach ($rows as $val) {
       $rowOutput["mcm_blngn"] = $val["mcm_blngn"];
-      $rowOutput["mcm_tkhpl"] = $this->dateFormat((int)$val["mcm_tkhpl"]);
-      $rowOutput["mcm_tkhtk"] = $this->dateFormat((int)$val["mcm_tkhtk"]);
+      $rowOutput["mcm_tkhpl"] = $this->dateFormat($val["mcm_tkhpl"]);
+      $rowOutput["mcm_tkhtk"] = $this->dateFormat($val["mcm_tkhtk"]);
       $rowOutput["mcm_kkrja"] = $val["mcm_kkrja"];
       $rowOutput["mcm_statf"] = $val["mcm_statf"];
       $rowOutput["mcm_bulan"] = $val["mcm_bulan"];
       $rowOutput["eld3"] = $val["eld3"];
       array_push($output, $rowOutput);
     }
-    return $output;
+
+    ## Response
+    $response = [
+      "draw" => intval($draw),
+      "iTotalRecords" => $totalRecords,
+      "iTotalDisplayRecords" => $totalRecordwithFilter,
+      "aaData" => $output,
+    ];
+
+    return $response;
 
     $dbOracle->closeOciConnection();
   }
 
-  public function streettable()
+  public function streettable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $dbOracle = new Oracle();
 
+    $searchQuery = "";
+    if ($searchValue != "") {
+      $searchQuery = "v.acm_sbktr LIKE '%" . $searchValue . "%'";
+    }
+
+    ## Total number of records without filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_MKWJLN v ";
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+    $records = $dbOracle->fetchAssociative();
+    $totalRecords = $records["allcount"];
+
+    ## Total number of record with filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_MKWJLN v ";
+    if ($searchValue != "") {
+      $sql .= "WHERE " . $searchQuery;
+    }
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+
+    $records = $dbOracle->fetchAssociative();
+    $totalRecordwithFilter = $records["allcount"];
+
+    ## Fetch records
     $query = "SELECT jln_jlkod, kws_kwkod, kws_knama, jln_jnama, jln_poskd ";
-    $query .= "FROM SPMC.V_MKWJLN ";
-
+    $query .= "FROM ( SELECT tmp.*, rownum rn ";
+    $query .= "FROM( SELECT * FROM SPMC.V_MKWJLN v ";
+    if ($searchValue != "") {
+      $query .= "WHERE " . $searchQuery;
+    }
+    if ($columnName != "") {
+      $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+    }
+    $query .= ") tmp ";
+    $query .= "WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
     $dbOracle->prepare($query);
     $dbOracle->execute();
 
-    $info = $dbOracle->fetchAllAssociative();
-    return $info;
+    $rows = $dbOracle->fetchAllAssociative();
+    $output = [];
+    $rowOutput = [];
+    foreach ($rows as $val) {
+      $rowOutput["jln_jlkod"] = $val["jln_jlkod"];
+      $rowOutput["kws_kwkod"] = $val["kws_kwkod"];
+      $rowOutput["kws_knama"] = $val["kws_knama"];
+      $rowOutput["jln_jnama"] = $val["jln_jnama"];
+      $rowOutput["jln_poskd"] = $val["jln_poskd"];
+      array_push($output, $rowOutput);
+    }
+
+    ## Response
+    $response = [
+      "draw" => intval($draw),
+      "iTotalRecords" => $totalRecords,
+      "iTotalDisplayRecords" => $totalRecordwithFilter,
+      "aaData" => $output,
+    ];
+
+    return $response;
 
     $dbOracle->closeOciConnection();
   }
 
-  public function reasontable()
+  public function reasontable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
     $dbOracle = new Oracle();
 
-    $query = "SELECT * FROM SPMC.V_ACMRSN ";
+    $searchQuery = "";
+    if ($searchValue != "") {
+      $searchQuery = "v.acm_sbktr LIKE '%" . $searchValue . "%'";
+    }
 
+    ## Total number of records without filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_ACMRSN v ";
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+    $records = $dbOracle->fetchAssociative();
+    $totalRecords = $records["allcount"];
+
+    ## Total number of record with filtering
+    $sql = "SELECT count(*) AS allcount FROM SPMC.V_ACMRSN v ";
+    if ($searchValue != "") {
+      $sql .= "WHERE " . $searchQuery;
+    }
+    $sel = $dbOracle->prepare($sql);
+    $dbOracle->execute($sel);
+
+    $records = $dbOracle->fetchAssociative();
+    $totalRecordwithFilter = $records["allcount"];
+
+    ## Fetch records
+    $query = "SELECT * ";
+    $query .= "FROM ( SELECT tmp.*, rownum rn ";
+    $query .= "FROM( SELECT * FROM SPMC.V_ACMRSN v ";
+    if ($searchValue != "") {
+      $query .= "WHERE " . $searchQuery;
+    }
+    if ($columnName != "") {
+      $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+    }
+    $query .= ") tmp ";
+    $query .= "WHERE rownum <= " . (int) ($row + $rowperpage) . " ) h ";
+    $query .= "WHERE rn > " . (int) $row;
     $dbOracle->prepare($query);
     $dbOracle->execute();
 
-    $info = $dbOracle->fetchAllAssociative();
-    return $info;
+    $rows = $dbOracle->fetchAllAssociative();
+    $output = [];
+    $rowOutput = [];
+    foreach ($rows as $val) {
+      $rowOutput["acm_sbkod"] = $val["acm_sbkod"];
+      $rowOutput["acm_sbktr"] = $val["acm_sbktr"];
+      array_push($output, $rowOutput);
+    }
+
+    ## Response
+    $response = [
+      "draw" => intval($draw),
+      "iTotalRecords" => $totalRecords,
+      "iTotalDisplayRecords" => $totalRecordwithFilter,
+      "aaData" => $output,
+    ];
+
+    return $response;
 
     $dbOracle->closeOciConnection();
   }
@@ -356,5 +498,20 @@ class Elements extends Model
     $rows = $dbOracle->fetchAllAssociative();
 
     return $rows;
+  }
+
+  public function updateRate($rate, $kwkod, $htkod)
+  {
+    $database = Database::openConnection();
+
+    $query = "UPDATE data.kadar_nilai SET kadar_nilai=:rate ";
+    $query .= "WHERE kws_kwkod = :kws_kwkod AND hrt_htkod = :hrt_htkod";
+    $database->prepare($query);
+    $database->bindValue(":rate", $rate);
+    $database->bindValue(":kws_kwkod", (int) $kwkod);
+    $database->bindValue(":hrt_htkod", (int) $htkod);
+    $database->execute();
+
+    return true;
   }
 }

@@ -884,93 +884,105 @@ var events = {
     }
   },
 
-  /*
-   * News Feed
-   */
-  newsfeed: {
+  engineering: {
     init: function () {
-      events.newsfeed.update()
-      events.newsfeed.delete()
+      events.engineering.semak()
+      events.engineering.permit()
+      events.engineering.permitpengubahan()
+      events.engineering.permittahunan()
     },
-    reInit: function () {
-      // It's important to have the update & delete events encapsulated inside a function,
-      // so you can call the function after ajax calls to re-initialize them
-      events.newsfeed.update()
-      events.newsfeed.delete()
+    semak: function () {
+      $("#form-semak-akaun").submit(function (e) {
+        e.preventDefault()
+
+        if (helpers.validateFileSize("file")) {
+          ajax.upload("Engineering/semakAkaun", new FormData(this), createFileCallBack)
+        } else {
+          helpers.displayError("#form-upload-file", "File size can't exceed max limit")
+        }
+      })
     },
-    update: function () {
-      $("#list-newsfeed .header .edit")
-        .off("click")
-        .on("click", function () {
-          var newsfeedBody = $(this).parent().parent().parent().parent()
-          var newsfeedId = newsfeedBody.attr("id")
-          getNewsFeedUpdateForm()
+    permit: function () {
+      $("#form-permit").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Engineering/generatePermit", helpers.serialize(this), PermitCallBack)
+      })
 
-          // 1. get the update form merged with the current newsfeed data
-          function getNewsFeedUpdateForm() {
-            ajax.send("NewsFeed/getUpdateForm", { newsfeed_id: newsfeedId }, getNewsFeedUpdateFormCallBack)
-
-            function getNewsFeedUpdateFormCallBack(result) {
-              if (helpers.validateData(result, newsfeedBody, "html", "default", "data")) {
-                newsfeedBody.html(result.data)
-                activateCancelNewsFeedEvent()
-                activateUpdateNewsFeedEvent()
-              }
+      function PermitCallBack(result) {
+        if (result === true) {
+          swal(
+            {
+              title: "Berjaya!",
+              text: "Telah berjaya direkodkan.",
+              icon: "success",
+              confirmButtonClass: "btn-primary",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+            },
+            function () {
+              window.location = config.root + "Engineering/permit"
             }
-          }
-
-          // 2. if cancel, then go and get the current newsfeed(regardless of any changes)
-          function activateCancelNewsFeedEvent() {
-            $("#form-update-" + newsfeedId + " button[name='cancel']").click(function (e) {
-              e.preventDefault()
-              ajax.send("NewsFeed/getById", { newsfeed_id: newsfeedId }, getNewsFeedByIdCallBack)
-
-              function getNewsFeedByIdCallBack(result) {
-                if (helpers.validateData(result, newsfeedBody, "html", "default", "data")) {
-                  $(newsfeedBody).after(result.data)
-                  $(newsfeedBody).remove()
-                  events.newsfeed.reInit()
-                }
-              }
-            })
-          }
-
-          // 3. if update, then update the current newsfeed and get back the updated one
-          function activateUpdateNewsFeedEvent() {
-            $("#form-update-" + newsfeedId).submit(function (e) {
-              e.preventDefault()
-              ajax.send("NewsFeed/update", helpers.serialize("#form-update-" + newsfeedId, "newsfeed_id=" + newsfeedId), updateNewsFeedCallBack)
-
-              function updateNewsFeedCallBack(result) {
-                if (helpers.validateData(result, newsfeedBody, "after", "default", "data")) {
-                  $(newsfeedBody).after(result.data)
-                  $(newsfeedBody).remove()
-                  events.newsfeed.reInit()
-                }
-              }
-            })
-          }
-        })
+          )
+        } else {
+          swal("Oops...", "Tidak berjaya direkodkan!", "error")
+        }
+      }
     },
-    delete: function () {
-      $("#list-newsfeed .header .delete")
-        .off("click")
-        .on("click", function (e) {
-          e.preventDefault()
-          if (!confirm("Are you sure?")) {
-            return
-          }
+    permitpengubahan: function () {
+      $("#form-permit-pengubahan").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Engineering/generatePermitPengubahan", helpers.serialize(this), PermitPengubahanCallBack)
+      })
 
-          var newsfeedBody = $(this).parent().parent().parent().parent()
-          var newsfeedId = newsfeedBody.attr("id")
-
-          ajax.send("NewsFeed/delete", { newsfeed_id: newsfeedId }, deleteNewsFeedCallBack)
-          function deleteNewsFeedCallBack(result) {
-            if (helpers.validateData(result, newsfeedBody, "html", "default", "success")) {
-              $(newsfeedBody).remove()
+      function PermitPengubahanCallBack(result) {
+        if (result === true) {
+          swal(
+            {
+              title: "Berjaya!",
+              text: "Telah berjaya direkodkan.",
+              icon: "success",
+              confirmButtonClass: "btn-primary",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+            },
+            function () {
+              window.location = config.root + "Engineering/notis"
             }
-          }
-        })
+          )
+        } else {
+          swal("Oops...", "Tidak berjaya direkodkan!", "error")
+        }
+      }
+    },
+    permittahunan: function () {
+      $("#form-permit-tahunan").submit(function (e) {
+        e.preventDefault()
+        ajax.send("Engineering/generatePermitTahunan", helpers.serialize(this), PermitTahunanCallBack)
+      })
+
+      function PermitTahunanCallBack(result) {
+        if (result) {
+          swal(
+            {
+              title: "Berjaya!",
+              text: "Data berjaya dikemaskini.",
+              icon: "success",
+              confirmButtonClass: "btn-primary",
+              confirmButtonText: "Ok",
+              closeOnConfirm: false
+            },
+            function () {
+              $("#notis_tahunan").DataTable().ajax.reload()
+            }
+          )
+        } else {
+          swal({
+            icon: "error",
+            title: "Oops...",
+            text: "Data tidak berjaya dikemaskini!"
+          })
+        }
+      }
     }
   },
 

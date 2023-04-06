@@ -1,5 +1,55 @@
 $(document).ready(function () {
   var popup_comparison = $("#popup_comparison").DataTable({
+    processing: true,
+    serverSide: true,
+    searching: true,
+    order: [],
+    ajax: {
+      url: config.root + "informations/comparison",
+      type: "POST",
+      data: {
+        type: 1,
+        kwkod: $("#kwkod").val(),
+        htkod: $("#htkod").val()
+      }
+    },
+    columnDefs: [
+      {
+        targets: 0,
+        data: "id"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "jln_jnama"
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: "bgn_bnama"
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: "peg_lsbgn"
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "peg_nilth"
+      },
+      {
+        targets: 5,
+        orderable: false,
+        data: "mfa"
+      },
+      {
+        targets: 6,
+        orderable: false,
+        data: "afa"
+      }
+    ],
+    order: [[1, "asc"]],
     language: {
       search: "Saring : ",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -55,22 +105,25 @@ $(document).ready(function () {
   })
 
   $("body").on("click", "#add", function (e) {
-    e.preventDefault()
     var row = $(this).parent().parent()
     var rowId = row.attr("id")
 
     $("#comparison_popup").modal("show")
     console.log(rowId)
 
-    $("#popup_comparison tbody").on("click", "tr", function () {
+    popup_comparison.on("click", "tr", function () {
       var data_comparison = popup_comparison.row(this).data()
-      console.log(rowId + "#noakaun")
-      $("#" + rowId + " #comparison").val(data_comparison[0])
-      $("#" + rowId + " #noakaun").html(data_comparison[0])
-      $("#" + rowId + " #nolot").html(data_comparison[1])
-      $("#" + rowId + " #keluasan").html(data_comparison[2])
-      $("#" + rowId + " #hargasmp").html(data_comparison[3])
-      $("#" + rowId + " #nilaitahunan").html(data_comparison[4])
+      console.log(data_comparison)
+      $(".comparison #comparison_" + rowId).val(data_comparison.id)
+      $(".comparison #jlname_" + rowId).html(data_comparison.jln_jnama)
+      $(".comparison #bgtype_" + rowId).html(data_comparison.bgn_bnama)
+      $(".comparison #breadth_" + rowId).html(data_comparison.peg_lsbgn)
+      $(".comparison #nilth_" + rowId).html(data_comparison.peg_nilth)
+      $(".comparison #mfa_" + rowId).html(data_comparison.mfa)
+      $(".comparison #afa_" + rowId).html(data_comparison.afa)
+      $("#comparison_popup").on("hidden.bs.modal", function (e) {
+        rowId = ""
+      })
       $("#comparison_popup").modal("hide")
     })
   })

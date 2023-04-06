@@ -12,6 +12,7 @@
     mapmobilewidth = (windowWidth / 5) * 3
 
     $("#mapView").css({
+      width: "100%",
       height: mapmobileheight
     })
     $("#mapViewSmall").css({

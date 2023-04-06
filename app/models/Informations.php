@@ -2,6 +2,14 @@
 
 class Informations extends Model
 {
+
+  public static function dateFormat($date)
+  {
+    $date = str_replace("-", "/", $date);
+    $date = date("d/m/Y", strtotime($date));
+
+    return $date;
+  }
   public function escapeJsonString($value)
   {
     # list from www.json.org: (\b backspace, \f formfeed)
@@ -137,10 +145,43 @@ class Informations extends Model
     return $response;
   }
 
-  public function handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area = "", $street = "")
+  public function handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area = "", $street = "")
   {
     // $database = Database::openConnection();
     $oracleDB = Oracle::openOriConnection();
+
+    if ($searchValue != "") {
+      $searchQuery =
+        "peg_akaun LIKE '%" .
+        $searchValue .
+        "' OR adpg1 LIKE '%" .
+        $searchValue .
+        "' OR adpg2 LIKE '%" .
+        $searchValue .
+        "' OR adpg3 LIKE '%" .
+        $searchValue .
+        "' OR adpg4 LIKE '%" .
+        $searchValue .
+        "' OR pvd_almt1 LIKE '%" .
+        $searchValue .
+        "' OR pvd_almt2 LIKE '%" .
+        $searchValue .
+        "' OR pvd_almt3 LIKE '%" .
+        $searchValue .
+        "' OR pvd_almt4 LIKE '%" .
+        $searchValue .
+        "' OR pvd_almt5 LIKE '%" .
+        $searchValue .
+        "' OR pvd_notel LIKE '%" .
+        $searchValue .
+        "' OR  pvd_nofax LIKE '%" .
+        $searchValue .
+        "' OR  pvd_email LIKE '%" .
+        $searchValue .
+        "' OR pmk_nmbil LIKE '%" .
+        $searchValue .
+        "' ";
+    }
 
     ## Total number of records without filtering
     $sql = "SELECT count(*) AS allcount FROM SPMC.V_HVNDUK h ";
@@ -155,10 +196,14 @@ class Informations extends Model
     $sql .= "LEFT JOIN SPMC.V_HBANGN c ON h.PEG_BGKOD = c.BGN_BGKOD ";
     $sql .= "LEFT JOIN SPMC.V_HSTBGN d ON h.PEG_STKOD = d.STB_STKOD ";
     $sql .= "LEFT JOIN SPMC.V_HTANAH e ON h.PEG_THKOD = e.TNH_THKOD ";
-    if ($area != "" && $street != "") {
-      $sql .= " WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND h.PEG_STATF != 'H'";
+    if ($area != "" && $street != "" && $searchValue != "") {
+      $sql .= "WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H' AND " . $searchQuery;
+    } elseif ($area != "" && $street != "" && $searchValue == "") {
+      $sql .= "WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H'";
+    } elseif ($area == "" && $street == "" && $searchValue != "") {
+      $sql .= "WHERE PEG_STATF != 'H' AND " . $searchQuery;
     } else {
-      $sql .= " WHERE h.PEG_STATF != 'H'";
+      $sql .= "WHERE PEG_STATF != 'H'";
     }
     $sel = $oracleDB->prepare($sql);
     if ($area != "" && $street != "") {
@@ -174,10 +219,14 @@ class Informations extends Model
     $query = "SELECT h.*, b.HRT_HNAMA, c.BGN_BNAMA, d.STB_SNAMA, e.TNH_TNAMA ";
     $query .= "FROM ( SELECT tmp.*, rownum rn ";
     $query .= "FROM( SELECT * FROM SPMC.V_HVNDUK ";
-    if ($area != "" && $street != "") {
-      $query .= " WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H'";
+    if ($area != "" && $street != "" && $searchValue != "") {
+      $query .= "WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H' AND " . $searchQuery;
+    } elseif ($area != "" && $street != "" && $searchValue == "") {
+      $query .= "WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H'";
+    } elseif ($area == "" && $street == "" && $searchValue != "") {
+      $query .= "WHERE PEG_STATF != 'H' AND " . $searchQuery;
     } else {
-      $query .= " WHERE PEG_STATF != 'H'";
+      $query .= "WHERE PEG_STATF != 'H'";
     }
     if ($columnName != "") {
       $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
@@ -251,6 +300,119 @@ class Informations extends Model
 
     return $response;
   }
+
+  // public function handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area = "", $street = "")
+  // {
+  //   $database = Database::openConnection();
+  //   // $oracleDB = Oracle::openOriConnection();
+
+  //   ## Total number of records without filtering
+  //   $sql = "SELECT count(*) AS allcount FROM data.hvnduk h ";
+  //   $sel = $database->prepare($sql);
+  //   $database->execute($sel);
+  //   $records = $database->fetchAssociative();
+  //   $totalRecords = $records["allcount"];
+
+  //   ## Total number of record with filtering
+  //   $sql = "SELECT count(*) AS allcount FROM data.hvnduk h ";
+  //   $sql .= "LEFT JOIN data.hharta b ON h.PEG_HTKOD = b.HRT_HTKOD ";
+  //   $sql .= "LEFT JOIN data.hbangn c ON h.PEG_BGKOD = c.BGN_BGKOD ";
+  //   $sql .= "LEFT JOIN data.hstbgn d ON h.PEG_STKOD = d.STB_STKOD ";
+  //   $sql .= "LEFT JOIN data.htanah e ON h.PEG_THKOD = e.TNH_THKOD ";
+  //   if ($area != "" && $street != "") {
+  //     $sql .= " WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND h.PEG_STATF != 'H'";
+  //   } else {
+  //     $sql .= " WHERE h.PEG_STATF != 'H'";
+  //   }
+  //   $sel = $database->prepare($sql);
+  //   if ($area != "" && $street != "") {
+  //     $database->bindValue(":kwkod", $area);
+  //     $database->bindValue(":jlkod", $street);
+  //   }
+  //   $database->execute($sel);
+
+  //   $records = $database->fetchAssociative();
+  //   $totalRecordwithFilter = $records["allcount"];
+
+  //   ## Fetch records
+  //   $query = "SELECT h.*, b.HRT_HNAMA, c.BGN_BNAMA, d.STB_SNAMA, e.TNH_TNAMA ";
+  //   $query .= "FROM data.hvnduk h ";
+  //   $query .= "LEFT JOIN data.hharta b ON h.PEG_HTKOD = b.HRT_HTKOD ";
+  //   $query .= "LEFT JOIN data.hbangn c ON h.PEG_BGKOD = c.BGN_BGKOD ";
+  //   $query .= "LEFT JOIN data.hstbgn d ON h.PEG_STKOD = d.STB_STKOD ";
+  //   $query .= "LEFT JOIN data.htanah e ON h.PEG_THKOD = e.TNH_THKOD ";
+
+  //   if ($area != "" && $street != "") {
+  //     $query .= "WHERE JLN_KWKOD = :kwkod AND JLN_JLKOD = :jlkod AND PEG_STATF != 'H'";
+  //   } else {
+  //     $query .= "WHERE PEG_STATF != 'H'";
+  //   }
+  //   if ($columnName != "") {
+  //     $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+  //   }
+  //   $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
+  //   $database->prepare($query);
+  //   if ($area != "" && $street != "") {
+  //     $database->bindValue(":kwkod", $area);
+  //     $database->bindValue(":jlkod", $street);
+  //   }
+  //   $database->execute();
+
+  //   $row = $database->fetchAllAssociative();
+  //   $output = [];
+  //   $rowOutput = [];
+  //   foreach ($row as $key => $val) {
+  //     $rowOutput["acct"] = Encryption::encryptId($val["peg_akaun"]);
+  //     $rowOutput["peg_akaun"] = $val["peg_akaun"];
+  //     $rowOutput["peg_nolot"] = $val["peg_nolot"];
+  //     $rowOutput["peg_statf"] = $val["peg_statf"];
+  //     $rowOutput["peg_wstatf"] = $val["peg_wstatf"];
+  //     $rowOutput["adpg1"] = $val["adpg1"];
+  //     $rowOutput["adpg2"] = $val["adpg2"];
+  //     $rowOutput["adpg3"] = $val["adpg3"];
+  //     $rowOutput["adpg4"] = $val["adpg4"];
+  //     $rowOutput["pvd_almt1"] = $val["pvd_almt1"];
+  //     $rowOutput["pvd_almt2"] = $val["pvd_almt2"];
+  //     $rowOutput["pvd_almt3"] = $val["pvd_almt3"];
+  //     $rowOutput["pvd_almt4"] = $val["pvd_almt4"];
+  //     $rowOutput["pvd_almt5"] = $val["pvd_almt5"];
+  //     $rowOutput["pvd_notel"] = $val["pvd_notel"];
+  //     $rowOutput["pvd_nofax"] = $val["pvd_nofax"];
+  //     $rowOutput["pvd_email"] = $val["pvd_email"];
+  //     $rowOutput["jpk_jnama"] = $val["jpk_jnama"];
+  //     $rowOutput["pvd_pnama"] = $val["pvd_pnama"];
+  //     $rowOutput["pmk_nmbil"] = $val["pmk_nmbil"];
+  //     $rowOutput["pmk_plgid"] = $val["pmk_plgid"];
+  //     $rowOutput["pmk_hkmlk"] = $val["pmk_hkmlk"];
+  //     $rowOutput["peg_nompt"] = $this->checkNull($val["peg_nompt"]);
+  //     $rowOutput["jln_jnama"] = $val["jln_jnama"];
+  //     $rowOutput["jln_kname"] = $val["jln_knama"];
+  //     $rowOutput["peg_pelan"] = $this->checkNull($val["peg_pelan"]);
+  //     $rowOutput["peg_rjmmk"] = $this->checkNull($val["peg_rjmmk"]);
+  //     $rowOutput["tnh_tnama"] = $val["tnh_tnama"];
+  //     $rowOutput["bgn_bnama"] = $val["bgn_bnama"];
+  //     $rowOutput["hrt_hnama"] = $val["hrt_hnama"];
+  //     $rowOutput["stb_snama"] = $val["stb_snama"];
+  //     $rowOutput["peg_lstnh"] = $this->checkNull($val["peg_lstnh"]);
+  //     $rowOutput["peg_lsbgn"] = $this->checkNull($val["peg_lsbgn"]);
+  //     $rowOutput["peg_lsans"] = $this->checkNull($val["peg_lsans"]);
+  //     $rowOutput["jpk_stcbk"] = $this->kodAnsuran($val["jpk_stcbk"]);
+  //     $rowOutput["peg_nilth"] = $val["peg_nilth"];
+  //     $rowOutput["kaw_kadar"] = $val["kaw_kadar"];
+  //     $rowOutput["peg_tksir"] = $val["peg_tksir"];
+  //     array_push($output, $rowOutput);
+  //   }
+
+  //   ## Response
+  //   $response = [
+  //     "draw" => intval($draw),
+  //     "iTotalRecords" => $totalRecords,
+  //     "iTotalDisplayRecords" => $totalRecordwithFilter,
+  //     "aaData" => $output,
+  //   ];
+
+  //   return $response;
+  // }
 
   public function ownerinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue)
   {
@@ -444,6 +606,82 @@ class Informations extends Model
     return $response;
   }
 
+  public function comparison($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $type, $kwkod, $htkod)
+  {
+    $database = Database::openConnection();
+
+    $searchQuery = "";
+    if ($searchValue != "") {
+      $searchQuery = "(CAST(r.mfa AS TEXT) = '" . $searchValue . "' OR CAST(r.afa AS TEXT) = '" . $searchValue . "' OR m.jln_jnama LIKE '%" . $searchValue . "%' OR CAST(h.peg_lsbgn AS TEXT) = '" . $searchValue . "' OR CAST(h.peg_nilth AS TEXT) = '" . $searchValue . "' OR h2.bgn_bnama LIKE '%" . $searchValue . "%')";
+    }
+
+    ## Total number of records without filtering
+    $sql = "SELECT count(*) AS allcount FROM data.v_rating r ";
+    $sql .= "WHERE r.jenis = " . $type . " AND r.kwkod = " . $kwkod . " AND r.htkod = " . $htkod;
+    $sel = $database->prepare($sql);
+    $database->execute();
+    $records = $database->fetchAssociative();
+    $totalRecords = $records["allcount"];
+
+    ## Total number of record with filtering
+    $qry = "SELECT count(*) AS allcount FROM data.v_rating r ";
+    $qry .= "INNER JOIN data.hvnduk h ON r.akaun = h.peg_akaun ";
+    $qry .= "INNER JOIN data.hbangn h2 ON r.bgkod = h2.bgn_bgkod ";
+    $qry .= "INNER JOIN data.mkwjln m ON r.jlkod = m.jln_jlkod ";
+    $qry .= "WHERE r.jenis = " . $type . " AND r.kwkod = " . $kwkod . " AND r.htkod = " . $htkod;
+    if ($searchValue != "") {
+      $qry .= " AND " . $searchQuery;
+    }
+    $all = $database->prepare($qry);
+    $database->execute();
+
+    $records = $database->fetchAssociative();
+    $totalRecordwithFilter = $records["allcount"];
+
+    ## Fetch records
+    $query = "SELECT r.*, m.jln_jnama, h.peg_nolot, h.peg_lsbgn, h.peg_nilth, h2.bgn_bnama FROM data.v_rating r ";
+    $query .= "INNER JOIN data.hvnduk h ON r.akaun = h.peg_akaun ";
+    $query .= "INNER JOIN data.hbangn h2 ON r.bgkod = h2.bgn_bgkod ";
+    $query .= "INNER JOIN data.mkwjln m ON r.jlkod = m.jln_jlkod ";
+    $query .= "WHERE r.jenis = " . $type . " AND r.kwkod = " . $kwkod . " AND r.htkod = " . $htkod;
+    if ($searchValue != "") {
+      $query .= " AND " . $searchQuery;
+    }
+    if ($columnName != "") {
+      $query .= " ORDER BY " . $columnName . " " . $columnSortOrder;
+    }
+    $query .= " LIMIT " . $rowperpage . " OFFSET " . $row;
+    $database->prepare($query);
+    $database->execute();
+
+    $row = $database->fetchAllAssociative();
+    $output = [];
+    $rowOutput = [];
+    foreach ($row as $val) {
+      $rowOutput["id"] = $val["id"];
+      $rowOutput["akaun"] = $val["akaun"];
+      $rowOutput["nmbil"] = $val["nmbil"];
+      $rowOutput["jln_jnama"] = $val["jln_jnama"];
+      $rowOutput["peg_nolot"] = $val["peg_nolot"];
+      $rowOutput["peg_lsbgn"] = $val["peg_lsbgn"];
+      $rowOutput["peg_nilth"] = $val["peg_nilth"];
+      $rowOutput["bgn_bnama"] = $val["bgn_bnama"];
+      $rowOutput["mfa"] = $val["mfa"];
+      $rowOutput["afa"] = $val["afa"];
+      array_push($output, $rowOutput);
+    }
+
+    ## Response
+    $response = [
+      "draw" => intval($draw),
+      "iTotalRecords" => $totalRecords,
+      "iTotalDisplayRecords" => $totalRecordwithFilter,
+      "aaData" => $output,
+    ];
+
+    return $response;
+  }
+
   public function comparisontable($type, $kwkod, $htkod)
   {
     $database = Database::openConnection();
@@ -554,7 +792,7 @@ class Informations extends Model
     $dbOracle = new Oracle();
 
     $query = "SELECT * FROM data.v_semak_raw vsr ";
-    $query .= "LEFT JOIN data.hvnduk h ON vsr.smk_akaun = h.peg_akaun ";
+    // $query .= "LEFT JOIN data.hvnduk h ON vsr.smk_akaun = h.peg_akaun ";
     $query .= "WHERE vsr.smk_akaun = :smk_akaun";
     $database->prepare($query);
     $database->bindValue(":smk_akaun", Encryption::decryptId($fileId));
@@ -563,19 +801,19 @@ class Informations extends Model
     $row = $database->fetchAllAssociative();
     $rowOutput = [];
     foreach ($row as $val) {
-      // $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
-      // $info = $dbOracle->fetchAssociative();
+      $dbOracle->getByNoAcct("V_HVNDUK", "PEG_AKAUN", $val["smk_akaun"]);
+      $info = $dbOracle->fetchAssociative();
 
       $rowOutput["no_akaun"] = $val["smk_akaun"];
       $rowOutput["no_lot"] = $val["smk_nolot"];
-      $rowOutput["nmbil"] = $val["pmk_nmbil"];
-      $rowOutput["plgid"] = $val["pmk_plgid"];
-      $rowOutput["almt1"] = $val["pvd_almt1"];
-      $rowOutput["almt2"] = $val["pvd_almt2"];
-      $rowOutput["almt3"] = $val["pvd_almt3"];
-      $rowOutput["almt4"] = $val["pvd_almt4"];
-      $rowOutput["almt5"] = $val["pvd_almt5"];
-      $rowOutput["notel"] = $val["pvd_notel"];
+      $rowOutput["nmbil"] = $info["pmk_nmbil"];
+      $rowOutput["plgid"] = $info["pmk_plgid"];
+      $rowOutput["almt1"] = $info["pvd_almt1"];
+      $rowOutput["almt2"] = $info["pvd_almt2"];
+      $rowOutput["almt3"] = $info["pvd_almt3"];
+      $rowOutput["almt4"] = $info["pvd_almt4"];
+      $rowOutput["almt5"] = $info["pvd_almt5"];
+      $rowOutput["notel"] = $info["pvd_notel"];
       $rowOutput["adpg1"] = $val["smk_adpg1"];
       $rowOutput["adpg2"] = $val["smk_adpg2"];
       $rowOutput["adpg3"] = $val["smk_adpg3"];
@@ -585,18 +823,109 @@ class Informations extends Model
       $rowOutput["kwkod"] = $val["jln_kwkod"];
       $rowOutput["thkod"] = $val["tnh_thkod"];
       $rowOutput["tnama"] = $val["tnh_tnama"];
-      $rowOutput["htkod"] = $val["peg_htkod"];
-      $rowOutput["hnama"] = $val["hrt_hnama"];
+      $rowOutput["htkod"] = $info["peg_htkod"];
+      $rowOutput["hnama"] = $info["hrt_hnama"];
       // $rowOutput["bnama"] = $val["bnama"];
       // $rowOutput["snama"] = $val["snama"];
-      $rowOutput["lsbgn"] = $val["peg_lsbgn"];
-      $rowOutput["lstnh"] = $val["peg_lstnh"];
-      $rowOutput["lsans"] = $val["peg_lsans"];
-      $rowOutput["ttl_bgn"] = $val["smk_lsbgn_tmbh"] + $val["peg_lsbgn"];
-      $rowOutput["ttl_ans"] = $val["smk_lsans_tmbh"] + $val["peg_lsans"];
-      $rowOutput["nilth_asal"] = $val["peg_nilth"];
-      $rowOutput["kadar_asal"] = $val["kaw_kadar"];
-      $rowOutput["cukai_asal"] = $val["peg_tksir"];
+      $rowOutput["lsbgn"] = $info["peg_lsbgn"];
+      $rowOutput["lstnh"] = $info["peg_lstnh"];
+      $rowOutput["lsans"] = $info["peg_lsans"];
+      $rowOutput["ttl_bgn"] = $val["smk_lsbgn_tmbh"] + $info["peg_lsbgn"];
+      $rowOutput["ttl_ans"] = $val["smk_lsans_tmbh"] + $info["peg_lsans"];
+      $rowOutput["nilth_asal"] = $info["peg_nilth"];
+      $rowOutput["kadar_asal"] = $info["kaw_kadar"];
+      $rowOutput["cukai_asal"] = $info["peg_tksir"];
+    }
+
+    return $rowOutput;
+  }
+
+  public function getCalcInfo($siriNo)
+  {
+    $database = Database::openConnection();
+    $dbOracle = new Oracle();
+
+    $query = "SELECT c.*, vs.* FROM data.calculator c ";
+    $query .= "INNER JOIN data.v_semak_raw vs ON c.account_no = vs.smk_akaun ";
+    $query .= "WHERE c.siri_no = :siri_no";
+    $database->prepare($query);
+    $database->bindValue(":siri_no", Encryption::decryptId($siriNo));
+    $database->execute();
+
+    $row = $database->fetchAllAssociative();
+    $rowOutput = [];
+    foreach ($row as $val) {
+      $sql = "SELECT PMK_NMBIL, PMK_PLGID, PEG_NOLOT, PEG_NOMPT, peg_htkod, hrt_hnama, peg_lsbgn, peg_lstnh, peg_lsans, peg_nilth, kaw_kadar, peg_tksir, ";
+      $sql .= "rtrim( ADPG1||', '||ADPG2||', '||ADPG3||', '||ADPG4,' ,') AS address, ";
+      $sql .= "rtrim( PVD_ALMT1||', '||PVD_ALMT2||', '||PVD_ALMT3||', '||PVD_ALMT4,' ,') AS postal ";
+      $sql .= "FROM SPMC.V_HVNDUK WHERE PEG_AKAUN = " . $val["account_no"];
+      $sel = $dbOracle->prepare($sql);
+      $dbOracle->execute($sel);
+      $row = $dbOracle->fetchAssociative();
+
+      $dataList = substr($val["comparison"], 1, -1);
+      $result = $dataList ? explode(',', $dataList) : array();
+      $integers = array_map('intval', $result);
+
+      $rowOutput["nmbil"] = $row["pmk_nmbil"];
+      $rowOutput["plgid"] = $row["pmk_plgid"];
+      $rowOutput["peg_nolot"] = $this->checkNull($row["peg_nolot"]);
+      $rowOutput["peg_nompt"] = $this->checkNull($row["peg_nompt"]);
+      $rowOutput["address"] = $row["address"];
+      $rowOutput["postal"] = $row["postal"];
+
+      $rowOutput["calc_type"] = $val["calc_type"];
+      $rowOutput["siri_no"] = $val["siri_no"];
+      $rowOutput["account_no"] = $val["account_no"];
+      if (count($integers) > 0) {
+        $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
+      } else {
+        $rowOutput["comparison"] = [];
+      }
+      $rowOutput["land"] = $this->getLand(Encryption::decryptId($siriNo));
+      $rowOutput["mfa"] = $this->getMfa(Encryption::decryptId($siriNo));
+      $rowOutput["afa"] = $this->getAfa(Encryption::decryptId($siriNo));
+      $rowOutput["totalmfa"] = $this->getTotalMfa(Encryption::decryptId($siriNo));
+      $rowOutput["totalafa"] = $this->getTotalAfa(Encryption::decryptId($siriNo));
+      $rowOutput["capital"] = $val["capital"];
+      $rowOutput["discount"] = $val["discount"];
+      $rowOutput["rental"] = $val["rental"];
+      $rowOutput["yearly_price"] = $val["yearly_price"];
+      $rowOutput["even"] = $val["even"];
+      $rowOutput["rate"] = $val["rate"];
+      $rowOutput["assessment_tax"] = $val["assessment_tax"];
+
+      $rowOutput["no_akaun"] = $val["smk_akaun"];
+      $rowOutput["no_lot"] = $val["smk_nolot"];
+      $rowOutput["adpg1"] = $val["smk_adpg1"];
+      $rowOutput["adpg2"] = $val["smk_adpg2"];
+      $rowOutput["adpg3"] = $val["smk_adpg3"];
+      $rowOutput["adpg4"] = $val["smk_adpg4"];
+      $rowOutput["jnama"] = $val["jln_jnama"];
+      $rowOutput["knama"] = $val["jln_knama"];
+      $rowOutput["kwkod"] = $val["jln_kwkod"];
+      $rowOutput["thkod"] = $val["tnh_thkod"];
+      $rowOutput["tnama"] = $val["tnh_tnama"];
+      $rowOutput["htkod"] = $row["peg_htkod"];
+      $rowOutput["hnama"] = $row["hrt_hnama"];
+      // $rowOutput["bnama"] = $val["bnama"];
+      // $rowOutput["snama"] = $val["snama"];
+      $rowOutput["lsbgn"] = $row["peg_lsbgn"];
+      $rowOutput["lstnh"] = $row["peg_lstnh"];
+      $rowOutput["lsans"] = $row["peg_lsans"];
+      $rowOutput["ttl_bgn"] = $val["smk_lsbgn_tmbh"] + $row["peg_lsbgn"];
+      $rowOutput["ttl_ans"] = $val["smk_lsans_tmbh"] + $row["peg_lsans"];
+      $rowOutput["nilth_asal"] = $row["peg_nilth"];
+      $rowOutput["kadar_asal"] = $row["kaw_kadar"];
+      $rowOutput["cukai_asal"] = $row["peg_tksir"];
+
+      // $rowOutput["bnama"] = $val["bnama"];
+      // $rowOutput["clerk"] = $val["entry"];
+      // $rowOutput["clerk_pos"] = $val["entry_pos"];
+      // $rowOutput["verifier"] = $this->checkNull($val["verifier"]);
+      // $rowOutput["verifier_pos"] = $this->checkNull($val["verifier_pos"]);
+      // $rowOutput["etdate"] = $val["etdate"];
+      // $rowOutput["vfdate"] = $this->checkNull($val["vfdate"]);
     }
 
     return $rowOutput;
@@ -621,36 +950,17 @@ class Informations extends Model
       $rowOutput["tkhtk"] = $val["tkhtk"];
       $rowOutput["nmbil"] = $val["nmbil"];
       $rowOutput["plgid"] = $val["plgid"];
-      $rowOutput["almt1"] = $val["almt1"];
-      $rowOutput["almt2"] = $val["almt2"];
-      $rowOutput["almt3"] = $val["almt3"];
-      $rowOutput["almt4"] = $val["almt4"];
-      $rowOutput["almt5"] = $val["almt5"];
-      $rowOutput["notel"] = $val["notel"];
       $rowOutput["adpg1"] = $val["adpg1"];
       $rowOutput["adpg2"] = $val["adpg2"];
       $rowOutput["adpg3"] = $val["adpg3"];
       $rowOutput["adpg4"] = $val["adpg4"];
-      $rowOutput["jnama"] = $val["jnama"];
-      $rowOutput["knama"] = $val["knama"];
-      $rowOutput["kwkod"] = $val["kwkod"];
+      $rowOutput["jlkod"] = $val["jlkod"];
       $rowOutput["thkod"] = $val["thkod"];
-      $rowOutput["tnama"] = $val["tnama"];
       $rowOutput["htkod"] = $val["htkod"];
-      $rowOutput["hnama"] = $val["hnama"];
-      $rowOutput["bnama"] = $val["bnama"];
-      $rowOutput["snama"] = $val["snama"];
       $rowOutput["lsbgn"] = $val["lsbgn"];
       $rowOutput["lstnh"] = $val["lstnh"];
       $rowOutput["lsans"] = $val["lsans"];
-      $rowOutput["ttl_bgn"] = $val["ttl_bgn"];
-      $rowOutput["ttl_ans"] = $val["ttl_ans"];
-      $rowOutput["nilth_asal"] = $val["nilth_asal"];
-      $rowOutput["kadar_asal"] = $val["kadar_asal"];
-      $rowOutput["cukai_asal"] = $val["cukai_asal"];
       $rowOutput["nilth_baru"] = $val["nilth_baru"];
-      $rowOutput["kadar_baru"] = $val["kadar_baru"];
-      $rowOutput["cukai_baru"] = $val["cukai_baru"];
       $rowOutput["sebab"] = $val["sebab"];
       $rowOutput["mesej"] = $val["mesej"];
       $rowOutput["status"] = $val["status"];
@@ -668,7 +978,7 @@ class Informations extends Model
     $dbOracle = Oracle::openOriConnection();
 
     $query = "SELECT distinct c.*, v.bnama, v.entry, v.entry_pos, v.verifier, v.verifier_pos, to_char(v.etdate, 'DD/MM/YYYY') as etdate, to_char(v.vfdate, 'DD/MM/YYYY') as vfdate FROM data.calculator c ";
-    $query .= "LEFT JOIN data.v_submitioninfo v ON c.siri_no = v.no_siri ";
+    $query .= "INNER JOIN data.v_submitioninfo v ON c.siri_no = v.no_siri ";
     $query .= "WHERE c.siri_no = :siri_no";
     $database->prepare($query);
     $database->bindValue(":siri_no", Encryption::decryptId($siriNo));
@@ -699,7 +1009,7 @@ class Informations extends Model
       $rowOutput["calc_type"] = $val["calc_type"];
       $rowOutput["siri_no"] = $val["siri_no"];
       $rowOutput["account_no"] = $val["account_no"];
-      if (count($integers) > 0) {
+      if (count($integers) >= 1) {
         $rowOutput["comparison"] = $this->getComparison($val["comparison"]);
       } else {
         $rowOutput["comparison"] = [];
@@ -786,19 +1096,27 @@ class Informations extends Model
   public function getMfa($siriNo)
   {
     $database = Database::openConnection();
+
+    $output = [];
+    $rowOutput = [];
+
     $query = "SELECT id, title FROM data.section ";
     $query .= "WHERE section_type = 1 AND siri_no = :siri_no";
     $database->prepare($query);
     $database->bindValue(":siri_no", $siriNo);
     $database->execute();
-    $rows = $database->fetchAllAssociative();
 
-    $output = [];
-    $rowOutput = [];
-    foreach ($rows as $row) {
-      $rowOutput["id"] = $row["id"];
-      $rowOutput["title"] = $row["title"];
-      $rowOutput["items"] = $this->itemsMain($row["id"], $siriNo);
+    if ($database->countRows() >= 1) {
+      foreach ($database->fetchAllAssociative() as $row) {
+        $rowOutput["id"] = $row["id"];
+        $rowOutput["title"] = $row["title"];
+        $rowOutput["items"] = $this->itemsMain($row["id"], $siriNo);
+        array_push($output, $rowOutput);
+      }
+    } else {
+      $rowOutput["id"] = 0;
+      $rowOutput["title"] = "";
+      $rowOutput["items"] = $this->itemsMain("", $siriNo);
       array_push($output, $rowOutput);
     }
 
@@ -808,19 +1126,27 @@ class Informations extends Model
   public function getAfa($siriNo)
   {
     $database = Database::openConnection();
+
+    $output = [];
+    $rowOutput = [];
+
     $query = "SELECT id, title FROM data.section ";
     $query .= "WHERE section_type = 2 AND siri_no = :siri_no";
     $database->prepare($query);
     $database->bindValue(":siri_no", $siriNo);
     $database->execute();
-    $rows = $database->fetchAllAssociative();
 
-    $output = [];
-    $rowOutput = [];
-    foreach ($rows as $row) {
-      $rowOutput["id"] = $row["id"];
-      $rowOutput["title"] = $row["title"];
-      $rowOutput["items"] = $this->itemsOut($row["id"], $siriNo);
+    if ($database->countRows() >= 1) {
+      foreach ($database->fetchAllAssociative() as $row) {
+        $rowOutput["id"] = $row["id"];
+        $rowOutput["title"] = $row["title"];
+        $rowOutput["items"] = $this->itemsOut($row["id"], $siriNo);
+        array_push($output, $rowOutput);
+      }
+    } else {
+      $rowOutput["id"] = 0;
+      $rowOutput["title"] = "";
+      $rowOutput["items"] = $this->itemsOut("", $siriNo);
       array_push($output, $rowOutput);
     }
 
@@ -860,9 +1186,15 @@ class Informations extends Model
     $database = Database::openConnection();
 
     $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_main ";
-    $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
+    if (!empty($sectionId)) {
+      $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
+    } else {
+      $query .= "WHERE siri_no = :siri_no";
+    }
     $database->prepare($query);
-    $database->bindValue(":section_id", $sectionId);
+    if (!empty($sectionId)) {
+      $database->bindValue(":section_id", $sectionId);
+    }
     $database->bindValue(":siri_no", $siriNo);
     $database->execute();
     $result = $database->fetchAllAssociative();
@@ -875,9 +1207,15 @@ class Informations extends Model
     $database = Database::openConnection();
 
     $query = "SELECT id, title, breadth, breadthtype, price, pricetype, total FROM data.items_out ";
-    $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
+    if (!empty($sectionId)) {
+      $query .= "WHERE section_id = :section_id AND siri_no = :siri_no";
+    } else {
+      $query .= "WHERE siri_no = :siri_no";
+    }
     $database->prepare($query);
-    $database->bindValue(":section_id", $sectionId);
+    if (!empty($sectionId)) {
+      $database->bindValue(":section_id", $sectionId);
+    }
     $database->bindValue(":siri_no", $siriNo);
     $database->execute();
     $result = $database->fetchAllAssociative();
@@ -1060,5 +1398,25 @@ class Informations extends Model
     $rowOutput["childs"] = $this->getChildsBenchMark($row["id"]);
 
     return $rowOutput;
+  }
+
+  public function getAcctInfo($fileId)
+  {
+    $oracleDB = Oracle::openOriConnection();
+
+    $query = "SELECT v.*, h2.TNH_TNAMA,h3.HRT_HNAMA,h4.BGN_BNAMA,h5.STB_SNAMA FROM SPMC.V_HVNDUK v ";
+    $query .= "LEFT JOIN SPMC.V_HTANAH h2 ON v.PEG_THKOD = h2.TNH_THKOD ";
+    $query .= "LEFT JOIN SPMC.V_HHARTA h3 ON v.PEG_HTKOD = h3.HRT_HTKOD ";
+    $query .= "LEFT JOIN SPMC.V_HBANGN h4 ON v.PEG_BGKOD = h4.BGN_BGKOD ";
+    $query .= "LEFT JOIN SPMC.V_HSTBGN h5 ON v.PEG_STKOD = h5.STB_STKOD ";
+    $query .= "WHERE v.PEG_AKAUN = :PEG_AKAUN ";
+
+    $oracleDB->prepare($query);
+    $oracleDB->bindValue(":PEG_AKAUN", $fileId);
+    $oracleDB->execute();
+
+    $row = $oracleDB->fetchAssociative();
+
+    return $row;
   }
 }

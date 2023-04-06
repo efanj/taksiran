@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -16,13 +16,11 @@
                   <div class="row mb-2">
                     <div class="col-md-6">
                       <label>No.IC / Daftar Syarikat :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["pmk_plgid"] ?>" name="plgid"
-                        readonly>
+                      <input class="form-control input-sm" type="text" value="<?= $info["pmk_plgid"] ?>" name="plgid" readonly>
                     </div>
                     <div class="col-md-6">
                       <label>Nama Dibil :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["pmk_nmbil"] ?>" name="nmbil"
-                        readonly>
+                      <input class="form-control input-sm" type="text" value="<?= $info["pmk_nmbil"] ?>" name="nmbil" readonly>
                     </div>
                   </div>
                 </div>
@@ -58,18 +56,15 @@
                   <div class="row mb-2">
                     <div class="col-md-4">
                       <label>Luas Tanah :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lstnh"] ?>" name="lstnh"
-                        readonly>
+                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lstnh"] ?>" name="lstnh" readonly>
                     </div>
                     <div class="col-md-4">
                       <label>Luas Bangunan :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lsbgn"] ?>" name="lsbgn"
-                        readonly>
+                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lsbgn"] ?>" name="lsbgn" readonly>
                     </div>
                     <div class="col-md-4">
                       <label>Luas Ansolari :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lsans"] ?>" name="lsans"
-                        readonly>
+                      <input class="form-control input-sm" type="text" value="<?= $info["peg_lsans"] ?>" name="lsans" readonly>
                     </div>
                   </div>
                 </div>
@@ -89,13 +84,11 @@
                   <div class="row mb-4">
                     <div class="col-md-6">
                       <label>koordinat X :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["peg_codex"] ?>" name="codex"
-                        id="codex" required>
+                      <input class="form-control input-sm" type="text" value="<?= $info["peg_codex"] ?>" name="codex" id="codex" required>
                     </div>
                     <div class="col-md-6">
                       <label>koordinat Y :</label>
-                      <input class="form-control input-sm" type="text" value="<?= $info["peg_codey"] ?>" name="codey"
-                        id="codey" required>
+                      <input class="form-control input-sm" type="text" value="<?= $info["peg_codey"] ?>" name="codey" id="codey" required>
                     </div>
                   </div>
                 </div>

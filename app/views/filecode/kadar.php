@@ -13,7 +13,7 @@
                 </div>
                 <!--end col-->
                 <div class="col-auto">
-                  <button class="btn btn-primary btn-sm mt5 mr15" id="reloadKegunaanTanah">Reload</button>
+                  <button class="btn btn-primary btn-sm mt5 mr15" id="uploadKegunaanTanah">Muatnaik</button>
                 </div>
                 <!--end col-->
               </div>
@@ -25,6 +25,7 @@
                     <th>Nama Kawasan</th>
                     <th>Jenis Harta</th>
                     <th>Kadar Semasa</th>
+                    <th>Kadar Nilaian</th>
                   </tr>
                 </thead>
               </table>

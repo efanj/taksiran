@@ -35,6 +35,9 @@ class InformationsController extends Controller
       case "getCalculationInfo":
         $this->Security->config("validateForm", false);
         break;
+      case "comparison":
+        $this->Security->config("validateForm", false);
+        break;
     }
   }
 
@@ -79,6 +82,7 @@ class InformationsController extends Controller
     $columnName = $columns[$columnIndex]["data"];
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
     $area = $this->request->data("area");
     $street = $this->request->data("street");
     $result = $this->informations->sitereviewtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area, $street);
@@ -100,9 +104,10 @@ class InformationsController extends Controller
     $columnName = $columns[$columnIndex]["data"];
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
     $area = $this->request->data("area");
     $street = $this->request->data("street");
-    $result = $this->informations->handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $area, $street);
+    $result = $this->informations->handleinfotable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $area, $street);
     if (!$result) {
       $this->view->renderErrors($this->informations->errors());
     } else {
@@ -175,6 +180,29 @@ class InformationsController extends Controller
     }
   }
 
+  public function comparison()
+  {
+    $draw = $this->request->data("draw");
+    $row = $this->request->data("start");
+    $rowperpage = $this->request->data("length");
+    $column = $this->request->data("order");
+    $columnIndex = $column[0]["column"];
+    $columns = $this->request->data("columns");
+    $columnName = $columns[$columnIndex]["data"];
+    $columnSortOrder = $column[0]["dir"];
+    $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
+    $type = $this->request->data("type");
+    $kwkod = $this->request->data("kwkod");
+    $htkod = $this->request->data("htkod");
+    $result = $this->informations->comparison($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue, $type, $kwkod, $htkod);
+    if (!$result) {
+      $this->view->renderErrors($this->informations->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function isAuthorized()
   {
     $action = $this->request->param("action");
@@ -188,7 +216,7 @@ class InformationsController extends Controller
     Permission::allow("user", $resource, "*");
 
     //only for vendor
-    Permission::allow("vendor", $resource, ["handleinfops", "handleinfotable"]);
+    Permission::allow("vendor", $resource, ["handleinfops", "handleinfotable", 'comparisontable', 'investigation']);
 
     return Permission::check($role, $resource, $action);
   }

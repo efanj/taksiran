@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -11,6 +11,8 @@
               <h4>MAKLUMAT PEGANGAN</h4>
             </div>
             <div class="panel-body">
+              <input type="hidden" id="kwkod" value="<?= $info['kwkod']; ?>">
+              <input type="hidden" id="htkod" value="<?= $info['htkod']; ?>">
               <table class="info" style="width:100%;font-size:13px;">
                 <tr>
                   <td style="width:15%"><label class="control-label tal">No. Akaun</label></td>
@@ -285,10 +287,21 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI DATA PERBANDINGAN</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->informations->comparisontable("1", $info["kwkod"], $info["htkod"]);
-        echo $this->render(Config::get("VIEWS_PATH") . "calculator/comparison.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_comparison" width="100%">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Nama Jalan</th>
+              <th>Jenis Bangunan</th>
+              <th>Keluasan</th>
+              <th>Nilai Tahunan</th>
+              <th>Sewa SMP(MFA)</th>
+              <th>Sewa SMP(AFA)</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

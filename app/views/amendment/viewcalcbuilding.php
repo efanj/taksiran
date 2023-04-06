@@ -1,12 +1,13 @@
-<div class="page-content clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
+      <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
+      <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
+      <?php print_r($calc); ?>
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
-          <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
-          <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
@@ -42,29 +43,6 @@
                     }
                     if ($info["adpg4"] != "" && $info["adpg4"] != "-") {
                       echo $info["adpg4"];
-                    }
-                    ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Alamat Surat Menyurat</label></td>
-                  <td>:</td>
-                  <td colspan="4">
-                    <?php
-                    if ($info["almt1"] != "") {
-                      echo $info["almt1"] . ", ";
-                    }
-                    if ($info["almt2"] != "" && $info["almt2"] != "-") {
-                      echo $info["almt2"] . ", ";
-                    }
-                    if ($info["almt3"] != "" && $info["almt3"] != "-") {
-                      echo $info["almt3"] . ", ";
-                    }
-                    if ($info["almt4"] != "" && $info["almt4"] != "-") {
-                      echo $info["almt4"] . ", ";
-                    }
-                    if ($info["almt5"] != "" && $info["almt5"] != "-") {
-                      echo $info["almt5"];
                     }
                     ?>
                   </td>
@@ -137,9 +115,9 @@
                       <thead>
                         <tr>
                           <th style="width:20%">Nama Taman</th>
-                          <th style="width:15%">Jenis Bangunan</th>
-                          <th>Keluasan</th>
-                          <th style="width:10%">Nilai Tahunan</th>
+                          <th style="width:20%">Jenis Bangunan</th>
+                          <th style="width:10%">Keluasan</th>
+                          <th style="width:15%">Nilai Tahunan</th>
                           <th style="width:15%">Sewa SMP(MFA)</th>
                           <th style="width:15%">Sewa SMP(AFA)</th>
                         </tr>
@@ -205,11 +183,19 @@
                     </div>
                     <div class="section_one">
                       <?php foreach ($calc['mfa'] as $section) { ?>
-                      <section id="<?= $section['id'] ?>">
+                      <section id="<?php
+                                      if ($section['id'] != "") {
+                                        echo $section['id'];
+                                      }
+                                      ?>">
                         <div class="form-group">
                           <label class="col-lg-2 col-md-3 control-label tal"><strong>Perkara : </strong></label>
                           <div class="col-lg-10 col-md-9">
-                            <?= $section['title'] ?>
+                            <?php
+                              if ($section['title'] != "") {
+                                echo $section['title'];
+                              }
+                              ?>
                           </div>
                         </div>
                         <table class="table table-bordered one" id="zero" style="font-size:13px;">

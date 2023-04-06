@@ -10,13 +10,13 @@
   </thead>
   <tbody>
     <?php foreach ($data as $row) { ?>
-    <tr>
-      <td><?= $row["jln_jlkod"] ?></td>
-      <td><?= $row["kws_kwkod"] ?></td>
-      <td><?= $row["jln_jnama"] ?></td>
-      <td><?= $row["jln_poskd"] ?></td>
-      <td><?= $row["kws_knama"] ?></td>
-    </tr>
+      <tr>
+        <td><?= $row["jln_jlkod"] ?></td>
+        <td><?= $row["kws_kwkod"] ?></td>
+        <td><?= $row["jln_jnama"] ?></td>
+        <td><?= $row["jln_poskd"] ?></td>
+        <td><?= $row["kws_knama"] ?></td>
+      </tr>
     <?php } ?>
   </tbody>
 </table>

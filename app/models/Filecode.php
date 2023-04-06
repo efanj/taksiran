@@ -752,18 +752,18 @@ class Filecode extends Model
 
     $searchQuery = "";
     if ($searchValue != "") {
-      $searchQuery = "kws_knama LIKE '%" . $searchValue . "%' OR hrt_hnama LIKE '%" . $searchValue . "%' OR CAST(kaw_kadar AS TEXT) = '" . $searchValue . "'";
+      $searchQuery = "kws_knama iLIKE '%" . $searchValue . "%' OR hrt_hnama iLIKE '%" . $searchValue . "%' OR CAST(kaw_kadar AS TEXT) = '" . $searchValue . "'";
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hkadar h ";
+    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.hkadar ";
+    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai ";
     if ($searchValue != "") {
       $sql .= "WHERE " . $searchQuery;
     }
@@ -774,7 +774,7 @@ class Filecode extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT * FROM data.hkadar ";
+    $query = "SELECT kws_kwkod, kws_knama, hrt_htkod, hrt_hnama, kaw_kadar, kadar_nilai FROM data.kadar_nilai ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }
@@ -792,6 +792,7 @@ class Filecode extends Model
       $rowOutput["kws_knama"] = $val["kws_knama"];
       $rowOutput["hrt_hnama"] = $val["hrt_hnama"];
       $rowOutput["kaw_kadar"] = $val["kaw_kadar"];
+      $rowOutput["kadar_nilai"] = $val["kadar_nilai"];
       array_push($output, $rowOutput);
     }
 
@@ -895,19 +896,18 @@ class Filecode extends Model
 
     $searchQuery = "";
     if ($searchValue != "") {
-      $searchQuery = "t.kws_knama LIKE '%" . $searchValue . "%' OR t.hrt_hnama LIKE '%" . $searchValue . "%' OR CAST(h.kaw_kadar AS TEXT) = '" . $searchValue . "'";
+      $searchQuery = "kws_knama iLIKE '%" . $searchValue . "%' OR hrt_hnama iLIKE '%" . $searchValue . "%' OR CAST(kaw_kadar AS TEXT) = '" . $searchValue . "'";
     }
 
     ## Total number of records without filtering
-    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai t ";
+    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai ";
     $sel = $database->prepare($sql);
     $database->execute($sel);
     $records = $database->fetchAssociative();
     $totalRecords = $records["allcount"];
 
     ## Total number of record with filtering
-    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai t ";
-    $sql .= "LEFT JOIN data.hkadar h ON t.kws_kwkod = h.kws_kwkod AND t.hrt_htkod = h.hrt_htkod ";
+    $sql = "SELECT count(*) AS allcount FROM data.kadar_nilai ";
     if ($searchValue != "") {
       $sql .= "WHERE " . $searchQuery;
     }
@@ -918,8 +918,7 @@ class Filecode extends Model
     $totalRecordwithFilter = $records["allcount"];
 
     ## Fetch records
-    $query = "SELECT t.kws_kwkod, t.kws_knama, t.hrt_htkod, t.hrt_hnama, t.kadar_nilai, h.kaw_kadar FROM data.kadar_nilai t ";
-    $query .= "LEFT JOIN data.hkadar h ON t.kws_kwkod = h.kws_kwkod AND t.hrt_htkod = h.hrt_htkod ";
+    $query = "SELECT kws_kwkod, kws_knama, hrt_htkod, hrt_hnama, kaw_kadar, kadar_nilai FROM data.kadar_nilai ";
     if ($searchValue != "") {
       $query .= "WHERE " . $searchQuery;
     }

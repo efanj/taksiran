@@ -479,14 +479,14 @@ class Database
 
   public function updateStatusSemak($id)
   {
-    $this->statement = $this->connection->prepare('UPDATE data.smktpk SET smk_stspn = "1" WHERE id = :id');
+    $this->statement = $this->connection->prepare('UPDATE data.smktpk SET smk_stspn = 1 WHERE id = :id');
     $this->bindValue(":id", $id);
     $this->execute();
   }
 
   public function updateStatusPermit($id)
   {
-    $this->statement = $this->connection->prepare('UPDATE data.smktpk SET smk_stsen = "1" WHERE id = :id');
+    $this->statement = $this->connection->prepare('UPDATE data.smktpk SET smk_stsen = 1 WHERE id = :id');
     $this->bindValue(":id", $id);
     $this->execute();
   }

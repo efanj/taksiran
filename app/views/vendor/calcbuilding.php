@@ -1,4 +1,4 @@
-<div class="page-content clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -10,78 +10,57 @@
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
             </div>
-            <div class="panel-body">
-              <table class="info" style="width:100%;font-size:13px;">
-                <tr>
-                  <td style="width:15%"><label class="control-label tal">No. Akaun</label></td>
-                  <td style="width:2%">:</td>
-                  <td style="width:15%"><?= $info["no_akaun"] ?></td>
-                  <td><label class="control-label tal">IC Pemilik</label></td>
-                  <td style="width:2%">:</td>
-                  <td><?= $info["plgid"] ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Nama Pemilik</label></td>
-                  <td>:</td>
-                  <td colspan="4" style="width:48%"><?= $info["nmbil"] ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Alamat Harta</label></td>
-                  <td>:</td>
-                  <td colspan="4">
-                    <?php
-                    if ($info["adpg1"] != "") {
-                      echo $info["adpg1"] . ", ";
-                    }
-                    if ($info["adpg2"] != "" && $info["adpg2"] != "-") {
-                      echo $info["adpg2"] . ", ";
-                    }
-                    if ($info["adpg3"] != "" && $info["adpg3"] != "-") {
-                      echo $info["adpg3"] . ", ";
-                    }
-                    if ($info["adpg4"] != "" && $info["adpg4"] != "-") {
-                      echo $info["adpg4"];
-                    }
-                    ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Kegunaan Tanah</label></td>
-                  <td>:</td>
-                  <td><?= $info["tnama"]; ?></td>
-                  <td><label class="control-label tal">Kegunaan Hartanah</label></td>
-                  <td>:</td>
-                  <td><?= $info["hnama"]; ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Luas Tanah</label></td>
-                  <td>:</td>
-                  <td colspan="4"><?= $info["lstnh"] . " mp"; ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Luas Bangunan</label></td>
-                  <td>:</td>
-                  <td><?= $info["lsbgn"] . " mp"; ?></td>
-                  <td><label class="control-label tal">Luas Ansolari</label></td>
-                  <td>:</td>
-                  <td><?= $info["lsans"] . " mp"; ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Nilai Tahunan Asal</label></td>
-                  <td>:</td>
-                  <td colspan="4"><?= "RM " . $info["nilth_asal"] ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Kadar Asal</label></td>
-                  <td>:</td>
-                  <td colspan="4"><?= $info["kadar_asal"] ?></td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Cukai Asal</label></td>
-                  <td>:</td>
-                  <td colspan="4"><?= "RM " . $info["cukai_asal"] ?></td>
-                </tr>
-              </table>
+            <div class="panel-body s12">
+              <div class="row mb5">
+                <div class="col-md-6"><label class="control-label tal">No. Akaun</label> : <?= $info["no_akaun"] ?>
+                </div>
+                <div class="col-md-6"><label class="control-label tal">IC Pemilik</label> : <?= $info["plgid"] ?></div>
+              </div>
+              <div class="row mb5">
+                <dv class="col-md-12"><label class="control-label tal">Nama Pemilik</label> : <?= $info["nmbil"] ?></dv>
+              </div>
+              <div class="row mb5">
+                <div class="col-md-12"><label class="control-label tal">Alamat Harta</label> :
+                  <?php
+                  if ($info["adpg1"] != "") {
+                    echo $info["adpg1"] . ", ";
+                  }
+                  if ($info["adpg2"] != "" && $info["adpg2"] != "-") {
+                    echo $info["adpg2"] . ", ";
+                  }
+                  if ($info["adpg3"] != "" && $info["adpg3"] != "-") {
+                    echo $info["adpg3"] . ", ";
+                  }
+                  if ($info["adpg4"] != "" && $info["adpg4"] != "-") {
+                    echo $info["adpg4"];
+                  }
+                  ?>
+                </div>
+              </div>
+              <div class="row mb5">
+                <div class="col-md-6"><label class="control-label tal">Kegunaan Tanah</label> : <?= $info["tnama"]; ?>
+                </div>
+                <div class="col-md-6"><label class="control-label tal">Kegunaan Hartanah</label> :
+                  <?= $info["hnama"]; ?></div>
+              </div>
+              <div class="row mb5">
+                <div class="col-md-4"><label class="control-label tal">Luas Tanah</label> :
+                  <?= $info["lstnh"] . " mp"; ?></div>
+                <div class="col-md-4"><label class="control-label tal">Luas Bangunan</label> :
+                  <?= $info["lsbgn"] . " mp"; ?></div>
+                <div class="col-md-4"><label class="control-label tal">Luas Ansolari</label> :
+                  <?= $info["lsans"] . " mp"; ?></div>
+              </div>
+              <div class="row">
+                <div class="col-md-4"><label class="control-label tal">Nilai Tahunan</label> :
+                  <?= "RM " . $info["nilth_asal"] ?></div>
+                <div class="col-md-4"><label class="control-label tal">Kadar</label> :
+                  <?= $info["kadar_asal"] . " %"; ?></div>
+                <div class="col-md-4"><label class="control-label tal">Cukai Tahunan</label> :
+                  <?= "RM " . $info["cukai_asal"] ?></div>
+              </div>
+              <input type="hidden" id="kwkod" value="<?= $info['kwkod']; ?>">
+              <input type="hidden" id="htkod" value="<?= $info['htkod']; ?>">
             </div>
           </div>
           <div class="panel">
@@ -147,8 +126,7 @@
                         </thead>
                         <tbody id="comparison_table">
                           <tr id="0">
-                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
-                                  class="fa fa-plus"></i></button></td>
+                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i class="fa fa-plus"></i></button></td>
                             <td>
                               <input type="hidden" name="comparison[]" id="comparison_0">
                               <div class='control-label tal' id='jlname_0'></div>
@@ -168,8 +146,7 @@
                             <td>
                               <div class='control-label tal' id='afa_0'></div>
                             </td>
-                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
-                                  class="fa fa-trash"></i></button></td>
+                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i class="fa fa-trash"></i></button></td>
                           </tr>
                         </tbody>
                       </table>
@@ -191,12 +168,10 @@
                         <tbody>
                           <tr>
                             <td></td>
-                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land"
-                                value="<?= $info["lstnh"] ?>"></td>
+                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land" min="0" value="<?= $info["lstnh"] ?>"></td>
                             <td>mp</td>
                             <td style="text-align:center">X</td>
-                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land"
-                                value="0"></td>
+                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land" min="0" value="0"></td>
                             <td>smp</td>
                             <td><input type="number" class="form-control input-sm ttl_partly" id="total_land" readonly>
                             </td>
@@ -235,11 +210,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_one[0][item][0][title_one]"></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][breadth_one]" id="breadth_one"
-                                    value="<?= $info["ttl_bgn"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_one[0][item][0][title_one]"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][breadth_one]" id="breadth_one" min="0" value="<?= $info["ttl_bgn"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][breadthtype_one]">
                                     <option value="">Sila Pilih</option>
@@ -250,8 +222,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][price_one]" id="price_one" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][price_one]" id="price_one" min="0" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][pricetype_one]">
                                     <option value="">Sila Pilih</option>
@@ -261,8 +232,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -321,11 +291,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_two[0][item][0][title_two]" value=""></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][breadth_two]" id="breadth_two"
-                                    value="<?= $info["ttl_ans"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_two[0][item][0][title_two]" value=""></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][breadth_two]" id="breadth_two" min="0" value="<?= $info["ttl_ans"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][breadthtype_two]">
                                     <option value="">Sila Pilih</option>
@@ -336,8 +303,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][price_two]" id="price_two" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][price_two]" min="0" id="price_two" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][pricetype_two]">
                                     <option value="">Sila Pilih</option>
@@ -347,8 +313,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -392,8 +357,7 @@
                           <td style="width:65%"></td>
                           <td>
                             <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount"
-                                placeholder="Diskaun">
+                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun">
                               <span class=" input-group-addon">%</span>
                             </div>
                           </td>
@@ -462,13 +426,24 @@
           <button type="button" class="close" data-dismiss="modal">
             <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
           </button>
-          <h4 class="modal-title" id="myModalLabel">SENARAI DATA PERBANDINGAN</h4>
+          <h4 class="modal-title">SENARAI DATA PERBANDINGAN</h4>
         </div>
         <div class="modal-body">
-          <?php
-          $data = $this->controller->informations->comparisontable("1", $info["kwkod"], $info["htkod"]);
-          echo $this->render(Config::get("VIEWS_PATH") . "calculator/comparison.php", ["data" => $data]);
-          ?>
+          <table class="table table-bordered" id="popup_comparison" width="100%">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nama Jalan</th>
+                <th>Jenis Bangunan</th>
+                <th>Keluasan</th>
+                <th>Nilai Tahunan</th>
+                <th>Sewa SMP(MFA)</th>
+                <th>Sewa SMP(AFA)</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -1,16 +1,32 @@
-<div class="page-content clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
+      <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
+      <?php $acct = $this->controller->informations->getAcctInfo($info['no_akaun']); ?>
+      <?php
+      if ($info["jlkod"] != 0) {
+        $kwkod = $info["jlkod"];
+      } else {
+        $kwkod = $acct['jln_kwkod'];
+      }
+      if ($info["htkod"] != 0) {
+        $htkod = $info["htkod"];
+      } else {
+        $htkod = $acct['peg_htkod'];
+      }
+      ?>
+      <?php print_r($info); ?>
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
-          <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
             </div>
             <div class="panel-body">
+              <input type="hidden" id="kwkod" value="<?= $kwkod; ?>">
+              <input type="hidden" id="htkod" value="<?= $htkod; ?>">
               <table class="info" style="width:100%;font-size:13px;">
                 <tr>
                   <td style="width:15%"><label class="control-label tal">No. Akaun</label></td>
@@ -18,12 +34,12 @@
                   <td style="width:15%"><?= $info["no_akaun"] ?></td>
                   <td><label class="control-label tal">IC Pemilik</label></td>
                   <td style="width:2%">:</td>
-                  <td><?= $info["plgid"] ?></td>
+                  <td><?= $acct["pmk_plgid"] ?></td>
                 </tr>
                 <tr>
                   <td><label class="control-label tal">Nama Pemilik</label></td>
                   <td>:</td>
-                  <td colspan="4" style="width:48%"><?= $info["nmbil"] ?></td>
+                  <td colspan="4" style="width:48%"><?= $acct["pmk_nmbil"] ?></td>
                 </tr>
                 <tr>
                   <td><label class="control-label tal">Alamat Harta</label></td>
@@ -46,47 +62,24 @@
                   </td>
                 </tr>
                 <tr>
-                  <td><label class="control-label tal">Alamat Surat Menyurat</label></td>
-                  <td>:</td>
-                  <td colspan="4">
-                    <?php
-                    if ($info["almt1"] != "") {
-                      echo $info["almt1"] . ", ";
-                    }
-                    if ($info["almt2"] != "" && $info["almt2"] != "-") {
-                      echo $info["almt2"] . ", ";
-                    }
-                    if ($info["almt3"] != "" && $info["almt3"] != "-") {
-                      echo $info["almt3"] . ", ";
-                    }
-                    if ($info["almt4"] != "" && $info["almt4"] != "-") {
-                      echo $info["almt4"] . ", ";
-                    }
-                    if ($info["almt5"] != "" && $info["almt5"] != "-") {
-                      echo $info["almt5"];
-                    }
-                    ?>
-                  </td>
-                </tr>
-                <tr>
                   <td><label class="control-label tal">Kegunaan Tanah</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["hnama"] ?></td>
+                  <td colspan="4"><?= $acct["tnh_tnama"] ?></td>
                 </tr>
                 <tr>
                   <td><label class="control-label tal">Kegunaan Hartanah</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["hnama"] ?></td>
+                  <td colspan="4"><?= $acct["hrt_hnama"] ?></td>
                 </tr>
                 <tr>
                   <td><label class="control-label tal">Jenis Bangunan</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["bnama"] ?></td>
+                  <td colspan="4"><?= $acct["bgn_bnama"] ?></td>
                 </tr>
                 <tr>
                   <td><label class="control-label tal">Struktur Bangunan</label></td>
                   <td>:</td>
-                  <td colspan="4"><?= $info["snama"] ?></td>
+                  <td colspan="4"><?= $acct["stb_snama"] ?></td>
                 </tr>
               </table>
             </div>
@@ -155,8 +148,7 @@
                         </thead>
                         <tbody id="comparison_table">
                           <tr id="0">
-                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i
-                                  class="fa fa-plus"></i></button></td>
+                            <td><button class="btn btn-primary btn-xs" id="add" type="button"><i class="fa fa-plus"></i></button></td>
                             <td>
                               <input type="hidden" name="comparison[]" id="comparison_0">
                               <div class='control-label tal' id='jlname_0'></div>
@@ -176,8 +168,7 @@
                             <td>
                               <div class='control-label tal' id='afa_0'></div>
                             </td>
-                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i
-                                  class="fa fa-trash"></i></button></td>
+                            <td><button class="btn btn-danger btn-xs" id="delete" type="button"><i class="fa fa-trash"></i></button></td>
                           </tr>
                         </tbody>
                       </table>
@@ -199,12 +190,10 @@
                         <tbody>
                           <tr>
                             <td></td>
-                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land"
-                                value="<?= $info["lstnh"] ?>"></td>
+                            <td><input type="number" class="form-control input-sm" name="breadth_land" id="breadth_land" value="<?= $info["lstnh"] ?>"></td>
                             <td>mp</td>
                             <td style="text-align:center">X</td>
-                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land"
-                                value="0"></td>
+                            <td><input type="number" class="form-control input-sm" name="price_land" id="price_land" value="0"></td>
                             <td>smp</td>
                             <td><input type="number" class="form-control input-sm ttl_partly" id="total_land" readonly>
                             </td>
@@ -243,11 +232,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_one[0][item][0][title_one]"></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][breadth_one]" id="breadth_one"
-                                    value="<?= $info["lsbgn"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_one[0][item][0][title_one]"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][breadth_one]" id="breadth_one" value="<?= $info["lsbgn"] ?>"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][breadthtype_one]">
                                     <option value="">Sila Pilih</option>
@@ -258,8 +244,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][price_one]" id="price_one" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][price_one]" id="price_one" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_one[0][item][0][pricetype_one]">
                                     <option value="">Sila Pilih</option>
@@ -269,8 +254,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_one[0][item][0][total_one]" id="total_one" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -329,11 +313,8 @@
                             </thead>
                             <tbody id="zero">
                               <tr id="0">
-                                <td><input type="text" class="form-control input-sm"
-                                    name="section_two[0][item][0][title_two]" value="<?= $info["lsans"] ?>"></td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][breadth_two]" id="breadth_two"
-                                    value="<?= $info["ttl_ans"] ?>"></td>
+                                <td><input type="text" class="form-control input-sm" name="section_two[0][item][0][title_two]" value=""></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][breadth_two]" id="breadth_two" value=""></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][breadthtype_two]">
                                     <option value="">Sila Pilih</option>
@@ -344,8 +325,7 @@
                                   </select>
                                 </td>
                                 <td style="text-align:center">X</td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][price_two]" id="price_two" value="0"></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][price_two]" id="price_two" value="0"></td>
                                 <td>
                                   <select class="form-control input-sm" name="section_two[0][item][0][pricetype_two]">
                                     <option value="">Sila Pilih</option>
@@ -355,8 +335,7 @@
                                     <option value="sepetak">Sepetak</option>
                                   </select>
                                 </td>
-                                <td><input type="number" class="form-control input-sm"
-                                    name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
+                                <td><input type="number" class="form-control input-sm" name="section_two[0][item][0][total_two]" id="total_two" readonly></td>
                                 <td></td>
                               </tr>
                             </tbody>
@@ -397,11 +376,10 @@
                           </td>
                         </tr>
                         <tr>
-                          <td style="width:65%"></td>
+                          <td style="width:60%"></td>
                           <td>
                             <div class="input-group input-group-sm">
-                              <input type="number" class="form-control input-sm" name="discount" id="discount"
-                                placeholder="Diskaun">
+                              <input type="number" class="form-control input-sm" name="discount" id="discount" placeholder="Diskaun">
                               <span class=" input-group-addon">%</span>
                             </div>
                           </td>
@@ -430,10 +408,15 @@
                           </td>
                         </tr>
                         <tr>
-                          <td colspan="2"><strong>KADAR</strong></td>
+                          <td><strong>KADAR</strong></td>
                           <td>
-                            <input type="hidden" name="rate" value="<?= $info["kadar_asal"] ?>">
-                            <span class="control-label tal" id="dummy_rate"><?= $info["kadar_asal"] ?></span> %
+                            <button type="button" class="btn btn-default btn-sm" id="update_rate">Kemaskini</button>
+                          </td>
+                          <td>
+                            <div class="input-group input-group-sm">
+                              <input type="number" class="form-control input-sm" name="rate" id="rate" value="<?= $acct["kaw_kadar"] ?>">
+                              <span class=" input-group-addon">%</span>
+                            </div>
                           </td>
                         </tr>
                         <tr>
@@ -473,10 +456,21 @@
           <h4 class="modal-title" id="myModalLabel">SENARAI DATA PERBANDINGAN</h4>
         </div>
         <div class="modal-body">
-          <?php
-          $data = $this->controller->informations->comparisontable("1", $info["kwkod"], $info["htkod"]);
-          echo $this->render(Config::get("VIEWS_PATH") . "calculator/comparison.php", ["data" => $data]);
-          ?>
+          <table class="table table-bordered" id="popup_comparison" width="100%">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nama Jalan</th>
+                <th>Jenis Bangunan</th>
+                <th>Keluasan</th>
+                <th>Nilai Tahunan</th>
+                <th>Sewa SMP(MFA)</th>
+                <th>Sewa SMP(AFA)</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

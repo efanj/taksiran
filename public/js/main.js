@@ -1,14 +1,5 @@
 //------------- main.js -------------//
 
-//Template options
-var templateOptions = {
-  fixed_header: true, //make header fixed
-  accordion: {
-    toggleIcon: "l-arrows-minus s16 collapse-icon", //toggle icon for accrodion (put additional class "collapse-icon" to prevent random icon deletition)
-    collapseIcon: "l-arrows-plus s16 collapse-icon" //collapse icon for accrodion
-  }
-}
-
 // make console.log safe to use
 window.console || (console = { log: function () {} })
 
@@ -35,90 +26,74 @@ window.addEventListener(
   false
 )
 
-//make footer sticky to the bottom
-function stickyFooter() {
-  $footer = $("#footer")
-  var pagewrapper = $("#wrapper")
-
-  if (pagewrapper.height() + 30 + $footer.height() < $(window).height()) {
-    $footer.removeAttr("style")
-    $footer.css({
-      position: "absolute"
-    })
-  } else {
-    $footer.removeAttr("style")
-    $footer.css({
-      bottom: "auto"
-    })
-  }
-}
-
-//Accordions funciton
-function accordions() {
-  var acc = $(".accordion") //get all accordions
-  acc.collapse() //activate it
-
-  //function to put icons
-  accPutIcon = function () {
-    acc.each(function (index) {
-      accExp = $(this).find(".panel-collapse.in")
-      accExp
-        .prev(".panel-heading")
-        .addClass("content-in")
-        .find("a.accordion-toggle")
-        .append('<i class="' + templateOptions.accordion.toggleIcon + '"></i>')
-      accNor = $(this).find(".panel-collapse").not(".panel-collapse.in")
-      accNor
-        .prev(".panel-heading")
-        .find("a.accordion-toggle")
-        .append('<i class="' + templateOptions.accordion.collapseIcon + '"></i>')
-    })
-  }
-
-  //function to update icons
-  accUpdIcon = function () {
-    acc.each(function (index) {
-      accExp = $(this).find(".panel-collapse.in")
-      accExp.prev(".panel-heading").find("i.collapse-icon").remove()
-      accExp
-        .prev(".panel-heading")
-        .addClass("content-in")
-        .find("a.accordion-toggle")
-        .append('<i class="' + templateOptions.accordion.toggleIcon + '"></i>')
-
-      accNor = $(this).find(".panel-collapse").not(".panel-collapse.in")
-      accNor.prev(".panel-heading").find("i.collapse-icon").remove()
-      accNor
-        .prev(".panel-heading")
-        .removeClass("content-in")
-        .find("a.accordion-toggle")
-        .append('<i class="' + templateOptions.accordion.collapseIcon + '"></i>')
-    })
-  }
-
-  accPutIcon()
-
-  $(".accordion")
-    .on("shown.bs.collapse", function () {
-      accUpdIcon()
-      stickyFooter()
-    })
-    .on("hidden.bs.collapse", function () {
-      accUpdIcon()
-      stickyFooter()
-    })
-}
-
 //doc ready function
 $(document).ready(function () {
-  //------------- Fix header on scroll -------------//
-  if (templateOptions.fixed_header) {
-    $("body").addClass("header-fixed")
-  }
-
   //Disable certain links
   $("a[href^=#]").click(function (e) {
     e.preventDefault()
+  })
+
+  //------------- Init our plugin -------------//
+  $("body").dynamic({
+    customScroll: {
+      color: "#fff", //color of custom scroll
+      rscolor: "#95A5A6", //color of right sidebar
+      size: "3px", //size in pixels
+      opacity: "1", //opacity
+      alwaysVisible: false //disable hide in
+    },
+    header: {
+      fixed: true //fixed header
+    },
+    breadcrumbs: {
+      auto: true, //auto populate breadcrumbs via js if is false you need to provide own markup see for example.
+      homeicon: "im-home6" //home icon
+    },
+    sidebar: {
+      fixed: true, //fixed sidebar
+      rememberToggle: true, //remember if sidebar is hided
+      offCanvas: false //make sidebar offcanvas in tablet and small screens
+    },
+    rightSidebar: {
+      fixed: true, //fixed sidebar
+      rememberToggle: true //remember if sidebar is hided
+    },
+    sideNav: {
+      toggleMode: true, //close previous open submenu before expand new
+      showArrows: true, //show arrow to indicate sub
+      sideNavArrowIcon: "l-arrows-right", //arrow icon for navigation
+      subOpenSpeed: 200, //animation speed for open subs
+      subCloseSpeed: 300, //animation speed for close subs
+      animationEasing: "linear", //animation easing
+      absoluteUrl: false, //put true if use absolute path links. example http://www.host.com/dashboard instead of /dashboard
+      subDir: "" //if you put template in sub dir you need to fill here. example '/html'
+    },
+    panels: {
+      refreshIcon: "fa fa-circle-o", //refresh icon for panels
+      toggleIcon: "fa fa-angle-up", //toggle icon for panels
+      collapseIcon: "fa fa-angle-down", //colapse icon for panels
+      closeIcon: "fa fa-times", //close icon
+      showControlsOnHover: false, //Show controls only on hover.
+      loadingEffect: "rotateplane", //loading effect for panels. bounce, none, rotateplane, stretch, orbit, roundBounce, win8, win8_linear, ios, facebook, rotation, pulse.
+      loaderColor: "#616469",
+      rememberSortablePosition: true //remember panel position
+    },
+    accordion: {
+      toggleIcon: "l-arrows-minus s16", //toggle icon for accrodion
+      collapseIcon: "l-arrows-plus s16" //collapse icon for accrodion
+    },
+    tables: {
+      responsive: true, //make tables resposnive
+      customscroll: true //ativate custom scroll for responsive tables
+    },
+    alerts: {
+      animation: true, //animation effect toggle
+      closeEffect: "bounceOutDown" //close effect for alerts see http://daneden.github.io/animate.css/
+    },
+    dropdownMenu: {
+      animation: true, //animation effect for dropdown
+      openEffect: "fadeIn" //open effect for menu see http://daneden.github.io/animate.css/
+    }
   })
 
   //------------- Bootstrap tooltips -------------//
@@ -130,73 +105,75 @@ $(document).ready(function () {
   //------------- Bootstrap popovers -------------//
   $("[data-toggle=popover]").popover()
 
-  //remove nav hover on mobile.
-  if (!$("html").hasClass("touch")) {
-    $(".site-nav  li.dropdown").hover(
-      function () {
-        $(this).delay(200).addClass("open")
-      },
-      function () {
-        $(this).delay(200).removeClass("open")
-      }
-    )
+  //get plugin object
+  var adminObj = $("body").data("dynamic")
+  //now we have access to change settings.
+
+  //If new user set the localstorage variables
+  if (firstImpression()) {
+    //console.log('New user');
+    if (adminObj.settings.header.fixed) {
+      store.set("fixed-header", 1)
+    } else {
+      store.set("fixed-header", 0)
+    }
+    if (adminObj.settings.sidebar.fixed) {
+      store.set("fixed-left-sidebar", 1)
+    } else {
+      store.set("fixed-left-sidebar", 0)
+    }
+    if (adminObj.settings.rightSidebar.fixed) {
+      store.set("fixed-right-sidebar", 1)
+    } else {
+      store.set("fixed-right-sidebar", 0)
+    }
   }
 
-  //get images and put it as background
-  $(".bg-img-holder").each(function () {
-    var img = $(this).children("img").attr("src")
-    $(this).css("background", 'url("' + img + '")')
-    $(this).children("img").hide()
-    $(this).css("background-position", "50% 50%")
-  })
+  //------------- Template Settings -------------//
+  // (this is example , remove it in production state.)
 
-  //Back to top
-  $(window).scroll(function () {
-    if ($(window).scrollTop() > 200) {
-      $("#back-to-top").fadeIn(200)
+  //checkbox states
+  // fixed header
+  if (store.get("fixed-header") == 1) {
+    $("#fixed-header-toggle").prop("checked", true)
+  } else {
+    $("#fixed-header-toggle").prop("checked", false)
+  }
+
+  //left sidebar
+  if (store.get("fixed-left-sidebar") == 1) {
+    $("#fixed-left-sidebar").prop("checked", true)
+  } else {
+    $("#fixed-left-sidebar").prop("checked", false)
+  }
+
+  //right sidebar
+  if (store.get("fixed-right-sidebar") == 1) {
+    $("#fixed-right-sidebar").prop("checked", true)
+  } else {
+    $("#fixed-right-sidebar").prop("checked", false)
+  }
+
+  //check magic access methods.
+  $("#fixed-header-toggle").on("change", function () {
+    if (this.checked) {
+      adminObj.fixedHeader(true)
     } else {
-      $("#back-to-top").fadeOut(200)
+      adminObj.fixedHeader(false)
     }
   })
-
-  $("#back-to-top, .back-to-top").click(function () {
-    $("html, body").animate({ scrollTop: 0 }, "800")
-    return false
-  })
-
-  //------------- Accordions -------------//
-  accordions()
-
-  //------------- Scroll events -------------//
-  $(window).scroll(function () {
-    stickyFooter()
-  })
-
-  //------------- Resize events -------------//
-  $(window).resize(function () {
-    stickyFooter()
-  })
-
-  //------------- Responsvie button------------//
-  $(".responsive-menu-toggle").click(function (event) {
-    _this = $(this)
-    if ($(this).hasClass("menu-open")) {
-      //close menu
-      $("#header .site-nav").slideUp("250", "swing", function () {
-        _this.removeClass("menu-open")
-      })
+  $("#fixed-left-sidebar").on("change", function () {
+    if (this.checked) {
+      adminObj.fixedSidebar("left")
     } else {
-      //open menu
-      $("#header .site-nav").slideDown("250", "swing", function () {
-        _this.addClass("menu-open")
-      })
+      adminObj.removeFixedSidebar("left")
     }
   })
-})
-
-//window load functions
-$(window).load(function () {
-  $(".bg-img-holder").addClass("animated fadeIn")
-  //execute sticky footer
-  stickyFooter()
+  $("#fixed-right-sidebar").on("change", function () {
+    if (this.checked) {
+      adminObj.fixedSidebar("right")
+    } else {
+      adminObj.removeFixedSidebar("right")
+    }
+  })
 })

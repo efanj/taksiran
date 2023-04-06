@@ -1,12 +1,12 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
       <!-- Start .row -->
+      <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
+      <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
       <div class="row">
         <div class="col-lg-4 col-sm-4 col-md-4">
-          <?php $info = $this->controller->informations->getSubmitionInfo($siriNo); ?>
-          <?php $calc = $this->controller->informations->getCalculationInfo($siriNo); ?>
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4>MAKLUMAT PEGANGAN</h4>
@@ -42,29 +42,6 @@
                     }
                     if ($info["adpg4"] != "" && $info["adpg4"] != "-") {
                       echo $info["adpg4"];
-                    }
-                    ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td><label class="control-label tal">Alamat Surat Menyurat</label></td>
-                  <td>:</td>
-                  <td colspan="4">
-                    <?php
-                    if ($info["almt1"] != "") {
-                      echo $info["almt1"] . ", ";
-                    }
-                    if ($info["almt2"] != "" && $info["almt2"] != "-") {
-                      echo $info["almt2"] . ", ";
-                    }
-                    if ($info["almt3"] != "" && $info["almt3"] != "-") {
-                      echo $info["almt3"] . ", ";
-                    }
-                    if ($info["almt4"] != "" && $info["almt4"] != "-") {
-                      echo $info["almt4"] . ", ";
-                    }
-                    if ($info["almt5"] != "" && $info["almt5"] != "-") {
-                      echo $info["almt5"];
                     }
                     ?>
                   </td>
@@ -136,27 +113,27 @@
                       </thead>
                       <tbody id="comparison_table">
                         <?php foreach ($calc['comparison'] as $row) { ?>
-                          <tr id="0">
-                            <td>
-                              <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
-                              <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
-                            </td>
-                            <td>
-                              <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
-                            </td>
-                          </tr>
+                        <tr id="0">
+                          <td>
+                            <input type="hidden" name="comparison[]" id="comparison" value="<?= $row['id'] ?>">
+                            <div class='control-label tal' id='jlname'><?= $row['jln_jnama'] ?></div>
+                          </td>
+                          <td>
+                            <div class='control-label tal' id='bgtype'><?= $row['bgn_bnama'] ?></div>
+                          </td>
+                          <td>
+                            <div class='control-label tal' id='breadth'><?= $row['peg_lsbgn'] ?></div>
+                          </td>
+                          <td>
+                            <div class='control-label tal' id='nilth'><?php echo "RM " . $row['peg_nilth'] ?></div>
+                          </td>
+                          <td>
+                            <div class='control-label tal' id='mfa'><?php echo "RM " . $row['mfa'] ?></div>
+                          </td>
+                          <td>
+                            <div class='control-label tal' id='afa'><?php echo "RM " . $row['afa'] ?></div>
+                          </td>
+                        </tr>
                         <?php } ?>
                       </tbody>
                     </table>
@@ -233,7 +210,8 @@
                       <tr>
                         <td colspan="2"><strong>CUKAI TAKSIRAN</strong></td>
                         <td>
-                          <strong>RM</strong> <span class="control-label tal bold" id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
+                          <strong>RM</strong> <span class="control-label tal bold"
+                            id="dummy_tax"><?= $calc["assessment_tax"] ?></span>
                         </td>
                       </tr>
                     </table>
@@ -244,7 +222,8 @@
                   </li>
                   <li class="next"><a href="#">Seterusnya &rarr;</a>
                   </li>
-                  <li class="next finish" style="display:none;"><a href="#" id="print_calc" data-siri="<?= $siriNo ?>">Cetak</a>
+                  <li class="next finish" style="display:none;"><a href="#" id="print_calc"
+                      data-siri="<?= $siriNo ?>">Cetak</a>
                   </li>
                 </ul>
               </div>

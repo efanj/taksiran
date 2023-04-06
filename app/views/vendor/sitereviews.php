@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -14,7 +14,7 @@
               <div class="row">
                 <div class="col-lg-6 col-sm-6 col-md-6">
                 </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 mb10 tar">
+                <div class="col-lg-6 col-sm-6 col-md-6 mb10 tar pr15">
                   <form class="form-inline" role="form">
                     <div class="form-group">
                       <select class="form-control input-sm" name="area" id="area">

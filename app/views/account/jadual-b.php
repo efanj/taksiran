@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -344,29 +344,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="street_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI JALAN</h4>
-      </div>
-      <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->streettable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/street.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -382,78 +371,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="customer_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI PELANGGAN</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered" id="popup_customer" width="100%">
+        <table class="table table-bordered" id="popup_reason" width="100%">
           <thead>
             <tr>
-              <th>Pelanggan ID</th>
-              <th>Nama Pelanggan</th>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
             </tr>
           </thead>
+          <tbody>
+          </tbody>
         </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="customeraddress_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
-          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">SENARAI ALAMAT</h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered" id="popup_customeraddress" width="100%">
-          <thead>
-            <tr>
-              <th>Pelanggan ID</th>
-              <th>Nama Pelanggan</th>
-              <th>Alamat</th>
-            </tr>
-          </thead>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="calc_button_popup" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="btn-group">
-              <button type="button" class="btn btn-default">Left</button>
-              <button type="button" class="btn btn-default">Middle</button>
-              <button type="button" class="btn btn-default">Right</button>
-              <button type="button" class="btn btn-default">Left</button>
-              <button type="button" class="btn btn-default">Middle</button>
-              <button type="button" class="btn btn-default">Right</button>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>

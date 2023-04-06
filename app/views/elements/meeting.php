@@ -10,13 +10,13 @@
   </thead>
   <tbody>
     <?php foreach ($data as $row) { ?>
-    <tr>
-      <td><?= $row["mcm_blngn"] ?></td>
-      <td><?= $row["eld3"] ?></td>
-      <td><?= $row["mcm_tkhpl"] ?></td>
-      <td><?= $row["mcm_tkhtk"] ?></td>
-      <td><?= $row["mcm_kkrja"] ?></td>
-    </tr>
+      <tr>
+        <td><?= $row["mcm_blngn"] ?></td>
+        <td><?= $row["eld3"] ?></td>
+        <td><?= $row["mcm_tkhpl"] ?></td>
+        <td><?= $row["mcm_tkhtk"] ?></td>
+        <td><?= $row["mcm_kkrja"] ?></td>
+      </tr>
     <?php } ?>
   </tbody>
 </table>

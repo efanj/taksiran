@@ -1,6 +1,39 @@
 $(document).ready(function () {
   $("#mjc_tkhoc").datepicker()
   var popup_meeting = $("#popup_meeting").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/meetingtable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "mcm_blngn"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "eld3"
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: "mcm_tkhpl"
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: "mcm_tkhtk"
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "mcm_kkrja"
+      }
+    ],
     order: [[0, "desc"]],
     language: {
       search: "Saring:",
@@ -20,13 +53,46 @@ $(document).ready(function () {
 
   $("#popup_meeting tbody").on("click", "tr", function () {
     var data_meeting = popup_meeting.row(this).data()
-    $("#mjc_tkhpl").val(data_meeting[2])
-    $("#mjc_tkhtk").html(data_meeting[3])
-    $("#mjcTkhtk").val(data_meeting[3])
+    $("#mjc_tkhpl").val(data_meeting.mcm_tkhpl)
+    $("#mjc_tkhtk").html(data_meeting.mcm_tkhtk)
+    $("#mjcTkhtk").val(data_meeting.mcm_tkhtk)
     $("#mesyuarat_popup").modal("hide")
   })
 
   var popup_street = $("#popup_street").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/streettable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "jln_jlkod"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "kws_kwkod"
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: "jln_jnama"
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: "jln_poskd"
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "kws_knama"
+      }
+    ],
     language: {
       search: "Saring:",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -45,14 +111,32 @@ $(document).ready(function () {
 
   $("#popup_street tbody").on("click", "tr", function () {
     var data_street = popup_street.row(this).data()
-    $("#dummy_mjc_jlkod").val(data_street[2])
-    $("#mjc_jlkod").val(data_street[0])
-    $("#mjc_kwkod").html(data_street[4])
-    $("#kawKwkod").val(data_street[1])
+    $("#dummy_mjc_jlkod").val(data_street.jln_jnama)
+    $("#mjc_jlkod").val(data_street.jln_jlkod)
+    $("#mjc_kwkod").html(data_street.kws_knama)
+    $("#kawKwkod").val(data_street.kws_kwkod)
     $("#street_popup").modal("toggle")
   })
 
   var popup_reason = $("#popup_reason").DataTable({
+    processing: true,
+    serverSide: true,
+    select: "single",
+    searching: false,
+    serverMethod: "post",
+    ajax: config.root + "elements/reasontable",
+    columnDefs: [
+      {
+        targets: 0,
+        orderable: false,
+        data: "acm_sbkod"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "acm_sbktr"
+      }
+    ],
     language: {
       search: "Saring:",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -72,8 +156,8 @@ $(document).ready(function () {
   $("#popup_reason tbody").on("click", "tr", function () {
     var data_reason = popup_reason.row(this).data()
     console.log(data_reason)
-    $("#mjc_sbkod").val(data_reason[0])
-    $("#dummy_mjc_sbkod").val(data_reason[1])
+    $("#mjc_sbkod").val(data_reason.acm_sbkod)
+    $("#dummy_mjc_sbkod").val(data_reason.acm_sbktr)
     $("#reason_popup").modal("toggle")
   })
 

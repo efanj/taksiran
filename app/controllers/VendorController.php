@@ -41,6 +41,12 @@ class VendorController extends Controller
       case "reviewSubmition":
         $this->Security->config("validateForm", false);
         break;
+      case "buildingSubmit":
+        $this->Security->config("validateForm", false);
+        break;
+      case "buildingEdit":
+        $this->Security->config("validateForm", false);
+        break;
       case "deletesitereview":
         $this->Security->config("form", ["fields" => ["file_id"]]);
         break;
@@ -95,6 +101,18 @@ class VendorController extends Controller
   {
     Config::setJsConfig("curPage", "vendor");
     $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/createEmptyLandCalc/", Config::get("VIEWS_PATH") . "vendor/calcland.php", ["reviewId" => $reviewId]);
+  }
+
+  public function editBuildingCalc($siriNo)
+  {
+    Config::setJsConfig("curPage", "vendor");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editBuildingCalc/", Config::get("VIEWS_PATH") . "vendor/editBuildingCalc.php", ["siriNo" => $siriNo]);
+  }
+
+  public function editEmptyLandCalc($siriNo)
+  {
+    Config::setJsConfig("curPage", "vendor");
+    $this->view->renderWithLayouts(Config::get("VIEWS_PATH") . "layout/vendor/editEmptyLandCalc/", Config::get("VIEWS_PATH") . "vendor/editEmptyLandCalc.php", ["siriNo" => $siriNo]);
   }
 
   public function viewimages($reviewId)
@@ -262,6 +280,56 @@ class VendorController extends Controller
     }
   }
 
+  public function buildingSubmit()
+  {
+    $siriNo = $this->account->generateSiriNo();
+    $akaun = $this->request->data("akaun");
+    $comparison = $this->request->data("comparison");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $section_one = $this->request->data("section_one");
+    $section_two = $this->request->data("section_two");
+    $discount = $this->request->data("discount");
+    $rental = $this->request->data("rental");
+    $even = $this->request->data("even");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->vendor->buildingSubmit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function buildingEdit()
+  {
+    $siriNo = $this->request->data("siri_no");
+    $akaun = $this->request->data("akaun");
+    $comparison = $this->request->data("comparison");
+    $breadth_land = $this->request->data("breadth_land");
+    $price_land = $this->request->data("price_land");
+    $section_one = $this->request->data("section_one");
+    $section_two = $this->request->data("section_two");
+    $discount = $this->request->data("discount");
+    $rental = $this->request->data("rental");
+    $even = $this->request->data("even");
+    $yearly = $this->request->data("yearly");
+    $rate = $this->request->data("rate");
+    $tax = $this->request->data("tax");
+
+    $result = $this->vendor->buildingEdit(Session::getUserId(), Session::getUserWorkerId(), $siriNo, $akaun, $comparison, $breadth_land, $price_land, $section_one, $section_two, $discount, $rental, $even, $yearly, $rate, $tax);
+
+    if (!$result) {
+      $this->view->renderErrors($this->vendor->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
   public function reviewSubmition()
   {
     $id = $this->request->data("id");
@@ -326,6 +394,7 @@ class VendorController extends Controller
     //only for normal vendor
     Permission::allow("vendor", $resource, ["reference", "sitereview", "submitted", "approved", "pending", "sitereviewtable"]);
     Permission::allow("vendor", $resource, ["uploadbenchmarkdocs", "insertcostbenchmark", "insertrentbenchmark", "viewbenchmark", "viewimages"]);
+    Permission::allow("vendor", $resource, ["buildingSubmit", "buildingEdit", "rentbenchmark", "costbenchmark"]);
     Permission::allow("vendor", $resource, ["viewdocuments", "uploadimages", "uploaddocuments", "deletesitereview", "deleteimage", "deletedocument"]);
 
     return Permission::check($role, $resource, $action);

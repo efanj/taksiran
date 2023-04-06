@@ -23,10 +23,22 @@ class ElementsController extends Controller
       case "customeraddtable":
         $this->Security->config("validateForm", false);
         break;
+      case "meetingtable":
+        $this->Security->config("validateForm", false);
+        break;
+      case "reasontable":
+        $this->Security->config("validateForm", false);
+        break;
+      case "streettable":
+        $this->Security->config("validateForm", false);
+        break;
       case "street":
         $this->Security->config("validateForm", false);
         break;
       case "hbangn":
+        $this->Security->config("validateForm", false);
+        break;
+      case "updateRate":
         $this->Security->config("validateForm", false);
         break;
       case "delete":
@@ -52,9 +64,9 @@ class ElementsController extends Controller
     $columnSortOrder = $column[0]["dir"];
     $search = $this->request->data("search");
     $searchValue = strtoupper($search["value"]);
-    $result = $this->vendor->referencetable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+    $result = $this->elements->referencetable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
     if (!$result) {
-      $this->view->renderErrors($this->account->errors());
+      $this->view->renderErrors($this->elements->errors());
     } else {
       $this->view->renderJson($result);
     }
@@ -74,7 +86,67 @@ class ElementsController extends Controller
     $searchValue = strtoupper($search["value"]);
     $result = $this->elements->customertable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
     if (!$result) {
-      $this->view->renderErrors($this->account->errors());
+      $this->view->renderErrors($this->elements->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function meetingtable()
+  {
+    $draw = $this->request->data("draw");
+    $row = $this->request->data("start");
+    $rowperpage = $this->request->data("length");
+    $column = $this->request->data("order");
+    $columnIndex = $column[0]["column"];
+    $columns = $this->request->data("columns");
+    $columnName = $columns[$columnIndex]["data"];
+    $columnSortOrder = $column[0]["dir"];
+    $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
+    $result = $this->elements->meetingtable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+    if (!$result) {
+      $this->view->renderErrors($this->elements->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function reasontable()
+  {
+    $draw = $this->request->data("draw");
+    $row = $this->request->data("start");
+    $rowperpage = $this->request->data("length");
+    $column = $this->request->data("order");
+    $columnIndex = $column[0]["column"];
+    $columns = $this->request->data("columns");
+    $columnName = $columns[$columnIndex]["data"];
+    $columnSortOrder = $column[0]["dir"];
+    $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
+    $result = $this->elements->reasontable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+    if (!$result) {
+      $this->view->renderErrors($this->elements->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function streettable()
+  {
+    $draw = $this->request->data("draw");
+    $row = $this->request->data("start");
+    $rowperpage = $this->request->data("length");
+    $column = $this->request->data("order");
+    $columnIndex = $column[0]["column"];
+    $columns = $this->request->data("columns");
+    $columnName = $columns[$columnIndex]["data"];
+    $columnSortOrder = $column[0]["dir"];
+    $search = $this->request->data("search");
+    $searchValue = strtoupper($search["value"]);
+    $result = $this->elements->streettable($draw, $row, $rowperpage, $columnIndex, $columnName, $columnSortOrder, $searchValue);
+    if (!$result) {
+      $this->view->renderErrors($this->elements->errors());
     } else {
       $this->view->renderJson($result);
     }
@@ -85,7 +157,20 @@ class ElementsController extends Controller
     $plgid = $this->request->data("id_search");
     $result = $this->elements->customeraddtable($plgid);
     if (!$result) {
-      $this->view->renderErrors($this->account->errors());
+      $this->view->renderErrors($this->elements->errors());
+    } else {
+      $this->view->renderJson($result);
+    }
+  }
+
+  public function updateRate()
+  {
+    $rate = $this->request->data("rate");
+    $kwkod = $this->request->data("kwkod");
+    $htkod = $this->request->data("htkod");
+    $result = $this->elements->updateRate($rate, $kwkod, $htkod);
+    if (!$result) {
+      $this->view->renderErrors($this->elements->errors());
     } else {
       $this->view->renderJson($result);
     }
@@ -96,7 +181,7 @@ class ElementsController extends Controller
     $area = $this->request->data("area");
     $result = $this->elements->street($area);
     if (!$result) {
-      $this->view->renderErrors($this->account->errors());
+      $this->view->renderErrors($this->elements->errors());
     } else {
       $this->view->renderJson($result);
     }
@@ -106,7 +191,7 @@ class ElementsController extends Controller
   {
     $result = $this->elements->hbangn();
     if (!$result) {
-      $this->view->renderErrors($this->account->errors());
+      $this->view->renderErrors($this->elements->errors());
     } else {
       $this->view->renderJson($result);
     }

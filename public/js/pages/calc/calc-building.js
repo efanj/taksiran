@@ -1,5 +1,55 @@
 $(document).ready(function () {
   var popup_comparison = $("#popup_comparison").DataTable({
+    processing: true,
+    serverSide: true,
+    searching: true,
+    order: [],
+    ajax: {
+      url: config.root + "informations/comparison",
+      type: "POST",
+      data: {
+        type: 1,
+        kwkod: $("#kwkod").val(),
+        htkod: $("#htkod").val()
+      }
+    },
+    columnDefs: [
+      {
+        targets: 0,
+        data: "id"
+      },
+      {
+        targets: 1,
+        orderable: false,
+        data: "jln_jnama"
+      },
+      {
+        targets: 2,
+        orderable: false,
+        data: "bgn_bnama"
+      },
+      {
+        targets: 3,
+        orderable: false,
+        data: "peg_lsbgn"
+      },
+      {
+        targets: 4,
+        orderable: false,
+        data: "peg_nilth"
+      },
+      {
+        targets: 5,
+        orderable: false,
+        data: "mfa"
+      },
+      {
+        targets: 6,
+        orderable: false,
+        data: "afa"
+      }
+    ],
+    order: [[1, "asc"]],
     language: {
       search: "Saring : ",
       lengthMenu: "Paparkan _MENU_ rekod",
@@ -48,7 +98,7 @@ $(document).ready(function () {
         section_one += '<th style="width:15%">Nilai Unit</th><th style="width:10%">Jenis</th><th style="width:15%">Jumlah</th><th></th></tr></thead>'
         section_one += '<tbody id="' + tableName + '"><tr id="' + rowId + '"><td>'
         section_one += '<input type="text" class="form-control input-sm" name="section_one[' + rowId + '][item][0][title_one]"></td>'
-        section_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + rowId + '][item][0][breadth_one]" id="breadth_one"></td>'
+        section_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + rowId + '][item][0][breadth_one]" min="0" id="breadth_one"></td>'
         section_one += '<td><select class="form-control input-sm" name="section_one[' + rowId + '][item][0][breadthtype_one]">'
         section_one += "<option value=''>Sila Pilih</option>"
         section_one += '<option value="mp" selected>Meter</option>'
@@ -56,7 +106,7 @@ $(document).ready(function () {
         section_one += '<option value="unit">Unit</option>'
         section_one += "</select></td>"
         section_one += '<td style="text-align:center">X</td>'
-        section_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + rowId + '][item][0][price_one]" id="price_one" value="0"></td>'
+        section_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + rowId + '][item][0][price_one]" min="0" id="price_one" value="0"></td>'
         section_one += '<td><select class="form-control input-sm" name="section_one[' + rowId + '][item][0][pricetype_one]">'
         section_one += "<option value=''>Sila Pilih</option>"
         section_one += '<option value="smp" selected>Meter Persegi</option>'
@@ -101,7 +151,7 @@ $(document).ready(function () {
         section_two += '<th style="width:15%">Nilai Unit</th><th style="width:10%">Jenis</th><th style="width:15%">Jumlah</th><th></th></tr></thead>'
         section_two += '<tbody id="' + tableName + '"><tr id="' + rowId + '"><td>'
         section_two += '<input type="text" class="form-control input-sm" name="section_two[' + rowId + '][item][0][title_two]"></td>'
-        section_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + rowId + '][item][0][breadth_two]" id="breadth_two"></td>'
+        section_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + rowId + '][item][0][breadth_two]" min="0" id="breadth_two"></td>'
         section_two += '<td><select class="form-control input-sm" name="section_two[' + rowId + '][item][0][breadthtype_two]">'
         section_two += "<option value=''>Sila Pilih</option>"
         section_two += '<option value="mp" selected>Meter</option>'
@@ -109,7 +159,7 @@ $(document).ready(function () {
         section_two += '<option value="unit">Unit</option>'
         section_two += "</select></td>"
         section_two += '<td style="text-align:center">X</td>'
-        section_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + rowId + '][item][0][price_two]" id="price_two" value="0"></td>'
+        section_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + rowId + '][item][0][price_two]" id="price_two" min="0" value="0"></td>'
         section_two += '<td><select class="form-control input-sm" name="section_two[' + rowId + '][item][0][pricetype_two]">'
         section_two += "<option value=''>Sila Pilih</option>"
         section_two += '<option value="smp" selected>Meter Persegi</option>'
@@ -150,6 +200,30 @@ $(document).ready(function () {
     tableBody.append(row_comparison)
   })
 
+  $("body").on("click", "#add", function (e) {
+    var row = $(this).parent().parent()
+    var rowId = row.attr("id")
+
+    $("#comparison_popup").modal("show")
+    console.log(rowId)
+
+    popup_comparison.on("click", "tr", function () {
+      var data_comparison = popup_comparison.row(this).data()
+      console.log(data_comparison)
+      $(".comparison #comparison_" + rowId).val(data_comparison.id)
+      $(".comparison #jlname_" + rowId).html(data_comparison.jln_jnama)
+      $(".comparison #bgtype_" + rowId).html(data_comparison.bgn_bnama)
+      $(".comparison #breadth_" + rowId).html(data_comparison.peg_lsbgn)
+      $(".comparison #nilth_" + rowId).html(data_comparison.peg_nilth)
+      $(".comparison #mfa_" + rowId).html(data_comparison.mfa)
+      $(".comparison #afa_" + rowId).html(data_comparison.afa)
+      $("#comparison_popup").on("hidden.bs.modal", function (e) {
+        rowId = ""
+      })
+      $("#comparison_popup").modal("hide")
+    })
+  })
+
   $("body").on("click", ".add-one", function (e) {
     var Id = $(this).attr("id")
     var tableId = $(this)
@@ -161,7 +235,7 @@ $(document).ready(function () {
     for (var i = 0; i < rowAmmount; i++) {
       var rowId = i + added
       var row_one = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][title_one]"></td>'
-      row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadth_one]" id="breadth_one" value="0"></td>'
+      row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadth_one]" id="breadth_one" min="0" value="0"></td>'
       row_one += '<td><select class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][breadthtype_one]">'
       row_one += "<option value=''>Sila Pilih</option>"
       row_one += '<option value="mp" selected>Meter</option>'
@@ -169,7 +243,7 @@ $(document).ready(function () {
       row_one += '<option value="unit">Unit</option>'
       row_one += "</select></td>"
       row_one += '<td style="text-align:center">X</td>'
-      row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][price_one]" id="price_one" value="0"></td>'
+      row_one += '<td><input type="number" class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][price_one]" id="price_one" min="0" value="0"></td>'
       row_one += '<td><select class="form-control input-sm" name="section_one[' + Id + "][item][" + rowId + '][pricetype_one]">'
       row_one += "<option value=''>Sila Pilih</option>"
       row_one += '<option value="smp" selected>Meter Persegi</option>'
@@ -195,7 +269,7 @@ $(document).ready(function () {
     for (var i = 0; i < rowAmmount; i++) {
       var rowId = i + added
       var row_two = '<tr id="' + rowId + '"><td><input type="text" class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][title_two]"></td>'
-      row_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][breadth_two]" id="breadth_two" value="0"></td>'
+      row_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][breadth_two]" id="breadth_two" min="0" value="0"></td>'
       row_two += '<td><select class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][breadthtype_two]">'
       row_two += "<option value=''>Sila Pilih</option>"
       row_two += '<option value="mp" selected>Meter</option>'
@@ -203,7 +277,7 @@ $(document).ready(function () {
       row_two += '<option value="unit">Unit</option>'
       row_two += "</select></td>"
       row_two += '<td style="text-align:center">X</td>'
-      row_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][price_two]" id="price_two" value="0"></td>'
+      row_two += '<td><input type="number" class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][price_two]" id="price_two" min="0" value="0"></td>'
       row_two += '<td><select class="form-control input-sm" name="section_two[' + Id + "][item][" + rowId + '][pricetype_two]">'
       row_two += "<option value=''>Sila Pilih</option>"
       row_two += '<option value="smp" selected>Meter Persegi</option>'
@@ -271,29 +345,6 @@ $(document).ready(function () {
     }
     $("#corner").val(this.checked)
   })
-
-  $("body").on("click", "#add", function (e) {
-    var row = $(this).parent().parent()
-    var rowId = row.attr("id")
-
-    $("#comparison_popup").modal("show")
-    console.log(rowId)
-
-    popup_comparison.on("click", "tr", function () {
-      var data_comparison = popup_comparison.row(this).data()
-      $(".comparison #comparison_" + rowId).val(data_comparison[0])
-      $(".comparison #jlname_" + rowId).html(data_comparison[1])
-      $(".comparison #bgtype_" + rowId).html(data_comparison[2])
-      $(".comparison #breadth_" + rowId).html(data_comparison[3])
-      $(".comparison #nilth_" + rowId).html(data_comparison[4])
-      $(".comparison #mfa_" + rowId).html(data_comparison[5])
-      $(".comparison #afa_" + rowId).html(data_comparison[6])
-      $("#comparison_popup").on("hidden.bs.modal", function (e) {
-        rowId = ""
-      })
-      $("#comparison_popup").modal("hide")
-    })
-  })
 })
 
 $("body").on("keyup", "#breadth_land, #price_land", function () {
@@ -302,6 +353,7 @@ $("body").on("keyup", "#breadth_land, #price_land", function () {
   var price_land = parseFloat(row.find("#price_land").val())
   var total_land = parseFloat(breadth_land * price_land)
   row.find("#total_land").val(total_land.toFixed(2))
+  sumOneTwo()
 })
 
 $("body").on("keyup", "#breadth_one, #price_one", function () {
@@ -354,6 +406,10 @@ $("body").on("keyup", "#discount", function () {
 // })
 
 $("body").on("keyup", "#even", function () {
+  generateTax()
+})
+
+$("body").on("keyup", "#rate", function () {
   generateTax()
 })
 
@@ -410,7 +466,7 @@ function generateTax() {
   var even = $("#even").val()
   year_value = parseFloat(even) * 12
 
-  var rate = $("#dummy_rate").html()
+  var rate = $("#rate").val()
   var tax = (parseFloat(rate) / 100) * year_value
 
   $("#yearly").val(year_value.toFixed(2))

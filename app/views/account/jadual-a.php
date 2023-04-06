@@ -1,4 +1,4 @@
-<div class="page-content sidebar-page right-sidebar-page clearfix">
+<div class="page-content sidebar-page clearfix">
   <!-- .page-content-wrapper -->
   <div class="page-content-wrapper">
     <div class="page-content-inner">
@@ -70,8 +70,8 @@
                   <div class="col-md-1">
                     <div class="checkbox-custom">
                       <input type="checkbox" id="dummy_mja_Stcbk" <?php if ($hacmja["peg_stcbk"] === "Y") {
-                        echo "checked";
-                      } ?>disabled>
+                                                                    echo "checked";
+                                                                  } ?>disabled>
                       <label for="dummy_mja_Stcbk"></label>
                     </div>
                     <input type="hidden" id="mja_Stcbk" name="mjaStcbk" value="<?= $hacmja["peg_stcbk"] ?>">
@@ -250,7 +250,9 @@
                 </div>
                 <hr>
                 <div class="row mb5">
-                  <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
+                  <div class="col-md-12 tar">
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa fa-save"></i> Simpan</button>
+                  </div>
                 </div>
               </form>
             </div>
@@ -278,10 +280,18 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI TARIKH MESYUARAT</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->meetingtable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/meeting.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_meeting">
+          <thead>
+            <tr>
+              <th>Bilangan</th>
+              <th>Bulan</th>
+              <th>Tarikh Mesyuarat</th>
+              <th>Tarikh Kuatkuasa</th>
+              <th>No. Kertas Kerja</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -297,10 +307,16 @@
         <h4 class="modal-title" id="myModalLabel">SENARAI SEBAB-SEBAB</h4>
       </div>
       <div class="modal-body">
-        <?php
-        $data = $this->controller->elements->reasontable();
-        echo $this->render(Config::get("VIEWS_PATH") . "elements/reason.php", ["data" => $data]);
-        ?>
+        <table class="table table-bordered" id="popup_reason" width="100%">
+          <thead>
+            <tr>
+              <th>Kod Sebab</th>
+              <th>Sebab-sebab</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

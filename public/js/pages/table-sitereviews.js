@@ -136,9 +136,13 @@ $(document).ready(function () {
             // console.log(data);
             if (type === "display") {
               data = '<div class="btn-group btn-group-sm" role="group">'
-              data += '<a href="' + row.calctype + "/" + row.akaun + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
+              if (row.sirino != "-") {
+                data += '<a href="' + row.calctype + "/" + row.sirino + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
+              } else {
+                data += '<a href="' + row.calctype + "/" + row.akaun + '" class="btn btn-default btn-sm" title="Borang Nilaian"><i class="fa fa-calculator color-dark"></i></a>'
+              }
               data += '<a href="viewimages/' + row.id + '" class="btn btn-default btn-sm" title="Gambar"><i class="fa  fa-file-photo-o color-dark"></i></a>'
-              data += '<a href="viewdocuments/' + row.id + '" class="btn btn-default btn-sm" title="Dokumen"><i class="fa fa-file color-dark"></i></a>'
+              data += '<a href="viewdocuments/' + row.id + '" class="btn btn-default btn-sm" title="Dokumen"><i class="fa fa-file-pdf-o color-dark"></i></a>'
               data += '<a class="btn btn-danger btn-sm remove" title="Padam" id="remove" data-id="' + row.id + '"><i class="fa fa-trash"></i></a>'
               data += "</div>"
             }

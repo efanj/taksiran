@@ -3,7 +3,7 @@ $(document).ready(function () {
     pageLength: 15,
     lengthMenu: [
       [5, 15, 25, 50],
-      [5, 15, 25, 50],
+      [5, 15, 25, 50]
     ],
     processing: true,
     serverSide: true,
@@ -14,18 +14,23 @@ $(document).ready(function () {
       {
         targets: 0,
         orderable: false,
-        data: "kws_knama",
+        data: "kws_knama"
       },
       {
         targets: 1,
         orderable: false,
-        data: "hrt_hnama",
+        data: "hrt_hnama"
       },
       {
         targets: 2,
         orderable: false,
-        data: "kaw_kadar",
+        data: "kaw_kadar"
       },
+      {
+        targets: 3,
+        orderable: false,
+        data: "kadar_nilai"
+      }
     ],
     order: [[0, "asc"]],
     language: {
@@ -38,8 +43,8 @@ $(document).ready(function () {
         first: "Pertama",
         last: "Terakhir",
         next: "Seterusnya",
-        previous: "Sebelumnya",
-      },
-    },
+        previous: "Sebelumnya"
+      }
+    }
   })
 })
